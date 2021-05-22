@@ -6,7 +6,7 @@
     app:startDestination="@id/splash">
     <fragment
         android:id="@+id/splash"
-        android:name="com.ITI.Team1.ecommerce.ui.Splash"
+        android:name="com.ITI.Team1.ecommerce.ui.splash.Splash"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
 </navigation>

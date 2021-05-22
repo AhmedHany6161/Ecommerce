@@ -1,4 +1,4 @@
-package com.ITI.Team1.ecommerce.ui
+package com.ITI.Team1.ecommerce.ui.splash
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
