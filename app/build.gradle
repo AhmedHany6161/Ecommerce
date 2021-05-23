@@ -35,7 +35,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.ITI.Team1.ecommerce"
+        applicationId "com.iti.team.ecommerce"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
