@@ -3,10 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/splash">
+    app:startDestination="@id/productDetailsFragment">
     <fragment
         android:id="@+id/splash"
         android:name="com.iti.team.ecommerce.ui.splash.Splash"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
+        android:label="ProductDetailsFragment" />
 </navigation>

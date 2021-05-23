@@ -11,7 +11,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:bind="http://schemas.android.com/apk/res-auto"
-        android:background="#FBFCFC">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/img_header"
@@ -43,8 +43,8 @@
             app:tint="@color/white"/>
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_header"
@@ -54,11 +54,13 @@
         <include
             layout="@layout/card_details"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            app:layout_constraintHeight_percent="0.12"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintTop_toBottomOf="@+id/img_header"
             app:layout_constraintBottom_toBottomOf="@id/img_header"
             bind:title="@{@string/app_name}"
+            bind:price="@{@string/app_name}"
+            bind:vendor="@{@string/app_name}"
 
             />
 
