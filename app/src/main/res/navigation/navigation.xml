@@ -19,4 +19,9 @@
         android:name="com.ITI.Team1.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login"/>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.ITI.Team1.ecommerce.ui.Categories.CategoriesFragment"
+        android:label="CategoriesFragment"
+        tools:layout="@layout/fragment_categories"/>
 </navigation>
