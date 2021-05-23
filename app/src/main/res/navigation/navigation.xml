@@ -9,4 +9,14 @@
         android:name="com.ITI.Team1.ecommerce.ui.splash.Splash"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+    <fragment
+        android:id="@+id/store"
+        android:name="com.ITI.Team1.ecommerce.ui.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ITI.Team1.ecommerce.ui.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login"/>
 </navigation>
