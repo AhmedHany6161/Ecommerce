@@ -44,7 +44,7 @@ object NetworkService {
         return httpClient.build()
     }
 
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+   private fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor()
 
         @Suppress("ConstantConditionIf")

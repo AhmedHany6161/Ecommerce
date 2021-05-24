@@ -20,8 +20,9 @@ class CategoriesFragment: Fragment() {
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }
 
-    fun init(){
+    private fun init(){
         viewModel.getCategories()
+        viewModel.getProducts()
     }
 
 
