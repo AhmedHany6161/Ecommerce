@@ -12,11 +12,14 @@
     <!--    ahmed-->
 
     <!--    wesam-->
+    <color name="gray">#A6ACAF</color>
 
     <!--    wesam-->
 
     <!--    norhan-->
-
+    <color name="darkTextColor">#020000</color>
+    <color name="primaryTextColor">#11CFC5</color>
+    <color name="whiteTextColor">#fff</color>
     <!--  norhan-->
 
     <!--   nermeen-->
