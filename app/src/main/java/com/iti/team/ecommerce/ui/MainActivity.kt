@@ -16,10 +16,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val bottomNavigation: MeowBottomNavigation = findViewById(R.id.meowBottomNavigation)
         val navController = navHostFragment.navController
+
         splashSetup(navController,bottomNavigation)
         navigationSetup(navController,bottomNavigation)
     }
