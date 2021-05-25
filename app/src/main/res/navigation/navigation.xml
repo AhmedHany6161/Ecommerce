@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/splash">
+    app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/splash"
         android:name="com.iti.team.ecommerce.ui.splash.Splash"
@@ -13,4 +13,8 @@
         android:id="@+id/products"
         android:name="com.iti.team.ecommerce.ui.proudcts.Products"
         android:label="Products" />
+     <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>
