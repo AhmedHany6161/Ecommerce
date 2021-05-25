@@ -19,14 +19,28 @@ class Products : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.products_fragment, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.products_rec)
+        val productRecyclerView: RecyclerView = view.findViewById(R.id.products_rec)
+        val brandRecyclerView: RecyclerView = view.findViewById(R.id.brand_rec)
         val search: SearchView = view.findViewById(R.id.product_search)
-        val adapter = ProductAdapter(ArrayList())
+        val productAdapter = ProductAdapter(ArrayList())
         val viewModel: ProductsViewModel by viewModels()
-        setupRecyclerView(recyclerView, adapter)
-        listeningForProducts(viewModel, adapter)
+        val brandAdapter = BrandAdapter(ArrayList(),viewModel)
+        setupProductRecyclerView(productRecyclerView, productAdapter)
+        setupBrandRecyclerView(brandRecyclerView,brandAdapter)
+        listeningForProducts(viewModel, productAdapter)
         setupSearch(search, viewModel)
+        listeningForBrand(viewModel, brandAdapter)
         return view
+    }
+
+    private fun listeningForBrand(
+        viewModel: ProductsViewModel,
+        brandAdapter: BrandAdapter
+    ) {
+        viewModel.getBrandData().observe(viewLifecycleOwner, {
+            brandAdapter.setData(it)
+            brandAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun listeningForProducts(
@@ -39,13 +53,22 @@ class Products : Fragment() {
         })
     }
 
-    private fun setupRecyclerView(
+    private fun setupProductRecyclerView(
         recyclerView: RecyclerView,
         adapter: ProductAdapter
     ) {
         val gridLayoutManager = GridLayoutManager(context, 2)
-        gridLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        gridLayoutManager.orientation = GridLayoutManager.VERTICAL
         recyclerView.layoutManager = gridLayoutManager
+        recyclerView.adapter = adapter
+    }
+    private fun setupBrandRecyclerView(
+        recyclerView: RecyclerView,
+        adapter: BrandAdapter
+    ) {
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
     }
 
