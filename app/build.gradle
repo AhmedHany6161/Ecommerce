@@ -66,6 +66,7 @@ android {
 
 dependencies {
     // ahmed
+    implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
 
     //ahmed
 

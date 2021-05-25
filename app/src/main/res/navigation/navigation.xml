@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splash">
     <fragment
         android:id="@+id/splash"
         android:name="com.iti.team.ecommerce.ui.splash.Splash"
@@ -14,6 +14,17 @@
         android:name="com.iti.team.ecommerce.ui.proudcts.Products"
         android:label="Products" />
      <fragment
+        android:id="@+id/store"
+        android:name="com.iti.team.ecommerce.ui.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main"/>
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.iti.team.ecommerce.ui.Categories.CategoriesFragment"
+        android:label="CategoriesFragment"
+        tools:layout="@layout/fragment_categories"/>
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment" />
