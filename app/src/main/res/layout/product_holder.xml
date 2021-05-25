@@ -29,7 +29,7 @@
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="@+id/product_image"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/add_ic" />
+            app:srcCompat="@drawable/cart" />
 
         <ImageView
             android:id="@+id/add_fav_item"

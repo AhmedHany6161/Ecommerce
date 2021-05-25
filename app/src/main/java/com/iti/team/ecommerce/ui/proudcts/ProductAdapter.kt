@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Product
 
-class ProductAdapter(private val dataSet: List<Product>) :
+class ProductAdapter(private var dataSet: List<Product>) :
 
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    init {
-     Log.e("uuuuuuuuuuuu",dataSet.toString())
+    fun setData(products:List<Product>){
+        dataSet = products
     }
-
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val name: TextView = view.findViewById(R.id.product_name)
         private val price: TextView = view.findViewById(R.id.product_price)
