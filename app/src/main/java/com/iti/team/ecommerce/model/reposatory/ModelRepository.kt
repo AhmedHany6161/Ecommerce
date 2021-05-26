@@ -1,29 +1,32 @@
 package com.iti.team.ecommerce.model.reposatory
 
+
 import android.util.Log
 import com.iti.team.ecommerce.model.data_classes.MainCategories
-import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.data_classes.ProductsModel
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
 import java.io.IOException
+import com.iti.team.ecommerce.model.remote.Result
 
 
 class ModelRepository: ModelRepo {
     private val apiDataSource: ApiInterface = ApiDataSource()
-    override suspend fun getMainCategories():MainCategories?{
+    override suspend fun getMainCategories():Result<MainCategories?>{
 
-        var result:MainCategories? = null
+        var result:Result<MainCategories?> = Result.Loading
 
         try {
             val response = apiDataSource.getMainCategories()
             if(response.isSuccessful){
-                 result = response.body()
+                 result = Result.Success(response.body())
                 Log.i("ModelRepository","Result $result")
-            }else{
-                Log.i("ModelRepository","Error")
+            }else {
+                //result = Result.Error(response.errorBody().)
+                Log.i("ModelRepository","Error${response.errorBody()}")
             }
         }catch (e: IOException){
+            result = Result.Error(e)
             Log.e("ModelRepository","IOException ${e.message}")
             Log.e("ModelRepository","IOException ${e.localizedMessage}")
 

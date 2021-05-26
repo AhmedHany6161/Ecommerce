@@ -3,7 +3,7 @@ package com.iti.team.ecommerce.ui.categories
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.team.ecommerce.model.data_classes.ProductsModel
+import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.launch
@@ -14,8 +14,11 @@ class CategoriesViewModel: ViewModel() {
 
     fun getCategories(){
         viewModelScope.launch {
-           val result = modelRepository.getMainCategories()
-            Log.i("ViewModel","getCategories: ${result?.collections}")
+           when(val result = modelRepository.getMainCategories()){
+                is Result.Success->{Log.i("getCategories:", "${result.data}")}
+                is Result.Error ->{Log.e("getCategories:", "${result.exception.message}")}
+                is Result.Loading ->{Log.i("getCategories","Loading")}
+            }
         }
 
     }

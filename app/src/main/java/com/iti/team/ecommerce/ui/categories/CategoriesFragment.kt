@@ -22,7 +22,6 @@ class CategoriesFragment: Fragment() {
 
     private fun init(){
         viewModel.getCategories()
-        viewModel.getProducts()
     }
 
 
