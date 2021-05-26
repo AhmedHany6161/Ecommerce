@@ -7,5 +7,5 @@ import com.iti.team.ecommerce.model.remote.Result
 interface ModelRepo {
 
     suspend fun getMainCategories(): Result<MainCategories?>
-    suspend fun getProducts(collectionId: Long): ProductsModel?
+    suspend fun getProducts(collectionId: Long): Result<ProductsModel?>
 }

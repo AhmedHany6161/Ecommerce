@@ -6,6 +6,7 @@ import com.iti.team.ecommerce.model.data_classes.ProductsModel
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -21,6 +22,10 @@ interface ApiService {
 
     @GET("price_rules.json")
     suspend fun createDiscount(@Body priceRule:PriceRule ):
+            Response<ProductsModel>
+
+    @GET("price_rules/{id}.json")
+    suspend fun getDiscount(@Path("id") discountId:Long ):
             Response<ProductsModel>
 
 

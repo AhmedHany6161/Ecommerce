@@ -22,10 +22,21 @@ class CategoriesViewModel: ViewModel() {
         }
 
     }
-//    fun getProducts(){
+//    fun getProducts(collectionID: Long){
+//
 //        viewModelScope.launch {
-//            val result:ProductsModel? = modelRepository.getProducts(268359598278)
-//            Log.i("ViewModel","getProducts: ${result?.let { it.product[0].title }}")
+//            when(val result = modelRepository.getProducts(collectionID)){
+//                is Result.Success -> {
+//                    Log.i(
+//                        "getCategories:", "${
+//                            result.data?.let {
+//                                it.product[0].title
+//                            }
+//                        }")
+//                }
+//                is Result.Error ->{Log.e("getCategories:", "${result.exception.message}")}
+//                is Result.Loading ->{Log.i("getCategories","Loading")}
+//            }
 //        }
 //
 //    }

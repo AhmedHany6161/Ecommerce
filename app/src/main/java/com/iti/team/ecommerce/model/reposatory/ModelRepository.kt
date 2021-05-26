@@ -34,18 +34,19 @@ class ModelRepository: ModelRepo {
       return result
     }
 
-    override suspend fun getProducts(collectionId: Long): ProductsModel? {
-        var result:ProductsModel? = null
+    override suspend fun getProducts(collectionId: Long): Result<ProductsModel?> {
+        var result:Result<ProductsModel?> = Result.Loading
 
         try {
             val response = apiDataSource.getProducts(collectionId)
             if(response.isSuccessful){
-                result = response.body()
+                result = Result.Success(response.body())
                 Log.i("ModelRepository","Result $result")
             }else{
                 Log.i("ModelRepository","Error")
             }
         }catch (e: IOException){
+            result = Result.Error(e)
             Log.e("ModelRepository","IOException ${e.message}")
             Log.e("ModelRepository","IOException ${e.localizedMessage}")
 
