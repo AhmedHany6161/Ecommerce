@@ -1,8 +1,6 @@
 package com.iti.team.ecommerce.model.reposatory
 
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.MainCategories
-import com.iti.team.ecommerce.model.data_classes.ProductsModel
+import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
 
 interface ModelRepo {
@@ -12,4 +10,6 @@ interface ModelRepo {
 
     suspend fun createDiscount(discount: Discount): Result<Discount?>
     suspend fun getDiscount(discountId: Long): Result<Discount?>
+
+    suspend fun getProductImages(productId: Long): Result<ProductImages?>
 }

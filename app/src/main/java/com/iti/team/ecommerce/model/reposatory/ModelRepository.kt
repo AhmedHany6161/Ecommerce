@@ -2,9 +2,7 @@ package com.iti.team.ecommerce.model.reposatory
 
 
 import android.util.Log
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.MainCategories
-import com.iti.team.ecommerce.model.data_classes.ProductsModel
+import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
 import java.io.IOException
@@ -95,6 +93,22 @@ class ModelRepository: ModelRepo {
 
         }
         return result
+    }
+
+    override suspend fun getProductImages(productId: Long): Result<ProductImages?> {
+        var result:Result<ProductImages?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getProductImages(productId)
+
+            if (response.isSuccessful){
+                result = Result.Success(response.body())
+            }
+
+        }catch (e: IOException){
+            result = Result.Error(e)
+        }
+        return  result
     }
 
 }

@@ -31,7 +31,7 @@ class CategoriesViewModel: ViewModel() {
 //            when(val result = modelRepository.getProducts(collectionID)){
 //                is Result.Success -> {
 //                    Log.i(
-//                        "getCategories:", "${
+//                        "getProducts:", "${
 //                            result.data?.let {
 //                                it.product[0].title
 //                            }
@@ -43,5 +43,7 @@ class CategoriesViewModel: ViewModel() {
 //        }
 //
 //    }
+
+
 
 }

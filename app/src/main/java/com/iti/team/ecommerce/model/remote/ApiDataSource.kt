@@ -1,9 +1,6 @@
 package com.iti.team.ecommerce.model.remote
 
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.MainCategories
-import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.model.data_classes.ProductsModel
+import com.iti.team.ecommerce.model.data_classes.*
 import retrofit2.Response
 
 
@@ -27,6 +24,10 @@ class ApiDataSource: ApiInterface {
 
     override suspend fun getDiscount(discountId: Long): Response<Discount> {
         return _apiService.getDiscount(discountId)
+    }
+
+    override suspend fun getProductImages(productId: Long): Response<ProductImages> {
+        return _apiService.getProductImage(productId)
     }
 
 }
