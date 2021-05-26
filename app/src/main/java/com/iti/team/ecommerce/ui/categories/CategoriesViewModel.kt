@@ -8,6 +8,7 @@ import com.iti.team.ecommerce.model.data_classes.PriceRule
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoriesViewModel: ViewModel() {
@@ -15,7 +16,7 @@ class CategoriesViewModel: ViewModel() {
     private val  modelRepository:ModelRepo = ModelRepository()
 
     fun getCategories(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
            when(val result = modelRepository.getMainCategories()){
                 is Result.Success->{Log.i("getCategories:", "${result.data}")}
                 is Result.Error ->{Log.e("getCategories:", "${result.exception.message}")}

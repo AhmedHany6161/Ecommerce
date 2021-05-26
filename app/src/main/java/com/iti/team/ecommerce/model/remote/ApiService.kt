@@ -27,6 +27,10 @@ interface ApiService {
     suspend fun getProductImage(@Path("productID") ProductId:Long ):
             Response<ProductImages>
 
+    @POST("customers.json")
+    suspend fun register(@Body customer:CustomerModel):
+            Response<CustomerModel>
+
 
 
 }

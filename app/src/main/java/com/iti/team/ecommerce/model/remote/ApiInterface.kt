@@ -11,4 +11,5 @@ interface ApiInterface {
     suspend fun createDiscount(discount: Discount): Response<Discount>
     suspend fun getDiscount(discountId: Long): Response<Discount>
     suspend fun getProductImages(productId: Long): Response<ProductImages>
+    suspend fun createCustomer(customer: CustomerModel): Response<CustomerModel>
 }

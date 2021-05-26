@@ -30,4 +30,8 @@ class ApiDataSource: ApiInterface {
         return _apiService.getProductImage(productId)
     }
 
+    override suspend fun createCustomer(customer: CustomerModel): Response<CustomerModel> {
+        return _apiService.register(customer)
+    }
+
 }

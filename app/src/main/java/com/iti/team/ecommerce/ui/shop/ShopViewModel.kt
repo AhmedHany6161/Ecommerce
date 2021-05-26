@@ -7,13 +7,14 @@ import com.iti.team.ecommerce.model.data_classes.Discount
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ShopViewModel: ViewModel() {
     private val  modelRepository: ModelRepo = ModelRepository()
 
     fun createDiscount(discount:Discount){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
             when(val result = modelRepository.createDiscount(discount)){
                 is Result.Success->{
                     Log.i("getCategories:", "${result.data}")}
@@ -28,7 +29,7 @@ class ShopViewModel: ViewModel() {
 
     fun getDiscount(discountId: Long){
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
             when(val result = modelRepository.getDiscount(discountId)){
                 is Result.Success->{
                     Log.i("getCategories:", "${result.data?.discount?.title}")}

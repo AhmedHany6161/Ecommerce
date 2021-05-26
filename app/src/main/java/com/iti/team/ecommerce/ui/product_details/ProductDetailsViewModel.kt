@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductDetailsViewModel: ViewModel() {
@@ -13,7 +14,7 @@ class ProductDetailsViewModel: ViewModel() {
 
     fun getProductImage(productId: Long){
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO)  {
             when(val result = modelRepository.getProductImages(productId)){
                 is Result.Success -> {
                     Log.i(

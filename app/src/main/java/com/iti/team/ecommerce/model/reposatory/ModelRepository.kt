@@ -111,4 +111,20 @@ class ModelRepository: ModelRepo {
         return  result
     }
 
+    override suspend fun createCustomer(customer: CustomerModel): Result<CustomerModel?> {
+        var result:Result<CustomerModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.createCustomer(customer)
+
+            if (response.isSuccessful){
+                result = Result.Success(response.body())
+            }
+
+        }catch (e: IOException){
+            result = Result.Error(e)
+        }
+        return  result
+
+    }
 }
