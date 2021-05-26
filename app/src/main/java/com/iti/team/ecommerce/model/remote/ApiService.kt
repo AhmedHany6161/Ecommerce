@@ -1,13 +1,11 @@
 package com.iti.team.ecommerce.model.remote
 
+import com.iti.team.ecommerce.model.data_classes.Discount
 import com.iti.team.ecommerce.model.data_classes.MainCategories
 import com.iti.team.ecommerce.model.data_classes.PriceRule
 import com.iti.team.ecommerce.model.data_classes.ProductsModel
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface ApiService {
@@ -20,13 +18,13 @@ interface ApiService {
     suspend fun getProducts(@Query("collection_id") collectionId: Long):
             Response<ProductsModel>
 
-    @GET("price_rules.json")
-    suspend fun createDiscount(@Body priceRule:PriceRule ):
-            Response<ProductsModel>
+    @POST("price_rules.json")
+    suspend fun createDiscount(@Body priceRule:Discount):
+            Response<Discount>
 
     @GET("price_rules/{id}.json")
     suspend fun getDiscount(@Path("id") discountId:Long ):
-            Response<ProductsModel>
+            Response<Discount>
 
 
 

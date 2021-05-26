@@ -2,6 +2,7 @@ package com.iti.team.ecommerce.model.reposatory
 
 
 import android.util.Log
+import com.iti.team.ecommerce.model.data_classes.Discount
 import com.iti.team.ecommerce.model.data_classes.MainCategories
 import com.iti.team.ecommerce.model.data_classes.ProductsModel
 import com.iti.team.ecommerce.model.remote.ApiDataSource
@@ -53,6 +54,47 @@ class ModelRepository: ModelRepo {
         }
         return result
 
+    }
+
+    override suspend fun createDiscount(discount: Discount): Result<Discount?> {
+        var result:Result<Discount?> = Result.Loading
+
+        try {
+            val response = apiDataSource.createDiscount(discount)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
+
+    override suspend fun getDiscount(discountId: Long): Result<Discount?> {
+        var result:Result<Discount?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getDiscount(discountId)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
     }
 
 }
