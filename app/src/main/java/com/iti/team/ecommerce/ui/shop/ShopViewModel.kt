@@ -17,11 +17,11 @@ class ShopViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO)  {
             when(val result = modelRepository.createDiscount(discount)){
                 is Result.Success->{
-                    Log.i("getCategories:", "${result.data}")}
+                    Log.i("createDiscount:", "${result.data}")}
                 is Result.Error ->{
-                    Log.e("getCategories:", "${result.exception.message}")}
+                    Log.e("createDiscount:", "${result.exception.message}")}
                 is Result.Loading ->{
-                    Log.i("getCategories","Loading")}
+                    Log.i("createDiscount","Loading")}
             }
         }
 
@@ -32,11 +32,11 @@ class ShopViewModel: ViewModel() {
         viewModelScope.launch(Dispatchers.IO)  {
             when(val result = modelRepository.getDiscount(discountId)){
                 is Result.Success->{
-                    Log.i("getCategories:", "${result.data?.discount?.title}")}
+                    Log.i("getDiscount:", "${result.data?.discount?.title}")}
                 is Result.Error ->{
-                    Log.e("getCategories:", "${result.exception.message}")}
+                    Log.e("getDiscount:", "${result.exception.message}")}
                 is Result.Loading ->{
-                    Log.i("getCategories","Loading")}
+                    Log.i("getDiscount","Loading")}
             }
         }
 

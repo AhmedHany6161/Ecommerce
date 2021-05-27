@@ -19,18 +19,15 @@ class ProductDetailsViewModel: ViewModel() {
                 is Result.Success -> {
                     Log.i(
                         "getProductImage:", "${
-                            result?.let {
-                                it.data?.images?.let {
+                            result.data?.images?.let {
                                     it[0].src
                                 }
-                            }
-
                         }")
                 }
                 is Result.Error ->{
-                    Log.e("getCategories:", "${result.exception.message}")}
+                    Log.e("getProductImage:", "${result.exception.message}")}
                 is Result.Loading ->{
-                    Log.i("getCategories","Loading")}
+                    Log.i("getProductImage","Loading")}
             }
         }
 

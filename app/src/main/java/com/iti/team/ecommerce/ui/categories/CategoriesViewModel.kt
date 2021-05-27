@@ -38,8 +38,8 @@ class CategoriesViewModel: ViewModel() {
 //                            }
 //                        }")
 //                }
-//                is Result.Error ->{Log.e("getCategories:", "${result.exception.message}")}
-//                is Result.Loading ->{Log.i("getCategories","Loading")}
+//                is Result.Error ->{Log.e("getProducts:", "${result.exception.message}")}
+//                is Result.Loading ->{Log.i("getProducts","Loading")}
 //            }
 //        }
 //
