@@ -45,6 +45,25 @@ class CategoriesViewModel: ViewModel() {
 //
 //    }
 
+//    fun getProductsFromType(productType: String){
+//
+//        viewModelScope.launch {
+//            when(val result = modelRepository.getProductsFromType(productType)){
+//                is Result.Success -> {
+//                    Log.i(
+//                        "getProductsFromType:", "${
+//                            result.data?.let {
+//                                it.product[0].title
+//                            }
+//                        }")
+//                }
+//                is Result.Error ->{Log.e("getProductsFromType:", "${result.exception.message}")}
+//                is Result.Loading ->{Log.i("getProductsFromType","Loading")}
+//            }
+//        }
+//
+//    }
+
 
 
 }

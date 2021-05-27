@@ -22,7 +22,7 @@ class CategoriesFragment: Fragment() {
 
     private fun init(){
         //viewModel.getCategories()
-        //viewModel.getProducts(268359598278)
+        //viewModel.getProductsFromType("ACCESSORIES")
        // viewModel.createDiscount()
 
     }

@@ -34,4 +34,8 @@ class ApiDataSource: ApiInterface {
         return _apiService.register(customer)
     }
 
+    override suspend fun getProductsFromType(productType: String): Response<ProductsModel> {
+        return _apiService.getProductsFromType(productType)
+    }
+
 }

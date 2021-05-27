@@ -11,6 +11,9 @@ data class Products(
     @Json(name = "title")
     val title: String?,
 
+    @Json(name = "product_type")
+    val productType: String?,
+
     @Json(name = "body_html")
     val description:String ?,
 

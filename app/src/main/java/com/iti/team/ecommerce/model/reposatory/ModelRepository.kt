@@ -127,4 +127,25 @@ class ModelRepository: ModelRepo {
         return  result
 
     }
+
+    override suspend fun getProductsFromType(productType: String): Result<ProductsModel?> {
+        var result:Result<ProductsModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getProductsFromType(productType)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
 }

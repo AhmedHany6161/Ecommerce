@@ -15,6 +15,10 @@ interface ApiService {
     suspend fun getProducts(@Query("collection_id") collectionId: Long):
             Response<ProductsModel>
 
+    @GET("products.json?")
+    suspend fun getProductsFromType(@Query("product_type") productType: String):
+            Response<ProductsModel>
+
     @POST("price_rules.json")
     suspend fun createDiscount(@Body priceRule:Discount):
             Response<Discount>

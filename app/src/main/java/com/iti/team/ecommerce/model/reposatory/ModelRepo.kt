@@ -14,4 +14,6 @@ interface ModelRepo {
     suspend fun getProductImages(productId: Long): Result<ProductImages?>
 
     suspend fun createCustomer(customer: CustomerModel): Result<CustomerModel?>
+
+    suspend fun getProductsFromType(productType: String): Result<ProductsModel?>
 }
