@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
@@ -33,6 +34,8 @@ class ProductsFragment : Fragment() {
         setupSearch(search, viewModel)
         listeningForBrand(viewModel, brandAdapter)
         viewModel.getProductsFromType("SHOES")
+//        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
+//        container.startShimmer()
         return view
     }
 

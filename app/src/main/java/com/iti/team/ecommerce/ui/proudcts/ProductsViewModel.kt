@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
@@ -17,16 +16,16 @@ import kotlinx.coroutines.launch
 class ProductsViewModel : ViewModel() {
     private val modelRepository: ModelRepo = ModelRepository()
 
-    private lateinit var dataOfProduct: List<Products>
+    private lateinit var dataOfProduct: MutableList<Pair<Products,String>>
     private lateinit var dataOfBrand: MutableList<String>
     private val set: MutableSet<String> = HashSet()
-    private val productLiveData: MutableLiveData<List<Products>> = MutableLiveData()
+    private val productLiveData: MutableLiveData<List<Pair<Products,String>>> = MutableLiveData()
     private val brandLiveData: MutableLiveData<List<String>> = MutableLiveData()
 
 
     fun search(name: String) {
         if (name.isNotEmpty()) {
-            productLiveData.value = dataOfProduct.filter { checkItem(it, name) }
+            productLiveData.value = dataOfProduct.filter { checkItem(it.first, name) }
         } else {
             filterBrand()
         }
@@ -40,7 +39,7 @@ class ProductsViewModel : ViewModel() {
             ?.contains(name.lowercase()) ?: false
 
 
-    fun getProductsData(): LiveData<List<Products>> {
+    fun getProductsData(): LiveData<List<Pair<Products,String>>> {
         return productLiveData
     }
 
@@ -54,7 +53,7 @@ class ProductsViewModel : ViewModel() {
     }
     private fun filterBrand(){
         if (set.isNotEmpty()) {
-            productLiveData.value = (dataOfProduct.filter { set.contains(it.vendor) })
+            productLiveData.value = (dataOfProduct.filter { set.contains(it.first.vendor) })
         } else {
             productLiveData.value = dataOfProduct
         }
@@ -70,13 +69,23 @@ class ProductsViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = modelRepository.getProductsFromType(productType)) {
                 is Result.Success -> {
-                   dataOfProduct = result.data?.product ?: listOf()
-                   productLiveData.postValue(dataOfProduct)
+                   dataOfProduct = mutableListOf()
                     dataOfBrand = mutableListOf()
-                   dataOfProduct.forEach {
-                       it.vendor?.let { it1 -> if(!dataOfBrand.contains(it1)){dataOfBrand.add(it1)} }
+                    result.data?.product?.forEach {
+                       it.vendor?.let { it1 ->
+                           if (!dataOfBrand.contains(it1)) {
+                               dataOfBrand.add(it1)
+                           }
+                       }
+                       when (val im = modelRepository.getProductImages(it.productId!!)) {
+                           is Result.Success ->{
+                             dataOfProduct.add(Pair(it, im.data?.images?.get(0)?.src!!))
+                               productLiveData.postValue(dataOfProduct)
+                               brandLiveData.postValue(dataOfBrand)
+                           }
+                       }
                    }
-                   brandLiveData.postValue(dataOfBrand)
+
                 }
                 is Result.Error -> {
                     Log.e("getProductsFromType:", "${result.exception.message}")

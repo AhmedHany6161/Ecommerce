@@ -16,10 +16,10 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import java.net.URL
 
-class ProductAdapter(private var dataSet: List<Products>) :
+class ProductAdapter(private var dataSet: List<Pair<Products,String>>) :
 
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    fun setData(products:List<Products>){
+    fun setData(products:List<Pair<Products,String>>){
         dataSet = products
     }
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -30,11 +30,11 @@ class ProductAdapter(private var dataSet: List<Products>) :
         private val addCart: ImageView = view.findViewById(R.id.add_item_cart)
         private val addFav: ImageView = view.findViewById(R.id.add_fav_item)
 
-        fun bind(item: Products){
-            name.text = item.title
-            price.text = "EGP ${item.variants[0]?.price}"
-            brand.text = item.vendor
-            Glide.with(view).load("https://cdn.shopify.com/s/files/1/0567/9310/4582/products/7883dc186e15bf29dad696e1e989e914.jpg?v=1621288214").into(image)
+        fun bind(item: Pair<Products,String>){
+            name.text = item.first.title
+            price.text = "EGP ${item.first.variants[0]?.price}"
+            brand.text = item.first.vendor
+            Glide.with(view).load(item.second).into(image)
         }
 
     }

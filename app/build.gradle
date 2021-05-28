@@ -73,6 +73,7 @@ android {
 dependencies {
     // ahmed
     implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     //ahmed
 
