@@ -21,11 +21,12 @@
 
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.iti.team.ecommerce.ui.Categories.CategoriesFragment"
+        android:name="com.iti.team.ecommerce.ui.categories.CategoriesFragment"
         android:label="CategoriesFragment"
         tools:layout="@layout/fragment_categories"/>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment" />
+
 </navigation>
