@@ -3,8 +3,6 @@ package com.iti.team.ecommerce.ui.categories
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.PriceRule
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -47,7 +45,7 @@ class CategoriesViewModel: ViewModel() {
 
 //    fun getProductsFromType(productType: String){
 //
-//        viewModelScope.launch {
+//        viewModelScope.launch(Dispatchers.IO) {
 //            when(val result = modelRepository.getProductsFromType(productType)){
 //                is Result.Success -> {
 //                    Log.i(
