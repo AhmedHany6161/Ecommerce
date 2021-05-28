@@ -2,6 +2,7 @@
     <string name="app_name">Ecommerce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="p_name">Product Name</string>
     <!--     ahmed-->
 
     <!--    ahmed-->
@@ -11,6 +12,15 @@
     <!--    wesam-->
 
     <!--    norhan-->
+
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="already_have_account">Already have an Account?</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="register_now">New user? Register Now</string>
+    <string name="other_methods">Use other Methods</string>
+
 
     <!--  norhan-->
 

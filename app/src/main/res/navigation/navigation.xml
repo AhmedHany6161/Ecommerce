@@ -3,14 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/categoriesFragment">
+    app:startDestination="@id/splash">
     <fragment
         android:id="@+id/splash"
         android:name="com.iti.team.ecommerce.ui.splash.Splash"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
     <fragment
+        android:id="@+id/products"
+        android:name="com.iti.team.ecommerce.ui.proudcts.Products"
+        android:label="Products" />
+     <fragment
+        android:id="@+id/store"
+        android:name="com.iti.team.ecommerce.ui.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main"/>
+
+    <fragment
         android:id="@+id/categoriesFragment"
         android:name="com.iti.team.ecommerce.ui.categories.CategoriesFragment"
-        android:label="CategoriesFragment" />
+        android:label="CategoriesFragment"
+        tools:layout="@layout/fragment_categories"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
+        android:label="LoginFragment" />
+
 </navigation>
