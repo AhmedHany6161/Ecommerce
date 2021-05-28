@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.ui.Categories
+package com.iti.team.ecommerce.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,8 +16,17 @@ class CategoriesFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(CategoriesViewModel::class.java)
+        init()
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }
+
+    private fun init(){
+        //viewModel.getCategories()
+        //viewModel.getProductsFromType("ACCESSORIES")
+       // viewModel.createDiscount()
+
+    }
+
 
     companion object {
 

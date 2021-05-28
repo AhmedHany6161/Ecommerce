@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.utils
 
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CompoundButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.annotation.Nullable
@@ -20,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.utils.extensions.getParentActivity
 
 /**
@@ -188,4 +192,19 @@ fun bindingAdapterCompoundButton(view: CompoundButton, @Nullable checked: LiveDa
                 { value -> value?.let { view.isChecked = it } })
         }
     }
+}
+
+@BindingAdapter("image","placeholder")
+fun setImage(image: ImageView, url: String?, placeHolder: Drawable) {
+
+    if (!url.isNullOrEmpty()){
+        Glide.with(image.context).load(url).centerCrop()
+            .placeholder(R.drawable.home)
+            .into(image)
+    }
+    else{
+        image.setImageDrawable(placeHolder)
+    }
+
+
 }
