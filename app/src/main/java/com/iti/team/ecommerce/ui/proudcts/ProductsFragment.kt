@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
+import com.iti.team.ecommerce.ui.MainActivity
 
 
-class Products : Fragment() {
+class ProductsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +32,18 @@ class Products : Fragment() {
         listeningForProducts(viewModel, productAdapter)
         setupSearch(search, viewModel)
         listeningForBrand(viewModel, brandAdapter)
+        viewModel.getProductsFromType("SHOES")
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).bottomNavigation.isGone = true
+    }
+    override fun onDestroyView() {
+        super.onDestroy()
+        (activity as MainActivity).bottomNavigation.isGone = false
+
     }
 
     private fun listeningForBrand(
