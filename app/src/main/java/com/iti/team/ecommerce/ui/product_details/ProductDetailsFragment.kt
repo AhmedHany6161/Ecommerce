@@ -35,11 +35,12 @@ class ProductDetailsFragment: Fragment() {
 
     private fun init(){
 
+        binding.viewModel = viewModel
 
         val vendors = listOf( Variants(price = "170.0",quantity = 3,requiresShipping = true,
             inventoryManagement ="ADDiDAS",taxable = true))
         val products = listOf(Products(productId = 6687366217926, productType = "SHOSE",
-            description = "this is first product test !!!!!",title = "ADDIDAS",status = "true",
+            description = "this is first product test !!!!!",title = "ADIDAS | SUPERSTAR 80S",status = "true",
             vendor = "ADDiDAS",variants = vendors))
         productObject = ProductsModel(products)
 
@@ -54,6 +55,7 @@ class ProductDetailsFragment: Fragment() {
 
        // viewModel.setProduct(productObject)
         //viewModel.getProductImage()
+        viewModel.updateProduct(products[0])
 
         observeData()
 

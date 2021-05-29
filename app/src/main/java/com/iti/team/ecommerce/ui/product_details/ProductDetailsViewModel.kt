@@ -59,13 +59,14 @@ class ProductDetailsViewModel: ViewModel() {
         updateProduct(product)
     }
 
-    private fun updateProduct(products: Products?){
+     fun updateProduct(products: Products?){
         products?.let {
            getProductImage(it.productId)
+            Log.i("description","${it.description}" )
             it.description?.let { it1 -> _descriptionText.value = it1 }
             it.vendor?.let { it1 -> _vendor.value = it1 }
             it.title?.let { it1 -> _title.value = it1 }
-            it.variants[0]?.price?.let { it1 -> _vendor.value = it1 }
+            it.variants[0]?.price?.let { it1 -> _price.value = it1 }
             it.variants[0]?.quantity?.let { it1 -> _quantity.value = it1.toString() }
             it.variants[0]?.taxable?.let { it1 -> _taxable.value = it1.toString() }
 
@@ -73,7 +74,7 @@ class ProductDetailsViewModel: ViewModel() {
 
     }
 
-     fun getProductImage(productId: Long? = 6687366217926){
+     private fun getProductImage(productId: Long? = 6687366217926){
 
         viewModelScope.launch(Dispatchers.IO)  {
             when(val result =productId?.let { modelRepository.getProductImages(it) } ){
