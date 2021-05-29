@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.utils.extensions.getParentActivity
+import com.smarteist.autoimageslider.SliderViewAdapter
 
 /**
  * Set [TextView] text.

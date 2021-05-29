@@ -7,6 +7,9 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.iti.team.ecommerce.ui.product_details.ProductDetailsViewModel" />
 
     </data>
 
@@ -87,14 +90,6 @@
             app:srcCompat="@drawable/ic_favorite"
             app:tint="@color/white"/>
 
-        <!--            <ImageView-->
-        <!--                android:layout_width="150dp"-->
-        <!--                android:layout_height="150dp"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="@id/img_header"-->
-        <!--                app:layout_constraintBottom_toBottomOf="@id/img_header"-->
-        <!--                android:background="@color/black"/>-->
         <androidx.cardview.widget.CardView
             app:cardCornerRadius="6dp"
             android:layout_margin="16dp"
@@ -133,34 +128,33 @@
             app:layout_constraintHeight_percent="0.12"
             app:layout_constraintTop_toBottomOf="@+id/img_header"
             app:layout_constraintBottom_toBottomOf="@id/img_header"
-            bind:title="@{@string/app_name}"
-
+            bind:title="@{viewModel.title}"
+            bind:price="@{viewModel.taxable}"
+            bind:vendor="@{viewModel.vendor}"
             />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_holder"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/description"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/card_details"
+                app:layout_constraintTop_toBottomOf="@+id/card_details"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/description"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txt_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/description"
-            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:layout_constraintStart_toStartOf="@id/details"
+            app:layout_constraintTop_toBottomOf="@+id/details"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
-            tools:text="nmnnjbjhdfhbudfnsdbuyrfdl;ndasfhbfgdngfbhbuadsfbnfk;d;fnhdvsfoubn
-fbnbsdbhlhdfnmfdbhgdfnmn;dlskja,al;sdnfdhyugfdsfh;g
-fbffffffffffffffffffffffffffffffffffffffffffffffffffffff
-zxvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb"/>
+            mutableText="@{viewModel.descriptionText}"/>
 
         <TextView
             android:id="@+id/taxable"
@@ -169,7 +163,8 @@ zxvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb"/>
             app:layout_constraintStart_toStartOf="@id/txt_description"
             app:layout_constraintTop_toBottomOf="@+id/txt_description"
             android:layout_marginTop="32dp"
-            tools:text="have taxable" />
+            tools:text="have taxable"
+            mutableText="@{viewModel.taxable}"/>
 
 
         <TextView
@@ -179,32 +174,11 @@ zxvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvb"/>
             app:layout_constraintStart_toStartOf="@id/taxable"
             app:layout_constraintTop_toBottomOf="@+id/taxable"
             android:layout_marginTop="32dp"
-            tools:text="4 Item Available" />
+            tools:text="4 Item Available"
+            mutableText="@{viewModel.quantity}"/>
 
-        <TextView
-            android:id="@+id/details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/card_details"
-            app:layout_constraintTop_toBottomOf="@+id/card_details"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/description"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/txt_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/details"
-            app:layout_constraintTop_toBottomOf="@+id/details"
-            android:layout_marginTop="16dp"
-            tools:text="@string/description"
-            android:textColor="@color/gray"
-            android:textSize="13sp"
-            android:textStyle="bold"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
