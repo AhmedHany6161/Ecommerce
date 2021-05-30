@@ -10,41 +10,55 @@ import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 class ProductsViewModel : ViewModel() {
     private val modelRepository: ModelRepo = ModelRepository()
-
-    private lateinit var dataOfProduct: MutableList<Pair<Products,String>>
-    private lateinit var dataOfBrand: MutableList<String>
+    private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
+    private var dataOfBrand: MutableList<String> = mutableListOf()
     private val set: MutableSet<String> = HashSet()
-    private val productLiveData: MutableLiveData<List<Pair<Products,String>>> = MutableLiveData()
-    private val brandLiveData: MutableLiveData<List<String>> = MutableLiveData()
+    private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
+    private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
+    private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            stateProductType.collectLatest {
+                if (it != null && dataOfProduct.isEmpty()) {
+                    val list = getMainDataForCard(it)
+                    bindBrands(list)
+                    brandFlowData.postValue(dataOfBrand)
+                    fetchImages(list)
+                }
+            }
+        }
+    }
 
     fun search(name: String) {
         if (name.isNotEmpty()) {
-            productLiveData.value = dataOfProduct.filter { checkItem(it.first, name) }
+            productFlowData.value = (dataOfProduct.filter { checkIsAccepted(it.first, name) })
         } else {
             filterBrand()
         }
     }
 
-    private fun checkItem(
+
+    private fun checkIsAccepted(
         it: Products,
         name: String
     ) =
         (set.contains(it.vendor) || set.isEmpty()) && it.title?.lowercase()
             ?.contains(name.lowercase()) ?: false
 
-
-    fun getProductsData(): LiveData<List<Pair<Products,String>>> {
-        return productLiveData
+    fun getProductsData(): LiveData<List<Pair<Products, String>>> {
+        return productFlowData
     }
 
     fun getBrandData(): LiveData<List<String>> {
-        return brandLiveData
+        return brandFlowData
     }
 
     fun addBrandFilter(name: String) {
@@ -53,9 +67,9 @@ class ProductsViewModel : ViewModel() {
     }
     private fun filterBrand(){
         if (set.isNotEmpty()) {
-            productLiveData.value = (dataOfProduct.filter { set.contains(it.first.vendor) })
+            productFlowData.value = (dataOfProduct.filter { set.contains(it.first.vendor) })
         } else {
-            productLiveData.value = dataOfProduct
+            productFlowData.value = (dataOfProduct)
         }
     }
 
@@ -64,38 +78,48 @@ class ProductsViewModel : ViewModel() {
         filterBrand()
     }
 
-     fun getProductsFromType(productType: String) {
+    fun getProductsFromType(productType: String) {
+        stateProductType.value = productType
+    }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = modelRepository.getProductsFromType(productType)) {
+    private suspend fun fetchImages(list: List<Products>) {
+        list.forEach {
+            when (val im = modelRepository.getProductImages(it.productId!!)) {
                 is Result.Success -> {
-                   dataOfProduct = mutableListOf()
-                    dataOfBrand = mutableListOf()
-                    result.data?.product?.forEach {
-                       it.vendor?.let { it1 ->
-                           if (!dataOfBrand.contains(it1)) {
-                               dataOfBrand.add(it1)
-                           }
-                       }
-                       when (val im = modelRepository.getProductImages(it.productId!!)) {
-                           is Result.Success ->{
-                             dataOfProduct.add(Pair(it, im.data?.images?.get(0)?.src!!))
-                               productLiveData.postValue(dataOfProduct)
-                               brandLiveData.postValue(dataOfBrand)
-                           }
-                       }
-                   }
-
-                }
-                is Result.Error -> {
-                    Log.e("getProductsFromType:", "${result.exception.message}")
-                }
-                is Result.Loading -> {
-                    Log.i("getProductsFromType", "Loading")
+                    dataOfProduct.add(Pair(it, im.data?.images?.get(0)?.src!!))
+                    productFlowData.postValue(dataOfProduct)
                 }
             }
         }
 
+    }
+
+    private suspend fun getMainDataForCard(productType: String): List<Products> {
+        when (val result = modelRepository.getProductsFromType(productType)) {
+            is Result.Success -> {
+                dataOfProduct = mutableListOf()
+                dataOfBrand = mutableListOf()
+                return result.data?.product ?: listOf()
+            }
+            is Result.Error -> {
+                Log.e("getProductsFromType:", "${result.exception.message}")
+            }
+            is Result.Loading -> {
+                Log.i("getProductsFromType", "Loading")
+            }
+        }
+        return listOf()
+    }
+
+
+    private fun bindBrands(list: List<Products>) {
+        list.forEach {
+            it.vendor?.let { it1 ->
+                if (!dataOfBrand.contains(it1)) {
+                    dataOfBrand.add(it1)
+                }
+            }
+        }
     }
 
 

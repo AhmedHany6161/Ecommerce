@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
@@ -43,11 +42,7 @@ class ProductsFragment : Fragment() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = true
     }
-    override fun onDestroyView() {
-        super.onDestroy()
-        (activity as MainActivity).bottomNavigation.isGone = false
 
-    }
 
     private fun listeningForBrand(
         viewModel: ProductsViewModel,
