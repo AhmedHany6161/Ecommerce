@@ -8,24 +8,10 @@ import com.iti.team.ecommerce.model.data_classes.Product
 class ProductsViewModel : ViewModel() {
     private var dataOfProduct: List<Product> = listOf(
         Product(
+            121,
             "adidmmmm",
             "000", "tft", 222
-        ), Product(
-            "abbssas",
-            "000", "tooojijijijift", 33
         ),
-        Product(
-            "jhuhuhu",
-            "000", "tyyyyft", 5588888
-        ),
-        Product(
-            "askjkjksas",
-            "000", "lkl", 55777
-        ),
-        Product(
-            "jjkkkkkj",
-            "000", "lllll", 55777
-        )
     )
     private var dataOfBrand: List<String> = listOf(
         "tft",
