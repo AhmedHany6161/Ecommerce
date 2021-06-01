@@ -7,19 +7,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.iti.team.ecommerce.R
+import com.iti.team.ecommerce.databinding.FragmentShopBinding
 import com.iti.team.ecommerce.model.data_classes.Discount
 import com.iti.team.ecommerce.model.data_classes.PriceRule
 
 class ShopFragment : Fragment() {
+
     private lateinit var viewModel: ShopViewModel
+    private lateinit var binding: FragmentShopBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentShopBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         init()
-        return inflater.inflate(R.layout.fragment_shop, container, false)
+        return binding.root
     }
 
     private fun init(){

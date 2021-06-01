@@ -9,7 +9,10 @@
 
     <!--    wesam-->
     <string name="description">Description</string>
-
+    <string name="t_shirt">T-Shirt</string>
+    <string name="shoes">Shoes</string>
+    <string name="accessory">Accessories</string>
+    <string name="special_offer">Special\nOffer</string>
     <!--    wesam-->
 
     <!--    norhan-->
