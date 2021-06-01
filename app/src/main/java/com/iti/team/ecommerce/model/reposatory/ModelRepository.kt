@@ -24,6 +24,7 @@ class ModelRepository: ModelRepo {
                 //result = Result.Error(response.errorBody().)
                 Log.i("ModelRepository","Error${response.errorBody()}")
             }
+
         }catch (e: IOException){
             result = Result.Error(e)
             Log.e("ModelRepository","IOException ${e.message}")

@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_splash" />
     <fragment
         android:id="@+id/products"
-        android:name="com.iti.team.ecommerce.ui.proudcts.Products"
+        android:name="com.iti.team.ecommerce.ui.proudcts.ProductsFragment"
         android:label="Products" />
      <fragment
         android:id="@+id/store"
@@ -28,5 +28,9 @@
         android:id="@+id/loginFragment"
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
+        android:label="ProductDetailsFragment" />
 
 </navigation>
