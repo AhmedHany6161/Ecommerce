@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductDetailsViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository()
+    private val  modelRepository: ModelRepo = ModelRepository(null)
 
     private var _descriptionText = MutableLiveData<String>()
     private var _taxable = MutableLiveData<String>()

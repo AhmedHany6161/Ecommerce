@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.model.reposatory.offline
+package com.iti.team.ecommerce.model.reposatory
 
 import com.iti.team.ecommerce.model.data_classes.Product
 import kotlinx.coroutines.flow.Flow

@@ -119,6 +119,9 @@ dependencies {
     // Retrofit Coroutines Support
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$kotlinCoroutinesAdapterVersion"
 
+    //image slider
+    implementation "com.github.smarteist:autoimageslider:$imageSlider"
+
     //wesam
 
     //norhan
