@@ -21,14 +21,14 @@ class BrandAdapter (private var dataSet: List<String> ,private val viewModel: Pr
             if (viewModel.inFilteredList(item)) {
                 name.setBackgroundColor(Color.RED)
             } else {
-                name.setBackgroundColor(Color.GRAY)
+                name.setBackgroundColor(Color.parseColor("#b1c4c4"))
             }
             name.setOnClickListener {
                 if (!viewModel.inFilteredList(item)) {
                     name.setBackgroundColor(Color.RED)
                     viewModel.addBrandFilter(item)
                 } else {
-                    name.setBackgroundColor(Color.GRAY)
+                    name.setBackgroundColor(Color.parseColor("#b1c4c4"))
                     viewModel.removeBrandFilter(item)
                 }
             }
