@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel: ViewModel()  {
 
-    private val  modelRepository: ModelRepo = ModelRepository()
+    private val  modelRepository: ModelRepo = ModelRepository(null)
 
     fun createCustomer(customer:CustomerModel){
         viewModelScope.launch(Dispatchers.IO) {

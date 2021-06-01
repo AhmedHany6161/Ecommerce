@@ -3,13 +3,15 @@ package com.iti.team.ecommerce.model.reposatory
 
 import android.util.Log
 import com.iti.team.ecommerce.model.data_classes.*
+import com.iti.team.ecommerce.model.local.room.OfflineDB
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
 import java.io.IOException
 import com.iti.team.ecommerce.model.remote.Result
+import kotlinx.coroutines.flow.Flow
 
 
-class ModelRepository: ModelRepo {
+class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRepo {
     private val apiDataSource: ApiInterface = ApiDataSource()
     override suspend fun getMainCategories():Result<MainCategories?>{
 
@@ -148,5 +150,23 @@ class ModelRepository: ModelRepo {
         }
         return result
 
+    }
+
+
+    override fun getAllProducts(): Flow<List<Product>> {
+        return offlineDB?.getAllProducts()!!
+    }
+
+    override suspend fun addToWishList(product: Product) {
+        offlineDB?.addToWishList(product)
+    }
+
+    override suspend fun removeFromWishList(product: Product) {
+        offlineDB?.removeFromWishList(product)
+
+    }
+
+    override suspend fun reset() {
+        offlineDB?.reset()
     }
 }

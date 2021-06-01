@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ShopViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository()
+    private val  modelRepository: ModelRepo = ModelRepository(null)
 
     fun createDiscount(discount:Discount){
         viewModelScope.launch(Dispatchers.IO)  {
