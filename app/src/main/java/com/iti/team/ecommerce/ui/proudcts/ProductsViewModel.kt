@@ -27,7 +27,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
-    private var idSet: List<Long> = listOf()
+    private var idSet: HashSet<Long> = hashSetOf()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -43,7 +43,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
             launch {
                 modelRepository.getAllId().collect {
-                    idSet = it
+                    idSet = HashSet(it)
                 }
             }
 
