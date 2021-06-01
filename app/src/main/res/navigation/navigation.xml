@@ -12,7 +12,12 @@
     <fragment
         android:id="@+id/products"
         android:name="com.iti.team.ecommerce.ui.proudcts.ProductsFragment"
-        android:label="Products" />
+        android:label="Products" >
+        <argument
+            android:name="product_type"
+            app:argType="string"
+            android:defaultValue="SHOES" />
+    </fragment>
      <fragment
         android:id="@+id/store"
         android:name="com.iti.team.ecommerce.ui.main.MainFragment"
@@ -35,6 +40,10 @@
     <fragment
         android:id="@+id/shopFragment"
         android:name="com.iti.team.ecommerce.ui.shop.ShopFragment"
-        android:label="ShopFragment" />
+        android:label="ShopFragment" >
+        <action
+            android:id="@+id/action_shopFragment_to_products"
+            app:destination="@id/products" />
+    </fragment>
 
 </navigation>

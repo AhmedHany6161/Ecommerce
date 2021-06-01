@@ -8,6 +8,7 @@ import android.widget.SearchView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,9 @@ import com.iti.team.ecommerce.ui.MainActivity
 
 
 class ProductsFragment : Fragment() {
+
+    private val arg:ProductsFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +36,7 @@ class ProductsFragment : Fragment() {
         listeningForProducts(viewModel, productAdapter)
         setupSearch(search, viewModel)
         listeningForBrand(viewModel, brandAdapter)
-        viewModel.getProductsFromType("SHOES")
+        viewModel.getProductsFromType(arg.productType)
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
         return view
