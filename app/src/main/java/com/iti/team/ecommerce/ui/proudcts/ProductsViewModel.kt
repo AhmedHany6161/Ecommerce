@@ -1,40 +1,58 @@
 package com.iti.team.ecommerce.ui.proudcts
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class ProductsViewModel : ViewModel() {
-    private val modelRepository: ModelRepo = ModelRepository(null)
+class ProductsViewModel(application: Application) : AndroidViewModel(application) {
+    private val modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application))
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
     private val set: MutableSet<String> = HashSet()
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
+    private var idSet: List<Long> = listOf()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            stateProductType.collectLatest {
-                if (it != null && dataOfProduct.isEmpty()) {
-                    val list = getMainDataForCard(it)
-                    bindBrands(list)
-                    brandFlowData.postValue(dataOfBrand)
-                    fetchImages(list)
+            launch {
+                stateProductType.collectLatest {
+                    if (it != null && dataOfProduct.isEmpty()) {
+                        val list = getMainDataForCard(it)
+                        bindBrands(list)
+                        brandFlowData.postValue(dataOfBrand)
+                        fetchImages(list)
+                    }
                 }
             }
+            launch {
+                modelRepository.getAllId().collect {
+                    idSet = it
+                }
+            }
+
         }
+    }
+
+
+    fun inWishList(id: Long): Boolean {
+        return idSet.contains(id)
     }
 
     fun search(name: String) {
@@ -45,6 +63,26 @@ class ProductsViewModel : ViewModel() {
         }
     }
 
+    fun addToWishList(products: Products, image: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToWishList(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    fun removeFromWishList(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.removeFromWishList(id)
+        }
+
+    }
 
     private fun checkIsAccepted(
         it: Products,

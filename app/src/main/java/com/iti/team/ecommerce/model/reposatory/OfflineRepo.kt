@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.Flow
 interface OfflineRepo {
     fun getAllProducts(): Flow<List<Product>>
 
+    fun getAllId(): Flow<List<Long>>
+
     suspend fun addToWishList(product: Product)
 
-    suspend fun removeFromWishList(product: Product)
+    suspend fun removeFromWishList(id: Long)
 
     suspend fun reset()
 }

@@ -28,12 +28,16 @@ class OfflineDatabase private constructor(): OfflineDB {
        return db.getAllProducts()
     }
 
+    override fun getAllId(): Flow<List<Long>> {
+        return db.getAllIds()
+    }
+
     override suspend fun addToWishList(product: Product) {
            db.addToWishList(product)
     }
 
-    override suspend fun removeFromWishList(product: Product) {
-          db.removeFromWishList(product)
+    override suspend fun removeFromWishList(id: Long) {
+          db.removeFromWishList(id)
     }
 
     override suspend fun reset() {
