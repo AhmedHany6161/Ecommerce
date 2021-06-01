@@ -9,6 +9,10 @@ import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.extensions.Event
+import com.iti.team.ecommerce.utils.moshi
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,6 +27,10 @@ class ProductsViewModel : ViewModel() {
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
+    private var _navigateToDetails = MutableLiveData<Event<String>>()
+
+    val navigateToDetails:LiveData<Event<String>>
+    get() = _navigateToDetails
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -123,4 +131,16 @@ class ProductsViewModel : ViewModel() {
     }
 
 
+    fun navigateToDetails(product: Products){
+            convertObjectToString(product)
+    }
+
+    private fun convertObjectToString(productObject: Products){
+        val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
+         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+    }
+
+    private fun sendObjectToDetailsScreen(objectString: String){
+        _navigateToDetails.postValue(Event(objectString))
+    }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
@@ -16,25 +17,32 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import java.net.URL
 
-class ProductAdapter(private var dataSet: List<Pair<Products,String>>) :
+class ProductAdapter(private var dataSet: List<Pair<Products,String>>,
+                     private val viewModel: ProductsViewModel) :
 
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     fun setData(products:List<Pair<Products,String>>){
         dataSet = products
     }
-    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View,private val viewModel: ProductsViewModel) :
+        RecyclerView.ViewHolder(view) {
         private val name: TextView = view.findViewById(R.id.product_name)
         private val price: TextView = view.findViewById(R.id.product_price)
         private val brand: TextView = view.findViewById(R.id.product_brand)
         private val image: ImageView = view.findViewById(R.id.product_image)
         private val addCart: ImageView = view.findViewById(R.id.add_item_cart)
         private val addFav: ImageView = view.findViewById(R.id.add_fav_item)
+        private val layout: ConstraintLayout = view.findViewById(R.id.product_layout)
 
         fun bind(item: Pair<Products,String>){
             name.text = item.first.title
             price.text = "EGP ${item.first.variants[0]?.price}"
             brand.text = item.first.vendor
             Glide.with(view).load(item.second).into(image)
+
+            layout.setOnClickListener {
+                viewModel.navigateToDetails(item.first)
+            }
         }
 
     }
@@ -43,7 +51,7 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>) :
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.product_holder, viewGroup, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view,viewModel)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
