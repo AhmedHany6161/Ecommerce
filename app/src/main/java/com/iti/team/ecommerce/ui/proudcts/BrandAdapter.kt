@@ -1,15 +1,12 @@
 package com.iti.team.ecommerce.ui.proudcts
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.data_classes.Product
 
 class BrandAdapter (private var dataSet: List<String> ,private val viewModel: ProductsViewModel) :
     RecyclerView.Adapter<BrandAdapter.ViewHolder>() {
@@ -21,12 +18,17 @@ class BrandAdapter (private var dataSet: List<String> ,private val viewModel: Pr
 
         fun bind(item: String){
             name.text = item
+            if (viewModel.inFilteredList(item)) {
+                name.setBackgroundColor(Color.RED)
+            } else {
+                name.setBackgroundColor(Color.GRAY)
+            }
             name.setOnClickListener {
-                if(name.currentTextColor == Color.BLACK){
-                    name.setTextColor(Color.RED)
+                if (!viewModel.inFilteredList(item)) {
+                    name.setBackgroundColor(Color.RED)
                     viewModel.addBrandFilter(item)
-                }else{
-                    name.setTextColor(Color.BLACK)
+                } else {
+                    name.setBackgroundColor(Color.GRAY)
                     viewModel.removeBrandFilter(item)
                 }
             }

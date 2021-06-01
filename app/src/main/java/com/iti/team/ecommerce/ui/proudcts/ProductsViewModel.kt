@@ -14,7 +14,6 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -23,7 +22,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         ModelRepository(OfflineDatabase.getInstance(application))
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
-    private val set: MutableSet<String> = HashSet()
+    private val filteredSet: MutableSet<String> = HashSet()
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -32,7 +31,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     init {
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                stateProductType.collectLatest {
+                stateProductType.collect {
                     if (it != null && dataOfProduct.isEmpty()) {
                         val list = getMainDataForCard(it)
                         bindBrands(list)
@@ -88,7 +87,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         it: Products,
         name: String
     ) =
-        (set.contains(it.vendor) || set.isEmpty()) && it.title?.lowercase()
+        (filteredSet.contains(it.vendor) || filteredSet.isEmpty()) && it.title?.lowercase()
             ?.contains(name.lowercase()) ?: false
 
     fun getProductsData(): LiveData<List<Pair<Products, String>>> {
@@ -100,19 +99,19 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun addBrandFilter(name: String) {
-        set.add(name)
+        filteredSet.add(name)
         filterBrand()
     }
     private fun filterBrand(){
-        if (set.isNotEmpty()) {
-            productFlowData.value = (dataOfProduct.filter { set.contains(it.first.vendor) })
+        if (filteredSet.isNotEmpty()) {
+            productFlowData.value = (dataOfProduct.filter { filteredSet.contains(it.first.vendor) })
         } else {
             productFlowData.value = (dataOfProduct)
         }
     }
 
     fun removeBrandFilter(name: String) {
-        set.remove(name)
+        filteredSet.remove(name)
         filterBrand()
     }
 
@@ -159,6 +158,8 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-
+     fun inFilteredList(name : String):Boolean{
+        return filteredSet.contains(name)
+     }
 
 }

@@ -154,7 +154,7 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
     }
 
 
-    override fun getAllProducts(): Flow<List<Product>> {
+    override fun getAllWishListProducts(): Flow<List<Product>> {
         return offlineDB?.getAllProducts() ?: flow { emit(listOf<Product>()) }
     }
 

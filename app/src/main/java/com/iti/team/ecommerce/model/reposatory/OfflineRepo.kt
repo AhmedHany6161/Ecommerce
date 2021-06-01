@@ -4,7 +4,8 @@ import com.iti.team.ecommerce.model.data_classes.Product
 import kotlinx.coroutines.flow.Flow
 
 interface OfflineRepo {
-    fun getAllProducts(): Flow<List<Product>>
+
+    fun getAllWishListProducts(): Flow<List<Product>>
 
     fun getAllId(): Flow<List<Long>>
 
