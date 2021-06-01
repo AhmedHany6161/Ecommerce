@@ -13,13 +13,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+    lateinit var bottomNavigation: MeowBottomNavigation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val bottomNavigation: MeowBottomNavigation = findViewById(R.id.meowBottomNavigation)
+        bottomNavigation = findViewById(R.id.meowBottomNavigation)
         val navController = navHostFragment.navController
 
         splashSetup(navController,bottomNavigation)
@@ -35,6 +36,11 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.store)
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        bottomNavigation.isGone = false
     }
     private fun navigationSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.store))

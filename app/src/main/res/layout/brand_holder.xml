@@ -16,5 +16,5 @@
         android:text="sddsd"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:textStyle="italic|bold" />
+        android:textStyle="italic" />
 </androidx.cardview.widget.CardView>
