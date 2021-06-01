@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 
 class ProductsViewModel : ViewModel() {
-    private val modelRepository: ModelRepo = ModelRepository()
+    private val modelRepository: ModelRepo = ModelRepository(null)
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
     private val set: MutableSet<String> = HashSet()

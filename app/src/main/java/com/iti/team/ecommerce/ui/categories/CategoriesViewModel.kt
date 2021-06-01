@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class CategoriesViewModel: ViewModel() {
 
-    private val  modelRepository:ModelRepo = ModelRepository()
+    private val  modelRepository:ModelRepo = ModelRepository(null)
 
     fun getCategories(){
         viewModelScope.launch(Dispatchers.IO)  {
