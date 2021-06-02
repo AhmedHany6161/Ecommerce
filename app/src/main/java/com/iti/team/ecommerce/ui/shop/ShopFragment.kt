@@ -1,10 +1,12 @@
 package com.iti.team.ecommerce.ui.shop
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.iti.team.ecommerce.R
@@ -29,13 +31,9 @@ class ShopFragment : Fragment() {
     }
 
     private fun init(){
-        val priceRule = PriceRule(title = "SUMMERSALE10OFF",
-            targetType = "line_item", targetSelection = "all", allocationMethod = "across",
-            valueType = "fixed_amount", value = "-10.0",customerSelection = "all",
-            startsAt = "2017-01-19T17:59:10Z")
-        val discount = Discount(priceRule)
-        viewModel.createDiscount(discount)
+        binding.viewModel = viewModel
         itemsClicked()
+        observeData()
 
     }
 
@@ -51,6 +49,22 @@ class ShopFragment : Fragment() {
         binding.accessoryLayout.subCategoryCard.setOnClickListener {
             navigate("ACCESSORIES")
         }
+    }
+
+    private fun observeData(){
+        observeShowErrorDialog()
+        observeShowSuccessDialog()
+    }
+
+    private fun observeShowSuccessDialog(){
+        viewModel.showSuccessDialog.observe(viewLifecycleOwner,{
+            Log.i("observeSuccessDialog", it)
+        })
+    }
+    private fun observeShowErrorDialog(){
+        viewModel.showErrorDialog.observe(viewLifecycleOwner,{
+            Log.i("observeErrorDialog", it)
+        })
     }
 
     private fun navigate(productType: String){

@@ -38,10 +38,6 @@ class ProductDetailsFragment: Fragment() {
     private fun init(){
 
         binding.viewModel = viewModel
-
-
-
-
         binding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM)
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
         binding.imageSlider.startAutoCycle()
