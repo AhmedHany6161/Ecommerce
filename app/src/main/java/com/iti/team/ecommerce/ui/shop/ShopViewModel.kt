@@ -32,6 +32,9 @@ class ShopViewModel: ViewModel() {
 
     private var _dialogMessage = MutableLiveData<String>()
 
+    private var _copyIcon = MutableLiveData<Int>()
+    private var _messageAlignment = MutableLiveData<Int>()
+
     val loading : LiveData<Int>
     get() = _loading
 
@@ -54,6 +57,12 @@ class ShopViewModel: ViewModel() {
     val dialogMessage: LiveData<String>
         get() = _dialogMessage
 
+    val copyIcon : LiveData<Int>
+        get() = _copyIcon
+
+    val messageAlignment : LiveData<Int>
+        get() = _messageAlignment
+
     init {
         showHideItems(View.GONE)
 
@@ -64,18 +73,21 @@ class ShopViewModel: ViewModel() {
             when(val result = modelRepository.createDiscount(discount)){
                 is Result.Success->{
                     Log.i("createDiscount:", "${result.data}")
+                    _copyIcon.postValue(View.VISIBLE)
                     showHideItems(View.GONE)
                     _dialogImage.postValue(R.drawable.ic_gift_box)
                     _dialogButtonText.postValue("Cancel")
-
+                    _messageAlignment.postValue(View.TEXT_ALIGNMENT_TEXT_START)
                     result.data?.discount?.title?.let {_dialogMessage.postValue(it)}
                     result.data?.discount?.title?.let { _showSuccessDialog.postValue(Event(it))}
                 }
                 is Result.Error ->{
                     Log.e("createDiscount:", "${result.exception.message}")
                     showHideItems(View.GONE)
+                    _copyIcon.postValue(View.GONE)
                     _dialogImage.postValue(R.drawable.ic_warning)
                     _dialogButtonText.postValue("OK")
+                    _messageAlignment.postValue(View.TEXT_ALIGNMENT_CENTER)
                     _dialogMessage.postValue("oops failed to get discount code.")
                     _showSuccessDialog.postValue(Event("oops failed to get discount code."))
                 }
@@ -112,6 +124,10 @@ class ShopViewModel: ViewModel() {
             startsAt = "2017-01-19T17:59:10Z")
         val discount = Discount(priceRule)
         createDiscount(discount)
+    }
+
+    fun copyIconClicked(){
+        Log.i("copyIconClicked","Clicked")
     }
 
     private fun showHideItems(visibility: Int){
