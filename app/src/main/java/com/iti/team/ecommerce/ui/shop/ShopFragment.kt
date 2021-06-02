@@ -58,12 +58,21 @@ class ShopFragment : Fragment() {
 
     private fun observeShowSuccessDialog(){
         viewModel.showSuccessDialog.observe(viewLifecycleOwner,{
-            Log.i("observeSuccessDialog", it)
+            it.getContentIfNotHandled()?.let {
+                Log.i("observeSuccessDialog", it)
+                val dialog = DiscountDialog.newInstance(it)
+                dialog.show(this.childFragmentManager, "SuccessDialog")
+            }
+
         })
     }
     private fun observeShowErrorDialog(){
         viewModel.showErrorDialog.observe(viewLifecycleOwner,{
-            Log.i("observeErrorDialog", it)
+
+            it.getContentIfNotHandled()?.let {
+                Log.i("observeErrorDialog", it)
+            }
+
         })
     }
 

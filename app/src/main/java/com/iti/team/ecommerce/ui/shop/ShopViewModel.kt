@@ -21,9 +21,9 @@ class ShopViewModel: ViewModel() {
     private var _loading = MutableLiveData<Int>()
     private var _transparentView = MutableLiveData<Int>()
 
-    private var _showSuccessDialog = MutableLiveData<String>()
+    private var _showSuccessDialog = MutableLiveData<Event<String>>()
 
-    private var _showErrorDialog = MutableLiveData<String>()
+    private var _showErrorDialog = MutableLiveData<Event<String>>()
 
     val loading : LiveData<Int>
     get() = _loading
@@ -32,10 +32,10 @@ class ShopViewModel: ViewModel() {
     val transparentView: LiveData<Int>
         get() = _transparentView
 
-    val showSuccessDialog: LiveData<String>
+    val showSuccessDialog: LiveData<Event<String>>
         get() = _showSuccessDialog
 
-    val showErrorDialog: LiveData<String>
+    val showErrorDialog: LiveData<Event<String>>
         get() = _showErrorDialog
 
     init {
@@ -48,12 +48,12 @@ class ShopViewModel: ViewModel() {
                 is Result.Success->{
                     Log.i("createDiscount:", "${result.data}")
                     showHideItems(View.GONE)
-                    result.data?.discount?.title?.let { _showSuccessDialog.postValue(it)}
+                    result.data?.discount?.title?.let { _showSuccessDialog.postValue(Event(it))}
                 }
                 is Result.Error ->{
                     Log.e("createDiscount:", "${result.exception.message}")
                     showHideItems(View.GONE)
-                    _showSuccessDialog.postValue("oops failed to get discount code")
+                    _showSuccessDialog.postValue(Event("oops failed to get discount code"))
                 }
                 is Result.Loading ->{
                     Log.i("createDiscount","Loading")
