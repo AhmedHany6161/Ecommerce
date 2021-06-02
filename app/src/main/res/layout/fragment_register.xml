@@ -115,54 +115,7 @@
                             android:hint="@string/register_phone_hint"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputstreet"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        app:errorEnabled="true">
-                        <EditText
-                            android:id="@+id/editTextStreet"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/primaryTextColor"
-                            android:hint="@string/register_Street_hint"
-                            android:maxLines="1"
-                            android:inputType="text"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputCity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        app:errorEnabled="true">
-                        <EditText
-                            android:id="@+id/editTextCity"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/primaryTextColor"
-                            android:hint="@string/register_city_hint"
-                            android:maxLines="1"
-                            android:inputType="text"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputCountry"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        app:errorEnabled="true">
-                        <EditText
-                            android:id="@+id/editTextCountry"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/primaryTextColor"
-                            android:hint="@string/register_country_hint"
-                            android:maxLines="1"
-                            android:inputType="text"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputPassword"
                         android:layout_width="match_parent"

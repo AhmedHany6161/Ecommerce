@@ -35,7 +35,8 @@ class RegisterFragment: Fragment() {
     }
 
     fun registerUser() {
-        if ( !validateFirstName() && !validateLastName() && !validatePassword() && !validateConfirmPass()&& !validatePhoneNo() && !validateEmail() && !validateAddrees()) {
+        if ( !validateFirstName() && !validateLastName() && !validatePassword()
+            && !validateConfirmPass()&& !validatePhoneNo() && !validateEmail() ) {
             Toast.makeText(context, "registerd", Toast.LENGTH_LONG).show()
         }
         else{
@@ -75,7 +76,7 @@ class RegisterFragment: Fragment() {
             binding.textInputEmail.setError("Invalid email address")
             false
         } else {
-            binding.textInputEmail.setError(null)
+            binding.textInputEmail.setError(null) 
             binding.textInputEmail.setErrorEnabled(false)
             true
         }
@@ -130,35 +131,5 @@ class RegisterFragment: Fragment() {
         }
 
     }
-    private fun validateAddrees(): Boolean {
-        val street: String = binding.editTextStreet.getText().toString()
-        val city: String = binding.editTextCity.getText().toString()
-        val country: String = binding.editTextCountry.getText().toString()
-        var isValid:Boolean=false
-        if(!street.isEmpty()&&!city.isEmpty()&&!country.isEmpty()){
-            binding.textInputstreet.setError(null)
-            binding.textInputstreet.setErrorEnabled(false)
-            binding.textInputCity.setError(null)
-            binding.textInputCity.setErrorEnabled(false)
-            binding.textInputCountry.setError(null)
-            binding.textInputCountry.setErrorEnabled(false)
-            isValid=true
-        }
-        else {
-            if (street.isEmpty()) {
-                binding.textInputstreet.setError("Field cannot be empty")
-                isValid = false
-            }
-            if (city.isEmpty()) {
-                binding.textInputCity.setError("Field cannot be empty")
-                isValid = false
-            }
-            if (country.isEmpty()) {
-                binding.textInputCountry.setError("Field cannot be empty")
-                isValid = false
-            }
 
-        }
-        return isValid
-    }
 }
