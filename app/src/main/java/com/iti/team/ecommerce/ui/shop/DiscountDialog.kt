@@ -7,9 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.iti.team.ecommerce.databinding.DiscountDialogFragmentBinding
 
-class DiscountDialog(val message: String): DialogFragment() {
+class DiscountDialog(private val viewModel: ShopViewModel): DialogFragment() {
 
 
     private lateinit var binding: DiscountDialogFragmentBinding
@@ -18,7 +19,7 @@ class DiscountDialog(val message: String): DialogFragment() {
         val inflater = LayoutInflater.from(activity)
         binding = DiscountDialogFragmentBinding.inflate(inflater)
 
-        binding.textMessage.text = message
+        binding.viewModel = viewModel
 
         val builder = AlertDialog.Builder(requireActivity())
 
@@ -35,6 +36,6 @@ class DiscountDialog(val message: String): DialogFragment() {
     }
 
     companion object{
-        fun newInstance(message: String) = DiscountDialog(message)
+        fun newInstance(viewModel: ShopViewModel) = DiscountDialog(viewModel)
     }
 }

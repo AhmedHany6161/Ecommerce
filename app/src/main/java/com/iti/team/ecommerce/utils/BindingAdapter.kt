@@ -119,7 +119,7 @@ fun setMutableText(
 }
 
 /**
- * Set [Button] text.
+ * Set [CompoundButton] text.
  */
 @BindingAdapter("mutableText", "mutableTextId", requireAll = false)
 fun setMutableText(view: Button, @Nullable text: LiveData<String>?, @Nullable textId: LiveData<Int>?) {
@@ -195,8 +195,19 @@ fun bindingAdapterCompoundButton(view: CompoundButton, @Nullable checked: LiveDa
     }
 }
 
+@BindingAdapter("mutableSrc")
+fun setImage(view:ImageView, @Nullable drawableId: LiveData<Int?>?){
+    view.getParentActivity()?.let { parentActivity ->
+        drawableId?.let {
+            drawableId->
+            drawableId.observe(parentActivity,
+            {value-> value?.let{view.setImageResource(it)}})
+        }
+    }
+}
+
 @BindingAdapter("image","placeholder")
-fun setImage(image: ImageView, url: String?, placeHolder: Drawable) {
+fun setImageWithGlide(image: ImageView, url: String?, placeHolder: Drawable) {
 
     if (!url.isNullOrEmpty()){
         Glide.with(image.context).load(url).centerCrop()
@@ -206,6 +217,5 @@ fun setImage(image: ImageView, url: String?, placeHolder: Drawable) {
     else{
         image.setImageDrawable(placeHolder)
     }
-
-
 }
+

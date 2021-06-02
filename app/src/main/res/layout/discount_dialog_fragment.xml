@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.iti.team.ecommerce.ui.shop.ShopViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,10 +33,10 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@string/hello_blank_fragment"
                     android:textSize="22sp"
                     android:textAlignment="center"
-                    android:layout_marginTop="50dp"/>
+                    android:layout_marginTop="50dp"
+                    mutableText="@{viewModel.dialogMessage}"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_cancel"
@@ -44,20 +49,20 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/rounded_stroke_rectangle"
-                    android:text="ok"
+                    mutableText="@{viewModel.dialogButtonText}"
                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/dialog_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="@+id/card_holder"
             app:layout_constraintEnd_toEndOf="@+id/card_holder"
             app:layout_constraintTop_toTopOf="@+id/card_holder"
             app:layout_constraintBottom_toTopOf="@+id/card_holder"
-            app:srcCompat="@drawable/ic_t_shirt"/>
+            mutableSrc="@{viewModel.dialogImage}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

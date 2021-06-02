@@ -1,11 +1,13 @@
 package com.iti.team.ecommerce.ui.shop
 
+
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Discount
 import com.iti.team.ecommerce.model.data_classes.PriceRule
 import com.iti.team.ecommerce.model.remote.Result
@@ -25,6 +27,11 @@ class ShopViewModel: ViewModel() {
 
     private var _showErrorDialog = MutableLiveData<Event<String>>()
 
+    private var _dialogImage = MutableLiveData<Int>()
+    private var _dialogButtonText = MutableLiveData<String>()
+
+    private var _dialogMessage = MutableLiveData<String>()
+
     val loading : LiveData<Int>
     get() = _loading
 
@@ -38,8 +45,18 @@ class ShopViewModel: ViewModel() {
     val showErrorDialog: LiveData<Event<String>>
         get() = _showErrorDialog
 
+    val dialogImage: LiveData<Int>
+        get() = _dialogImage
+
+    val dialogButtonText: LiveData<String>
+        get() = _dialogButtonText
+
+    val dialogMessage: LiveData<String>
+        get() = _dialogMessage
+
     init {
         showHideItems(View.GONE)
+
     }
 
     private fun createDiscount(discount:Discount){
@@ -48,12 +65,19 @@ class ShopViewModel: ViewModel() {
                 is Result.Success->{
                     Log.i("createDiscount:", "${result.data}")
                     showHideItems(View.GONE)
+                    _dialogImage.postValue(R.drawable.ic_gift_box)
+                    _dialogButtonText.postValue("Cancel")
+
+                    result.data?.discount?.title?.let {_dialogMessage.postValue(it)}
                     result.data?.discount?.title?.let { _showSuccessDialog.postValue(Event(it))}
                 }
                 is Result.Error ->{
                     Log.e("createDiscount:", "${result.exception.message}")
                     showHideItems(View.GONE)
-                    _showSuccessDialog.postValue(Event("oops failed to get discount code"))
+                    _dialogImage.postValue(R.drawable.ic_warning)
+                    _dialogButtonText.postValue("OK")
+                    _dialogMessage.postValue("oops failed to get discount code.")
+                    _showSuccessDialog.postValue(Event("oops failed to get discount code."))
                 }
                 is Result.Loading ->{
                     Log.i("createDiscount","Loading")
