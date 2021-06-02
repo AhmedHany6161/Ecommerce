@@ -9,4 +9,4 @@ data class Product(@PrimaryKey(autoGenerate = true)
                    val name:String,
                    val image:String,
                    val brand:String,
-                   val price:Int)
+                   val price:String)
