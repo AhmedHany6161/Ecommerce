@@ -37,6 +37,10 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
         android:label="ProductDetailsFragment" />
+    <fragment
+        android:id="@+id/wishListFragment"
+        android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
+        android:label="WishListFragment" />
 
 
 </navigation>
