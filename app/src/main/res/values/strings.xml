@@ -2,11 +2,13 @@
     <string name="app_name">Ecommerce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="p_name">Product Name</string>
     <!--     ahmed-->
 
     <!--    ahmed-->
 
     <!--    wesam-->
+    <string name="description">Description</string>
 
     <!--    wesam-->
 
