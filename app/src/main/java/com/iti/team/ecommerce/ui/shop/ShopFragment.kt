@@ -1,24 +1,23 @@
 package com.iti.team.ecommerce.ui.shop
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentShopBinding
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.PriceRule
-import com.iti.team.ecommerce.ui.proudcts.ProductsFragment
 
 class ShopFragment : Fragment() {
 
     private lateinit var viewModel: ShopViewModel
     private lateinit var binding: FragmentShopBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +29,9 @@ class ShopFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    }
     private fun init(){
         binding.viewModel = viewModel
         itemsClicked()
@@ -60,7 +62,7 @@ class ShopFragment : Fragment() {
         viewModel.showSuccessDialog.observe(viewLifecycleOwner,{
             it.getContentIfNotHandled()?.let {
                 Log.i("observeSuccessDialog", it)
-                val dialog = DiscountDialog.newInstance(viewModel)
+                val dialog = DiscountDialog.newInstance(viewModel,it)
                 dialog.show(this.childFragmentManager, "SuccessDialog")
             }
 
@@ -70,7 +72,7 @@ class ShopFragment : Fragment() {
         viewModel.showErrorDialog.observe(viewLifecycleOwner,{
             it.getContentIfNotHandled()?.let {
                 Log.i("observeErrorDialog", it)
-                val dialog = DiscountDialog.newInstance(viewModel)
+                val dialog = DiscountDialog.newInstance(viewModel,it)
                 dialog.show(this.childFragmentManager, "ErrorDialog")
             }
 

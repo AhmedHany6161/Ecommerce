@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class ShopViewModel: ViewModel() {
     private val  modelRepository: ModelRepo = ModelRepository(null)
+    private var code:String = ""
 
     private var _loading = MutableLiveData<Int>()
     private var _transparentView = MutableLiveData<Int>()
@@ -34,6 +35,8 @@ class ShopViewModel: ViewModel() {
 
     private var _copyIcon = MutableLiveData<Int>()
     private var _messageAlignment = MutableLiveData<Int>()
+
+    private var _copyAction = MutableLiveData<Event<String>>()
 
     val loading : LiveData<Int>
     get() = _loading
@@ -62,6 +65,9 @@ class ShopViewModel: ViewModel() {
 
     val messageAlignment : LiveData<Int>
         get() = _messageAlignment
+
+    val copyAction: LiveData<Event<String>>
+        get() = _copyAction
 
     init {
         showHideItems(View.GONE)
@@ -128,6 +134,7 @@ class ShopViewModel: ViewModel() {
 
     fun copyIconClicked(){
         Log.i("copyIconClicked","Clicked")
+        _copyAction.postValue(Event(code))
     }
 
     private fun showHideItems(visibility: Int){

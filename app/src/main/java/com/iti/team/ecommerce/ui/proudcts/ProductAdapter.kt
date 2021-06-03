@@ -17,15 +17,17 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import java.net.URL
 
-class ProductAdapter(private var dataSet: List<Pair<Products,String>>,
-                     private val viewModel: ProductsViewModel) :
+class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private val viewModel: ProductsViewModel) :
+
 
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
     fun setData(products:List<Pair<Products,String>>){
         dataSet = products
     }
-    class ViewHolder(val view: View,private val viewModel: ProductsViewModel) :
-        RecyclerView.ViewHolder(view) {
+
+
+    class ViewHolder(val view: View , private val viewModel: ProductsViewModel) : RecyclerView.ViewHolder(view) {
+
         private val name: TextView = view.findViewById(R.id.product_name)
         private val price: TextView = view.findViewById(R.id.product_price)
         private val brand: TextView = view.findViewById(R.id.product_brand)
@@ -40,8 +42,24 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,
             brand.text = item.first.vendor
             Glide.with(view).load(item.second).into(image)
 
+
             layout.setOnClickListener {
                 viewModel.navigateToDetails(item.first)
+            }
+
+            if(viewModel.inWishList(item.first.productId?:-1)){
+                addFav.setImageResource(R.drawable.ic_favorite_red)
+            }else{
+                addFav.setImageResource(R.drawable.ic_favorite)
+            }
+            addFav.setOnClickListener {
+                if (!viewModel.inWishList(item.first.productId ?: -1)) {
+                    viewModel.addToWishList(item.first, item.second)
+                    addFav.setImageResource(R.drawable.ic_favorite_red)
+                } else {
+                    viewModel.removeFromWishList(item.first.productId ?: -1)
+                    addFav.setImageResource(R.drawable.ic_favorite)
+                }
             }
         }
 

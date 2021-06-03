@@ -86,6 +86,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/t_shirt_layout"
                 app:layout_constraintStart_toEndOf="@+id/t_shirt_layout"
                 app:layout_constraintEnd_toStartOf="@+id/shoes_layout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
                 android:layout_marginTop="32dp"
                 bind:name="@{@string/accessory}"
                 bind:image="@{@drawable/ic_bag}"/>

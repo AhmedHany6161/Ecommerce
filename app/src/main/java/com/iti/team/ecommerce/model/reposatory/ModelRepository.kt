@@ -6,9 +6,10 @@ import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.local.room.OfflineDB
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
-import java.io.IOException
 import com.iti.team.ecommerce.model.remote.Result
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import java.io.IOException
 
 
 class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRepo {
@@ -153,16 +154,20 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
     }
 
 
-    override fun getAllProducts(): Flow<List<Product>> {
-        return offlineDB?.getAllProducts()!!
+    override fun getAllWishListProducts(): Flow<List<Product>> {
+        return offlineDB?.getAllProducts() ?: flow { emit(listOf<Product>()) }
+    }
+
+    override fun getAllId(): Flow<List<Long>> {
+        return offlineDB?.getAllId() ?: flow { emit(listOf<Long>()) }
     }
 
     override suspend fun addToWishList(product: Product) {
         offlineDB?.addToWishList(product)
     }
 
-    override suspend fun removeFromWishList(product: Product) {
-        offlineDB?.removeFromWishList(product)
+    override suspend fun removeFromWishList(id: Long) {
+        offlineDB?.removeFromWishList(id)
 
     }
 
