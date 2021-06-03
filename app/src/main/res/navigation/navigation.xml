@@ -29,8 +29,14 @@
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment" />
     <fragment
+ 
+        android:id="@+id/registerFragment"
+        android:name="com.iti.team.ecommerce.ui.register.RegisterFragment"
+        android:label="RegisterFragment" />
+    <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
         android:label="ProductDetailsFragment" />
+
 
 </navigation>
