@@ -37,8 +37,14 @@
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
         android:label="LoginFragment" />
     <fragment
+ 
+        android:id="@+id/registerFragment"
+        android:name="com.iti.team.ecommerce.ui.register.RegisterFragment"
+        android:label="RegisterFragment" />
+    <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
+
         android:label="ProductDetailsFragment" >
         <argument
             android:name="productObject"
@@ -51,6 +57,17 @@
         <action
             android:id="@+id/action_shopFragment_to_products"
             app:destination="@id/products" />
+        <action
+            android:id="@+id/action_shopFragment_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
     </fragment>
+=======
+        android:label="ProductDetailsFragment" />
+    <fragment
+        android:id="@+id/wishListFragment"
+        android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
+        android:label="WishListFragment" />
+
+>>>>>>> develop
 
 </navigation>
