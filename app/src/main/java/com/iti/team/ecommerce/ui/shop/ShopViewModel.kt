@@ -40,6 +40,7 @@ class ShopViewModel: ViewModel() {
 
     private var _copyAction = MutableLiveData<Event<String>>()
 
+    private var _navigateToWish = MutableLiveData<Event<Boolean>>()
     val loading : LiveData<Int>
     get() = _loading
 
@@ -70,6 +71,9 @@ class ShopViewModel: ViewModel() {
 
     val copyAction: LiveData<Event<String>>
         get() = _copyAction
+
+    val navigateToWish: LiveData<Event<Boolean>>
+        get() = _navigateToWish
 
     init {
         showHideItems(View.GONE)
@@ -165,5 +169,10 @@ class ShopViewModel: ViewModel() {
     }
     fun shopItemsClicked(id: Long){
         Log.i("shopItemsClicked",id.toString())
+
+    }
+
+    fun navigateToWish(){
+        _navigateToWish.postValue(Event(true))
     }
 }
