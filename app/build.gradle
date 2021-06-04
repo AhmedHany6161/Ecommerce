@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 ext{
@@ -25,6 +26,7 @@ ext{
     kotlinCoroutinesAdapterVersion = "0.9.2"
     coroutinesVersion = '1.4.2'
     imageSlider = '1.4.0'
+    lottieVersion = '3.4.0'
     //wesam
 
     //norhan
@@ -47,6 +49,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -65,8 +68,8 @@ android {
         jvmTarget = '1.8'
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
 
     viewBinding {
@@ -126,6 +129,10 @@ dependencies {
 
     //image slider
     implementation "com.github.smarteist:autoimageslider:$imageSlider"
+
+    //lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
 
     //wesam
 

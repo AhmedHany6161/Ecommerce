@@ -12,7 +12,15 @@
     <fragment
         android:id="@+id/products"
         android:name="com.iti.team.ecommerce.ui.proudcts.ProductsFragment"
-        android:label="Products" />
+        android:label="Products" >
+        <argument
+            android:name="product_type"
+            app:argType="string"
+            android:defaultValue="SHOES" />
+        <action
+            android:id="@+id/action_products_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
      <fragment
         android:id="@+id/store"
         android:name="com.iti.team.ecommerce.ui.main.MainFragment"
@@ -36,11 +44,30 @@
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"
+
+        android:label="ProductDetailsFragment" >
+        <argument
+            android:name="productObject"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopFragment"
+        android:name="com.iti.team.ecommerce.ui.shop.ShopFragment"
+        android:label="ShopFragment" >
+        <action
+            android:id="@+id/action_shopFragment_to_products"
+            app:destination="@id/products" />
+        <action
+            android:id="@+id/action_shopFragment_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
+    </fragment>
+=======
         android:label="ProductDetailsFragment" />
     <fragment
         android:id="@+id/wishListFragment"
         android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
         android:label="WishListFragment" />
 
+>>>>>>> develop
 
 </navigation>
