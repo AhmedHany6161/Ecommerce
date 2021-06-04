@@ -68,6 +68,7 @@ class DiscountDialog(private val discount:String,private val viewModel: ShopView
     }
 
     companion object{
-        fun newInstance(viewModel: ShopViewModel,discount:String) = DiscountDialog(discount,viewModel)
+        fun newInstance(viewModel: ShopViewModel,discount:String) =
+            DiscountDialog(discount,viewModel)
     }
 }

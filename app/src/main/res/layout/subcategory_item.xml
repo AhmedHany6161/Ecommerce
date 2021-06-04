@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/t_shirt_image"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +45,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="8dp"
             android:text="@{name}"
-            android:textSize="18sp"
+            android:textSize="12sp"
             android:textStyle="bold"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

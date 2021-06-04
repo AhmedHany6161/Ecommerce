@@ -35,6 +35,8 @@ interface ApiService {
     suspend fun register(@Body customer:CustomerModel):
             Response<CustomerModel>
 
-
+    @GET("smart_collections.json")
+    suspend fun smartCollection():
+            Response<SmartCollectionModel>
 
 }

@@ -16,10 +16,12 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ShopViewModel: ViewModel() {
     private val  modelRepository: ModelRepo = ModelRepository(null)
     private var code:String = ""
+    var shopAdapter = ShopAdapter(this)
 
     private var _loading = MutableLiveData<Int>()
     private var _transparentView = MutableLiveData<Int>()
@@ -121,6 +123,26 @@ class ShopViewModel: ViewModel() {
 
     }
 
+    fun smartCollection(){
+
+        viewModelScope.launch(Dispatchers.IO)  {
+            when(val result = modelRepository.smartCollection()){
+                is Result.Success->{
+                    Log.i("getDiscount:", "${result.data?.smart_collections}")
+                    withContext(Dispatchers.Main){
+                        result.data?.smart_collections?.let { shopAdapter.loadData(it) }
+                    }
+                }
+
+                is Result.Error ->{
+                    Log.e("getDiscount:", "${result.exception.message}")}
+                is Result.Loading ->{
+                    Log.i("getDiscount","Loading")}
+            }
+        }
+
+    }
+
     fun discountImageClicked(){
         Log.i("discountImageClicked","Clicked")
         showHideItems(View.VISIBLE)
@@ -140,5 +162,8 @@ class ShopViewModel: ViewModel() {
     private fun showHideItems(visibility: Int){
         _transparentView.postValue(visibility)
         _loading.postValue(visibility)
+    }
+    fun shopItemsClicked(id: Long){
+        Log.i("shopItemsClicked",id.toString())
     }
 }

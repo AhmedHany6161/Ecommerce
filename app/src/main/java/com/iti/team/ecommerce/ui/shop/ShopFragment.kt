@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentShopBinding
 
 class ShopFragment : Fragment() {
@@ -34,11 +35,16 @@ class ShopFragment : Fragment() {
     }
     private fun init(){
         binding.viewModel = viewModel
+        viewModel.smartCollection()
+        setUpRecyclerView()
         itemsClicked()
         observeData()
 
     }
 
+    private fun setUpRecyclerView(){
+        binding.shopRecycler.layoutManager = GridLayoutManager(context,2)
+    }
     private fun itemsClicked(){
         binding.tShirtLayout.subCategoryCard.setOnClickListener {
             navigate("T-SHIRTS")
