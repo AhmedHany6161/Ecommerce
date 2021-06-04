@@ -8,17 +8,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
+import com.iti.team.ecommerce.model.data_classes.Customer
+import com.iti.team.ecommerce.model.data_classes.CustomerModel
 import com.iti.team.ecommerce.ui.main.MainViewModel
 
 class RegisterFragment: Fragment() {
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: RegisterViewModel
     private lateinit var binding:FragmentRegisterBinding
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = RegisterViewModel()
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,9 +40,12 @@ class RegisterFragment: Fragment() {
     }
 
     fun registerUser() {
-        if ( !validateFirstName() && !validateLastName() && !validatePassword()
-            && !validateConfirmPass()&& !validatePhoneNo() && !validateEmail() ) {
+        if ( validateFirstName() && validateLastName() && validatePassword()
+            && validateConfirmPass()&& validatePhoneNo() && validateEmail() ) {
+            val customerModel= createCustomer()
+            viewModel.createCustomer(customerModel)
             Toast.makeText(context, "registerd", Toast.LENGTH_LONG).show()
+
         }
         else{
             Toast.makeText(context, "not registerd", Toast.LENGTH_LONG).show()
@@ -89,8 +97,8 @@ class RegisterFragment: Fragment() {
                 "(?=.*[a-zA-Z])" +  //any letter
                 "(?=.*[@#$%^&+=])" +  //at least 1 special character
                 "(?=\\S+$)" +  //no white spaces
-                ".{4,}" +  //at least 4 characters
-                "$"
+                ".{4,}"  //at least 4 characters
+//                "$"
         return if (pass.isEmpty()) {
             binding.textInputPassword.setError("Field cannot be empty")
             false
@@ -120,7 +128,7 @@ class RegisterFragment: Fragment() {
             binding.textInputConfirmPassword.setError("Field cannot be empty")
             false
         }
-        else if (!confirmPass.equals(binding.editTextPassword)) {
+        else if (!confirmPass.equals(binding.editTextPassword.getText().toString())) {
             binding.textInputConfirmPassword.setError("Password not matching  ")
             false
         }
@@ -131,5 +139,12 @@ class RegisterFragment: Fragment() {
         }
 
     }
+    private fun createCustomer(): CustomerModel{
 
+        val customer:Customer= Customer(null,binding.editTextEmail.getText().toString(),binding.editTextMobile.getText().toString(),
+            binding.editTextFirstName.getText().toString() , binding.editTextLastName.getText().toString(),0,null,
+             "EGP",null,null,binding.editTextPassword.getText().toString(),binding.editTextConfirmPassword.getText().toString())
+        val customerModel:CustomerModel=CustomerModel(customer,null)
+        return customerModel
+    }
 }
