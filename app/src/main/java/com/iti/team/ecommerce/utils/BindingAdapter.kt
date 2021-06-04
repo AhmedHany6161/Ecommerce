@@ -210,16 +210,18 @@ fun setImage(view:ImageView, @Nullable drawableId: LiveData<Int?>?){
     }
 }
 
-@BindingAdapter("image","placeholder")
-fun setImageWithGlide(image: ImageView, url: String?, placeHolder: Drawable) {
+@BindingAdapter("image")
+fun setImageWithGlide(image: ImageView, @Nullable url:  LiveData<String?>?) {
 
-    if (!url.isNullOrEmpty()){
-        Glide.with(image.context).load(url).centerCrop()
-            .placeholder(R.drawable.home)
-            .into(image)
-    }
-    else{
-        image.setImageDrawable(placeHolder)
+    image.getParentActivity()?.let { parentActivity ->
+        url?.let {
+                url->
+            url.observe(parentActivity,
+                {value-> value?.let{
+                    Glide.with(image.context).load(it)
+                    .placeholder(R.drawable.home)
+                    .into(image)}})
+        }
     }
 }
 
