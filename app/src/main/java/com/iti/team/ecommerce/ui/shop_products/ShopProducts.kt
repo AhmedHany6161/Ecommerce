@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
 import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.ui.shop.ShopViewModel
@@ -14,6 +16,7 @@ import com.iti.team.ecommerce.ui.shop.ShopViewModel
 class ShopProducts: Fragment() {
 
     private lateinit var binding: FragmentShopProductsBinding
+    val arg:ShopProductsArgs by navArgs()
     private val viewModel by lazy {
         ShopProductsViewModel()
     }
@@ -30,10 +33,14 @@ class ShopProducts: Fragment() {
 
     private fun init(){
         binding.viewModel = viewModel
-        viewModel.getData()
+        viewModel.getData(arg.imageUrl)
+        viewModel.getProducts(arg.collectionId)
         observeData()
+        setUpRecyclerView()
     }
-
+    private fun setUpRecyclerView(){
+        binding.shopProductRecycler.layoutManager = GridLayoutManager(context,2)
+    }
     private fun observeData(){
 
     }

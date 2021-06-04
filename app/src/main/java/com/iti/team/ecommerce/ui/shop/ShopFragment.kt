@@ -99,8 +99,9 @@ class ShopFragment : Fragment() {
 
     private fun observeNavigateToShopProduct(){
         viewModel.navigateToShopProduct.observe(viewLifecycleOwner,{
-            it.getContentIfNotHandled()?.let {
-                val action = ShopFragmentDirections.actionShopFragmentToShopProducts()
+            it.getContentIfNotHandled()?.let {it1->
+                val action = ShopFragmentDirections.
+                actionShopFragmentToShopProducts(it1.first,it1.second)
                 findNavController().navigate(action)
             }
         })

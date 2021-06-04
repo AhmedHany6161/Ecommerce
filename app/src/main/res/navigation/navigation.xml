@@ -76,6 +76,12 @@
         <action
             android:id="@+id/action_shopProducts_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <argument
+            android:name="collectionId"
+            app:argType="long" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
     </fragment>
 
 
