@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.loginFragment)
+                    navController.navigate(R.id.registerFragment)
 
                 }
                 else->{
