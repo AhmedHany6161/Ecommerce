@@ -32,6 +32,9 @@ data class Customer(
     @Json(name = "currency")
     val currency: String? = "EGP",
 
+    @Json(name = "note")
+    val note: String? = "",
+
     @Json(name = "total_spent")
     val totalSpent: String? = "",
 

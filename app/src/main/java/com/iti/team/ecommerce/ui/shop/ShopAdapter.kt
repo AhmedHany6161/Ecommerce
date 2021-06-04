@@ -39,7 +39,11 @@ class ShopAdapter(private val viewModel:ShopViewModel): RecyclerView.Adapter<Sho
             binding.card.setOnClickListener(this) 
         }
         override fun onClick(v: View?) {
-            shopArray[adapterPosition].id?.let { viewModel.shopItemsClicked(it) }
+            shopArray[adapterPosition].id?.let { shopArray[adapterPosition].image.src?.let { it1 ->
+                viewModel.shopItemsClicked(it,
+                    it1
+                )
+            } }
 
         }
     }

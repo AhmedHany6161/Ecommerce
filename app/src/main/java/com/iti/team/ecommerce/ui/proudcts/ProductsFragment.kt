@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
 
 class ProductsFragment : Fragment() {

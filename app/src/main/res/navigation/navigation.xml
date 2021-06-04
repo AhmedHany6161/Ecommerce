@@ -60,14 +60,29 @@
         <action
             android:id="@+id/action_shopFragment_to_wishListFragment"
             app:destination="@id/wishListFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_shopProducts"
+            app:destination="@id/shopProducts" />
     </fragment>
-=======
-        android:label="ProductDetailsFragment" />
+
     <fragment
         android:id="@+id/wishListFragment"
         android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
         android:label="WishListFragment" />
+    <fragment
+        android:id="@+id/shopProducts"
+        android:name="com.iti.team.ecommerce.ui.shop_products.ShopProducts"
+        android:label="ShopProducts" >
+        <action
+            android:id="@+id/action_shopProducts_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <argument
+            android:name="collectionId"
+            app:argType="long" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+    </fragment>
 
->>>>>>> develop
 
 </navigation>

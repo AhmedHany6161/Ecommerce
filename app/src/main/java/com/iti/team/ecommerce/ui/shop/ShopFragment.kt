@@ -1,8 +1,5 @@
 package com.iti.team.ecommerce.ui.shop
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,7 +20,7 @@ class ShopFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentShopBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
         init()
@@ -63,13 +60,14 @@ class ShopFragment : Fragment() {
         observeShowErrorDialog()
         observeShowSuccessDialog()
         observeToWishList()
+        observeNavigateToShopProduct()
     }
 
     private fun observeShowSuccessDialog(){
         viewModel.showSuccessDialog.observe(viewLifecycleOwner,{
-            it.getContentIfNotHandled()?.let {
-                Log.i("observeSuccessDialog", it)
-                val dialog = DiscountDialog.newInstance(viewModel,it)
+            it.getContentIfNotHandled()?.let { it1->
+                Log.i("observeSuccessDialog", it1)
+                val dialog = DiscountDialog.newInstance(viewModel,it1)
                 dialog.show(this.childFragmentManager, "SuccessDialog")
             }
 
@@ -77,9 +75,9 @@ class ShopFragment : Fragment() {
     }
     private fun observeShowErrorDialog(){
         viewModel.showErrorDialog.observe(viewLifecycleOwner,{
-            it.getContentIfNotHandled()?.let {
-                Log.i("observeErrorDialog", it)
-                val dialog = DiscountDialog.newInstance(viewModel,it)
+            it.getContentIfNotHandled()?.let { it1->
+                Log.i("observeErrorDialog", it1)
+                val dialog = DiscountDialog.newInstance(viewModel,it1)
                 dialog.show(this.childFragmentManager, "ErrorDialog")
             }
 
@@ -94,11 +92,19 @@ class ShopFragment : Fragment() {
             }
         })
     }
-    private fun navigate(productType: String){
+    private fun navigate(productType: String = ""){
         val action = ShopFragmentDirections.actionShopFragmentToProducts(productType)
         findNavController().navigate(action)
     }
-    companion object {
 
+    private fun observeNavigateToShopProduct(){
+        viewModel.navigateToShopProduct.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {it1->
+                val action = ShopFragmentDirections.
+                actionShopFragmentToShopProducts(it1.first,it1.second)
+                findNavController().navigate(action)
+            }
+        })
     }
+
 }
