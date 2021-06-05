@@ -1,23 +1,71 @@
 package com.iti.team.ecommerce.ui.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
-import com.iti.team.ecommerce.ui.main.MainViewModel
+
 
 class RegisterFragment: Fragment() {
 
     private lateinit var viewModel: RegisterViewModel
     private lateinit var binding:FragmentRegisterBinding
+    private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+     val RC_SIGN_IN=123
 
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        auth = Firebase.auth
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), getGSO())
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)!!
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                //handle error
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    //handle success
+                } else {
+                    //handle error
+                }
+            }
+    }
+
+    private fun getGSO(): GoogleSignInOptions {
+        return  GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +78,11 @@ class RegisterFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        binding.googleSingInBtn.setOnClickListener(View.OnClickListener {
+            googleSignIn()
+        })
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
@@ -39,7 +92,15 @@ class RegisterFragment: Fragment() {
 
     }
 
-    fun registerUser() {
+    private fun googleSignIn() {
+        try{
+        val signInIntent: Intent = googleSignInClient.getSignInIntent()
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+        }catch (e:Exception ){
+        e.printStackTrace();
+        }
+    }
+   private fun registerUser() {
         if ( validateFirstName() && validateLastName() && validatePassword()
             && validateConfirmPass()&& validatePhoneNo() && validateEmail() ) {
             val customerModel= createCustomer()
