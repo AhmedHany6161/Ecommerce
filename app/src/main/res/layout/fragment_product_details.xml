@@ -73,6 +73,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             app:tint="@color/white"
+            android:onClick="@{()->viewModel.backButtonClicked()}"
             />
 
         <ImageView

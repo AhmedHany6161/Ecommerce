@@ -10,6 +10,7 @@ import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.extensions.Event
 import com.iti.team.ecommerce.utils.moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class ProductDetailsViewModel: ViewModel() {
     private var _price = MutableLiveData<String>()
     private var _vendor = MutableLiveData<String>()
     private var _imageProduct = MutableLiveData<List<Images>>()
-
+    private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
     val descriptionText:LiveData<String>
     get() = _descriptionText
@@ -44,6 +45,8 @@ class ProductDetailsViewModel: ViewModel() {
     val vendor:LiveData<String>
         get() = _vendor
 
+    val buttonBackClicked:LiveData<Event<Boolean>>
+        get() = _buttonBackClicked
 
     val imageProduct:LiveData<List<Images>>
         get() = _imageProduct
@@ -94,5 +97,8 @@ class ProductDetailsViewModel: ViewModel() {
             }
         }
 
+    }
+    fun backButtonClicked(){
+        _buttonBackClicked.postValue(Event(true))
     }
 }

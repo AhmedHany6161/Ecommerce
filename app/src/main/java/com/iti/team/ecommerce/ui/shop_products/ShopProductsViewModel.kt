@@ -6,11 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iti.team.ecommerce.model.data_classes.CustomerModel
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.ui.shop.ShopAdapter
+import com.iti.team.ecommerce.utils.extensions.Event
+import com.iti.team.ecommerce.utils.moshi
+import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +26,10 @@ class ShopProductsViewModel:ViewModel() {
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
 
     private var _loading = MutableLiveData<Int>()
+    private var _navigateToDetails = MutableLiveData<Event<String>>()
+
+    val navigateToDetails:LiveData<Event<String>>
+        get() = _navigateToDetails
 
 
     val shopProductImage: LiveData<String>
@@ -70,5 +78,19 @@ class ShopProductsViewModel:ViewModel() {
             }
         }
 
+    }
+
+    fun navigateToDetails(product: Products){
+        convertObjectToString(product)
+    }
+
+    private fun convertObjectToString(productObject: Products){
+        val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+    }
+
+
+    private fun sendObjectToDetailsScreen(objectString: String){
+        _navigateToDetails.postValue(Event(objectString))
     }
 }

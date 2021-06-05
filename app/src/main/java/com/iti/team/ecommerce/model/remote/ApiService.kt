@@ -39,4 +39,10 @@ interface ApiService {
     suspend fun smartCollection():
             Response<SmartCollectionModel>
 
+
+    @PUT("customers/{id}.json")
+    suspend fun updateCustomer(@Path("id") customerId:Long,
+                               @Body customer:CustomerModel):
+            Response<CustomerModel>
+
 }

@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.shop.ShopViewModel
+import com.iti.team.ecommerce.ui.proudcts.ProductsFragmentDirections
 
 class ShopProducts: Fragment() {
 
@@ -25,7 +25,7 @@ class ShopProducts: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentShopProductsBinding.inflate(inflater)
         init()
         return binding.root
@@ -37,10 +37,26 @@ class ShopProducts: Fragment() {
         viewModel.getProducts(arg.collectionId)
         observeData()
         setUpRecyclerView()
+        listeningForNavigate()
+    }
+
+    private fun listeningForNavigate(
+    ) {
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let {it1->
+                navigate(it1)
+            }
+        })
     }
     private fun setUpRecyclerView(){
         binding.shopProductRecycler.layoutManager = GridLayoutManager(context,2)
     }
+
+    private fun navigate(productObject: String){
+        val action = ShopProductsDirections.actionShopProductsToProductDetailsFragment(productObject)
+        findNavController().navigate(action)
+    }
+
     private fun observeData(){
 
     }

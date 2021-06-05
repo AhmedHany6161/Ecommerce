@@ -3,6 +3,7 @@ package com.iti.team.ecommerce.ui.shop_products
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -40,7 +41,13 @@ class ShopProductAdapter(val viewModel: ShopProductsViewModel):
     override fun getItemCount() = productArray.size
 
     inner class ViewHolder(val binding:ShopProductRowItemBinding)
-        :RecyclerView.ViewHolder(binding.root){
+        :RecyclerView.ViewHolder(binding.root),View.OnClickListener{
+        init {
+            binding.card.setOnClickListener(this)
+        }
+        override fun onClick(v: View?) {
+            viewModel.navigateToDetails(productArray[adapterPosition].first)
+        }
 
     }
 
