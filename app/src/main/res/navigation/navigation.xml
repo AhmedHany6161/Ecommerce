@@ -49,6 +49,17 @@
         <argument
             android:name="productObject"
             app:argType="string" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_shopFragment2"
+            app:destination="@id/shopFragment"
+            app:popUpTo="@id/shopFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_shoppingPageFragment"
+            app:destination="@id/shoppingPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"
@@ -63,6 +74,13 @@
         <action
             android:id="@+id/action_shopFragment_to_shopProducts"
             app:destination="@id/shopProducts" />
+        <argument
+            android:name="backFromDetails"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_shopFragment_to_shoppingPageFragment"
+            app:destination="@id/shoppingPageFragment" />
     </fragment>
 
     <fragment
@@ -83,6 +101,21 @@
             android:name="imageUrl"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/moreMenu"
+        android:name="com.iti.team.ecommerce.ui.product_details.MoreMenu"
+        android:label="MoreMenu" >
+        <action
+            android:id="@+id/action_moreMenu_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
+        <action
+            android:id="@+id/action_moreMenu_to_shopFragment"
+            app:destination="@id/shopFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingPageFragment"
+        android:name="com.iti.team.ecommerce.ui.shop_bag.ShoppingPageFragment"
+        android:label="ShoppingPageFragment" />
 
 
 </navigation>
