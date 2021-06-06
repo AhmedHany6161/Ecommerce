@@ -1,20 +1,19 @@
 package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
 import com.iti.team.ecommerce.utils.moshi
 import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -30,6 +29,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
+    private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     private var _navigateToDetails = MutableLiveData<Event<String>>()
 
@@ -56,10 +56,20 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                     idSet = HashSet(it)
                 }
             }
-
+            launch {
+               val pref= application.getSharedPreferences("app", Context.MODE_PRIVATE)
+                if(MySharedPreference(pref).getBoolean("logIn")){
+                    isLogin.emit(true)
+                }else{
+                    isLogin.emit(false)
+                }
+            }
         }
     }
 
+    fun getLogInState():LiveData<Boolean>{
+        return isLogin.asLiveData()
+    }
 
     fun inWishList(id: Long): Boolean {
         return idSet.contains(id)
