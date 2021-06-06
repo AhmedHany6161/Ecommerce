@@ -1,32 +1,36 @@
 package com.iti.team.ecommerce.ui.shop_products
 
+import android.app.Application
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.iti.team.ecommerce.model.data_classes.CustomerModel
+import androidx.lifecycle.*
+import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import com.iti.team.ecommerce.ui.shop.ShopAdapter
 import com.iti.team.ecommerce.utils.extensions.Event
 import com.iti.team.ecommerce.utils.moshi
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShopProductsViewModel:ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class ShopProductsViewModel(application: Application) : AndroidViewModel(application) {
+    private val  modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application))
+
+
     var shopProductAdapter = ShopProductAdapter(this)
     private var _shopProductImage = MutableLiveData<String>()
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
 
     private var _loading = MutableLiveData<Int>()
     private var _navigateToDetails = MutableLiveData<Event<String>>()
+    private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+
+    private var idSet: HashSet<Long> = hashSetOf()
 
     val navigateToDetails:LiveData<Event<String>>
         get() = _navigateToDetails
@@ -38,10 +42,24 @@ class ShopProductsViewModel:ViewModel() {
     val loading : LiveData<Int>
         get() = _loading
 
-    fun getData(imageUrl: String){
-        _shopProductImage.postValue(imageUrl)
+    val buttonBackClicked:LiveData<Event<Boolean>>
+        get() = _buttonBackClicked
+
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            launch {
+                modelRepository.getAllId().collect {
+                    idSet = HashSet(it)
+                }
+            }
+        }
     }
-    fun getProducts(collectionId:Long){
+        fun getData(imageUrl: String) {
+            _shopProductImage.postValue(imageUrl)
+        }
+
+        fun getProducts(collectionId: Long) {
             viewModelScope.launch(Dispatchers.IO) {
                 when (val result = modelRepository.getProducts(collectionId)) {
                     is Result.Success -> {
@@ -67,7 +85,7 @@ class ShopProductsViewModel:ViewModel() {
                     }
                 }
             }
-    }
+        }
 
     fun navigateToDetails(product: Products){
         convertObjectToString(product)
@@ -81,5 +99,34 @@ class ShopProductsViewModel:ViewModel() {
 
     private fun sendObjectToDetailsScreen(objectString: String){
         _navigateToDetails.postValue(Event(objectString))
+    }
+
+    fun inWishList(id: Long): Boolean {
+        return idSet.contains(id)
+    }
+
+    fun addToWishList(products: Products, image: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToWishList(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    fun removeFromWishList(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.removeFromWishList(id)
+        }
+
+    }
+
+    fun backButtonClicked(){
+        _buttonBackClicked.postValue(Event(true))
     }
 }
