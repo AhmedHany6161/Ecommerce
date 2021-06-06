@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
 }
 
@@ -106,6 +107,8 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+    //
+
 
     // Retrofit with Moshi Converter
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -140,6 +143,14 @@ dependencies {
     //wesam
 
     //norhan
+
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+    //facebook
+    implementation 'com.facebook.android:facebook-android-sdk:4.29.0'
 
     //norhan
 

@@ -16,6 +16,6 @@ interface ApiInterface {
     suspend fun smartCollection(): Response<SmartCollectionModel>
 
     suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Response<CustomerModel>
-    suspend fun login(email: String): Response<CustomerModel>
+    suspend fun login(email: String): Response<CustomerLoginModel>
 
 }

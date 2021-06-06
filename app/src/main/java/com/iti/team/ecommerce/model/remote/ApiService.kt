@@ -47,6 +47,6 @@ interface ApiService {
 
     @GET("customers.json?")
     suspend fun login(@Query("email") email: String):
-            Response<CustomerModel>
+            Response<CustomerLoginModel>
 
 }

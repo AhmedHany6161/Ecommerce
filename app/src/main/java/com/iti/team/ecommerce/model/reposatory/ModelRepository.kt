@@ -197,8 +197,8 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
         return result
     }
 
-    override suspend fun login(email: String): Result<CustomerModel?> {
-        var result:Result<CustomerModel?> = Result.Loading
+    override suspend fun login(email: String): Result<CustomerLoginModel?> {
+        var result:Result<CustomerLoginModel?> = Result.Loading
 
         try {
             val response = apiDataSource.login(email)
