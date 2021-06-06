@@ -1,40 +1,68 @@
 package com.iti.team.ecommerce.ui.proudcts
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.extensions.Event
+import com.iti.team.ecommerce.utils.moshi
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
-class ProductsViewModel : ViewModel() {
-    private val modelRepository: ModelRepo = ModelRepository(null)
+class ProductsViewModel(application: Application) : AndroidViewModel(application) {
+    private val modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application))
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
-    private val set: MutableSet<String> = HashSet()
+    private val filteredSet: MutableSet<String> = HashSet()
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
 
+    private var _navigateToDetails = MutableLiveData<Event<String>>()
+
+    val navigateToDetails:LiveData<Event<String>>
+    get() = _navigateToDetails
+
+    private var idSet: HashSet<Long> = hashSetOf()
+
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            stateProductType.collectLatest {
-                if (it != null && dataOfProduct.isEmpty()) {
-                    val list = getMainDataForCard(it)
-                    bindBrands(list)
-                    brandFlowData.postValue(dataOfBrand)
-                    fetchImages(list)
+            launch {
+                stateProductType.collect {
+                    if (it != null && dataOfProduct.isEmpty()) {
+                        val list = getMainDataForCard(it)
+                        bindBrands(list)
+                        brandFlowData.postValue(dataOfBrand)
+                        fetchImages(list)
+                    }
                 }
             }
+            launch {
+                modelRepository.getAllId().collect {
+                    idSet = HashSet(it)
+                }
+            }
+
         }
+    }
+
+
+    fun inWishList(id: Long): Boolean {
+        return idSet.contains(id)
     }
 
     fun search(name: String) {
@@ -45,12 +73,32 @@ class ProductsViewModel : ViewModel() {
         }
     }
 
+    fun addToWishList(products: Products, image: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToWishList(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    fun removeFromWishList(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.removeFromWishList(id)
+        }
+
+    }
 
     private fun checkIsAccepted(
         it: Products,
         name: String
     ) =
-        (set.contains(it.vendor) || set.isEmpty()) && it.title?.lowercase()
+        (filteredSet.contains(it.vendor) || filteredSet.isEmpty()) && it.title?.lowercase()
             ?.contains(name.lowercase()) ?: false
 
     fun getProductsData(): LiveData<List<Pair<Products, String>>> {
@@ -62,19 +110,19 @@ class ProductsViewModel : ViewModel() {
     }
 
     fun addBrandFilter(name: String) {
-        set.add(name)
+        filteredSet.add(name)
         filterBrand()
     }
     private fun filterBrand(){
-        if (set.isNotEmpty()) {
-            productFlowData.value = (dataOfProduct.filter { set.contains(it.first.vendor) })
+        if (filteredSet.isNotEmpty()) {
+            productFlowData.value = (dataOfProduct.filter { filteredSet.contains(it.first.vendor) })
         } else {
             productFlowData.value = (dataOfProduct)
         }
     }
 
     fun removeBrandFilter(name: String) {
-        set.remove(name)
+        filteredSet.remove(name)
         filterBrand()
     }
 
@@ -121,6 +169,20 @@ class ProductsViewModel : ViewModel() {
             }
         }
     }
+     fun inFilteredList(name : String):Boolean{
+        return filteredSet.contains(name)
+     }
 
+    fun navigateToDetails(product: Products){
+            convertObjectToString(product)
+    }
 
+    private fun convertObjectToString(productObject: Products){
+        val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
+         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+    }
+
+    private fun sendObjectToDetailsScreen(objectString: String){
+        _navigateToDetails.postValue(Event(objectString))
+    }
 }

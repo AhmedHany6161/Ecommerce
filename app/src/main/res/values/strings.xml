@@ -9,7 +9,12 @@
 
     <!--    wesam-->
     <string name="description">Description</string>
-
+    <string name="t_shirt">T-Shirt</string>
+    <string name="shoes">Shoes</string>
+    <string name="accessory">Accessories</string>
+    <string name="special_offer">Special\nOffer</string>
+    <string name="shop">Shop</string>
+    <string name="category">Category</string>
     <!--    wesam-->
 
     <!--    norhan-->
@@ -30,6 +35,15 @@
     <!--  norhan-->
 
     <!--   nermeen-->
+    <string name="register_first_name_hint">First Name</string>
+    <string name="register_last_name_hint">Last Name</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_phone_hint">Phone Number</string>
+    <string name="register_Confirm_password_hint">Confirm Password</string>
+    <string name="register_city_hint">City</string>
+    <string name="register_country_hint">Country</string>
+    <string name="register_Street_hint">Street</string>
 
     <!--    nermeen-->
 </resources>

@@ -9,11 +9,14 @@ interface ProductsDAO {
     @Query("SELECT * FROM products")
     fun getAllProducts(): Flow<List<Product>>
 
+    @Query("SELECT id FROM products")
+    fun getAllIds(): Flow<List<Long>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToWishList(product: Product)
 
-    @Delete
-    suspend fun removeFromWishList(product: Product)
+    @Query("DELETE FROM products where id = :id")
+    suspend fun removeFromWishList(id:Long)
 
     @Query("DELETE FROM products")
     suspend fun reset()
