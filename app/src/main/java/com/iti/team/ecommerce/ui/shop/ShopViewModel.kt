@@ -42,7 +42,10 @@ class ShopViewModel: ViewModel() {
 
     private var _navigateToWish = MutableLiveData<Event<Boolean>>()
     private var _navigateToCart = MutableLiveData<Event<Boolean>>()
+    private var _navigateToSearch = MutableLiveData<Event<String>>()
     private var _navigateToShopProduct = MutableLiveData<Event<Pair<Long,String>>>()
+
+    private var productTypeSet: HashSet<String> = hashSetOf()
 
     val loading : LiveData<Int>
     get() = _loading
@@ -81,12 +84,17 @@ class ShopViewModel: ViewModel() {
     val navigateToCart: LiveData<Event<Boolean>>
         get() = _navigateToCart
 
+    val navigateToSearch: LiveData<Event<String>>
+        get() = _navigateToSearch
+
     val navigateToShopProduct: LiveData<Event<Pair<Long,String>>>
         get() = _navigateToShopProduct
 
     init {
         showHideItems(View.GONE)
-
+        productTypeSet.add("t-shirts")
+        productTypeSet.add("shoes")
+        productTypeSet.add("accessories")
     }
 
     private fun createDiscount(discount:Discount){
@@ -143,7 +151,12 @@ class ShopViewModel: ViewModel() {
                 is Result.Success->{
                     Log.i("getDiscount:", "${result.data?.smart_collections}")
                     withContext(Dispatchers.Main){
-                        result.data?.smart_collections?.let { shopAdapter.loadData(it) }
+                        result.data?.smart_collections?.let {
+                            shopAdapter.loadData(it)
+                            for(i in it){
+                                //i.handle?.let { it1 -> productTypeSet.add(it1) }
+                            }
+                        }
                     }
                 }
 
@@ -190,4 +203,12 @@ class ShopViewModel: ViewModel() {
     fun navigateToCart(){
         _navigateToCart.postValue(Event(true))
     }
+
+    fun navigateToSearch(){
+        Log.i("navigateToSearch","${productTypeSet.size}")
+        _navigateToSearch.postValue(Event(productTypeSet.toString()))
+        Log.i("navigateToSearch","$productTypeSet")
+    }
+
+
 }

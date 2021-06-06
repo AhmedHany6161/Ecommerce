@@ -17,6 +17,7 @@ class LoginFragment: Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        viewModel.login("wessam@gmail.com")
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 

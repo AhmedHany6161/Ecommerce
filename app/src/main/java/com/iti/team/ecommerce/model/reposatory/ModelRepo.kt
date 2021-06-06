@@ -21,4 +21,6 @@ interface ModelRepo {
     suspend fun smartCollection(): Result<SmartCollectionModel?>
 
     suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Result<CustomerModel?>
+
+    suspend fun login(email: String): Result<CustomerModel?>
 }

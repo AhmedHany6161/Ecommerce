@@ -81,6 +81,9 @@
         <action
             android:id="@+id/action_shopFragment_to_shoppingPageFragment"
             app:destination="@id/shoppingPageFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <fragment
@@ -116,6 +119,14 @@
         android:id="@+id/shoppingPageFragment"
         android:name="com.iti.team.ecommerce.ui.shop_bag.ShoppingPageFragment"
         android:label="ShoppingPageFragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.iti.team.ecommerce.ui.search.SearchFragment"
+        android:label="SearchFragment" >
+        <argument
+            android:name="listProductType"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

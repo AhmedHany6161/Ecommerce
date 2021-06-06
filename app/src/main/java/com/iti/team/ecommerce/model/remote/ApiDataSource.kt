@@ -49,4 +49,8 @@ class ApiDataSource: ApiInterface {
         return  _apiService.updateCustomer(customerId,customer)
     }
 
+    override suspend fun login(email: String): Response<CustomerModel> {
+        return _apiService.login(email)
+    }
+
 }
