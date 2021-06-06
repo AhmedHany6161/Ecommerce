@@ -9,6 +9,7 @@ import com.iti.team.ecommerce.model.remote.ApiInterface
 import com.iti.team.ecommerce.model.remote.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import java.io.IOException
 
 
@@ -151,6 +152,26 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
         }
         return result
 
+    }
+
+    override suspend fun smartCollection(): Result<SmartCollectionModel?> {
+        var result:Result<SmartCollectionModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.smartCollection()
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
     }
 
 

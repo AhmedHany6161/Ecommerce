@@ -8,6 +8,8 @@ import android.widget.SearchView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,9 @@ import com.iti.team.ecommerce.ui.MainActivity
 
 
 class ProductsFragment : Fragment() {
+
+    private val arg:ProductsFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,7 +37,8 @@ class ProductsFragment : Fragment() {
         listeningForProducts(viewModel, productAdapter)
         setupSearch(search, viewModel)
         listeningForBrand(viewModel, brandAdapter)
-        viewModel.getProductsFromType("SHOES")
+        viewModel.getProductsFromType(arg.productType)
+        listeningForNavigate(viewModel)
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
         return view
@@ -61,6 +67,16 @@ class ProductsFragment : Fragment() {
         viewModel.getProductsData().observe(viewLifecycleOwner, {
             adapter.setData(it)
             adapter.notifyDataSetChanged()
+        })
+    }
+
+    private fun listeningForNavigate(
+        viewModel: ProductsViewModel
+    ) {
+        viewModel.navigateToDetails.observe(viewLifecycleOwner, {
+           it.getContentIfNotHandled()?.let {it1->
+              navigate(it1)
+           }
         })
     }
 
@@ -99,4 +115,8 @@ class ProductsFragment : Fragment() {
         })
     }
 
+    private fun navigate(productObject: String){
+        val action = ProductsFragmentDirections.actionProductsToProductDetailsFragment(productObject)
+        findNavController().navigate(action)
+    }
 }

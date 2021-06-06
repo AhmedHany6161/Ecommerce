@@ -2,18 +2,12 @@ package com.iti.team.ecommerce.utils
 
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.TextUtils
+import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.CompoundButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +37,7 @@ import com.smarteist.autoimageslider.SliderViewAdapter
     "mutableTextId",
     "mutableTitleDetails",
     "mutableSpannableStringBuilder",
+    "mutableAlignment",
     requireAll = false
 )
 fun setMutableText(
@@ -50,7 +45,8 @@ fun setMutableText(
     @Nullable text: LiveData<String>?,
     @Nullable textId: LiveData<Int>?,
     @Nullable titleDetails: LiveData<List<Any>>?,
-    @Nullable spannableStringBuilder: LiveData<SpannableStringBuilder>?
+    @Nullable spannableStringBuilder: LiveData<SpannableStringBuilder>?,
+    @Nullable alignment:LiveData<Int>?
 ) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
 
@@ -61,6 +57,12 @@ fun setMutableText(
             textId.observe(
                 parentActivity,
                 Observer { value -> value?.let { view.setText(value) } })
+        }
+
+        alignment?.let { alignment.observe(parentActivity,
+            Observer { value ->
+                view.textAlignment = value ?: 0
+            })
         }
 
         titleDetails?.let {
@@ -119,10 +121,11 @@ fun setMutableText(
 }
 
 /**
- * Set [Button] text.
+ * Set [CompoundButton] text.
  */
-@BindingAdapter("mutableText", "mutableTextId", requireAll = false)
-fun setMutableText(view: Button, @Nullable text: LiveData<String>?, @Nullable textId: LiveData<Int>?) {
+@BindingAdapter("mutableText", "mutableTextId",requireAll = false)
+fun setMutableText(view: Button, @Nullable text: LiveData<String>?,
+                   @Nullable textId: LiveData<Int>?) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
 
     if (parentActivity != null) {
@@ -133,6 +136,7 @@ fun setMutableText(view: Button, @Nullable text: LiveData<String>?, @Nullable te
                 parentActivity,
                 Observer { value -> value?.let { view.setText(value) } })
         }
+
     }
 }
 
@@ -195,17 +199,29 @@ fun bindingAdapterCompoundButton(view: CompoundButton, @Nullable checked: LiveDa
     }
 }
 
-@BindingAdapter("image","placeholder")
-fun setImage(image: ImageView, url: String?, placeHolder: Drawable) {
-
-    if (!url.isNullOrEmpty()){
-        Glide.with(image.context).load(url).centerCrop()
-            .placeholder(R.drawable.home)
-            .into(image)
+@BindingAdapter("mutableSrc")
+fun setImage(view:ImageView, @Nullable drawableId: LiveData<Int?>?){
+    view.getParentActivity()?.let { parentActivity ->
+        drawableId?.let {
+            drawableId->
+            drawableId.observe(parentActivity,
+            {value-> value?.let{view.setImageResource(it)}})
+        }
     }
-    else{
-        image.setImageDrawable(placeHolder)
-    }
-
-
 }
+
+@BindingAdapter("image")
+fun setImageWithGlide(image: ImageView, @Nullable url:  LiveData<String?>?) {
+
+    image.getParentActivity()?.let { parentActivity ->
+        url?.let {
+                url->
+            url.observe(parentActivity,
+                {value-> value?.let{
+                    Glide.with(image.context).load(it)
+                    .placeholder(R.drawable.home)
+                    .into(image)}})
+        }
+    }
+}
+

@@ -1,6 +1,9 @@
 package com.iti.team.ecommerce.ui
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.navigation.NavController
@@ -11,13 +14,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigation: MeowBottomNavigation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        generateFBKey()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         bottomNavigation = findViewById(R.id.meowBottomNavigation)
@@ -33,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch{
                 bottomNavigation.isGone = false
                 navController.popBackStack()
-                navController.navigate(R.id.store)
+                navController.navigate(R.id.shopFragment)
             }
         }
     }
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             when(model?.id){
                 1->{
                     navController.popBackStack()
-                    navController.navigate(R.id.store)
+                    navController.navigate(R.id.shopFragment)
                 }
                 2->{
                     navController.popBackStack()
@@ -59,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.loginFragment)
+                    navController.navigate(R.id.registerFragment)
 
                 }
                 else->{
@@ -68,4 +73,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun generateFBKey(){
+        try {
+            val info = packageManager.getPackageInfo(
+                "com.iti.team.ecommerce",
+                PackageManager.GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+        } catch (e: NoSuchAlgorithmException) {
+        }
+    }
+
 }

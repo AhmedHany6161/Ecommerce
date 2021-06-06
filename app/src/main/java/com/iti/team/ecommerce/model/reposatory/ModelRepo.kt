@@ -2,6 +2,7 @@ package com.iti.team.ecommerce.model.reposatory
 
 import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
+import retrofit2.Response
 
 interface ModelRepo {
 
@@ -16,4 +17,6 @@ interface ModelRepo {
     suspend fun createCustomer(customer: CustomerModel): Result<CustomerModel?>
 
     suspend fun getProductsFromType(productType: String): Result<ProductsModel?>
+
+    suspend fun smartCollection(): Result<SmartCollectionModel?>
 }
