@@ -35,6 +35,9 @@ class LoginFragment: Fragment()  {
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+
+        viewModel.login("wessam@gmail.com")
+
         return binding.root
     }
 
@@ -78,6 +81,7 @@ class LoginFragment: Fragment()  {
                 Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
             }
         }
+
     }
 
     private fun observeAuthenticationState() {

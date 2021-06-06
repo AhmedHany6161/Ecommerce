@@ -42,4 +42,15 @@ class ApiDataSource: ApiInterface {
         return  _apiService.smartCollection()
     }
 
+    override suspend fun updateCustomer(
+        customerId: Long,
+        customer: CustomerModel
+    ): Response<CustomerModel> {
+        return  _apiService.updateCustomer(customerId,customer)
+    }
+
+    override suspend fun login(email: String): Response<CustomerLoginModel> {
+        return _apiService.login(email)
+    }
+
 }

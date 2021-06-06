@@ -143,7 +143,7 @@ class RegisterFragment: Fragment() {
 
         val customer:Customer= Customer(null,binding.editTextEmail.getText().toString(),binding.editTextMobile.getText().toString(),
             binding.editTextFirstName.getText().toString() , binding.editTextLastName.getText().toString(),0,null,
-             "EGP",null,null,binding.editTextPassword.getText().toString(),binding.editTextConfirmPassword.getText().toString())
+             "EGP",null,null,null,binding.editTextPassword.getText().toString(),binding.editTextConfirmPassword.getText().toString())
         val customerModel:CustomerModel=CustomerModel(customer,null)
         return customerModel
     }

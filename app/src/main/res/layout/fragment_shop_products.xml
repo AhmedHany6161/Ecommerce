@@ -19,6 +19,17 @@
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/ic_search"
             image="@{viewModel.shopProductImage}"/>
+        <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_arrow_back"
+            android:onClick="@{()->viewModel.backButtonClicked()}"
+            android:backgroundTint="@color/gray"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shop_product_recycler"

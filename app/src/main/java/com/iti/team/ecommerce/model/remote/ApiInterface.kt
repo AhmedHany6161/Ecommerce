@@ -15,4 +15,7 @@ interface ApiInterface {
     suspend fun getProductsFromType(productType: String): Response<ProductsModel>
     suspend fun smartCollection(): Response<SmartCollectionModel>
 
+    suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Response<CustomerModel>
+    suspend fun login(email: String): Response<CustomerLoginModel>
+
 }
