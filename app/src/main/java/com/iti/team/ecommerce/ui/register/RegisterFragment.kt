@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
@@ -30,9 +32,16 @@ class RegisterFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.loginTxt.setOnClickListener(View.OnClickListener {
+            navigateToLogin()
+        })
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
+    }
+
+    private fun navigateToLogin() {
+        findNavController().navigate(R.id.loginFragment)
     }
 
     companion object {
@@ -143,7 +152,7 @@ class RegisterFragment: Fragment() {
 
         val customer:Customer= Customer(null,binding.editTextEmail.getText().toString(),binding.editTextMobile.getText().toString(),
             binding.editTextFirstName.getText().toString() , binding.editTextLastName.getText().toString(),0,null,
-             "EGP",null,null,binding.editTextPassword.getText().toString(),binding.editTextConfirmPassword.getText().toString())
+             "EGP",binding.editTextPassword.getText().toString(),null,null,binding.editTextPassword.getText().toString(),binding.editTextConfirmPassword.getText().toString())
         val customerModel:CustomerModel=CustomerModel(customer,null)
         return customerModel
     }
