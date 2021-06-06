@@ -15,8 +15,8 @@ import com.iti.team.ecommerce.model.data_classes.Products
 class ShopProductAdapter(val viewModel: ShopProductsViewModel):
     RecyclerView.Adapter<ShopProductAdapter.ViewHolder>() {
 
-    var productArray:List<Pair<Products,String>> = ArrayList()
 
+    var productArray:List<Products> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val viewBinding = ShopProductRowItemBinding.
         inflate(LayoutInflater.from(parent.context),parent,false)
@@ -26,12 +26,12 @@ class ShopProductAdapter(val viewModel: ShopProductsViewModel):
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        holder.binding.productName.text = productArray[position].first.title
-        holder.binding.productPrice.text ="EGP ${productArray[position].first.variants[0]?.price}"
-        holder.binding.productBrand.text = productArray[position].first.vendor
+        holder.binding.productName.text = productArray[position].title
+        holder.binding.productPrice.text ="EGP ${productArray[position].variants[0]?.price}"
+        holder.binding.productBrand.text = productArray[position].vendor
 
         Glide.with(holder.binding.productImage.context)
-            .load(productArray[position].second)
+            .load(productArray[position].image.src)
             .placeholder(R.drawable.ic_back_img)
             .into(holder.binding.productImage)
 
@@ -46,14 +46,14 @@ class ShopProductAdapter(val viewModel: ShopProductsViewModel):
             binding.card.setOnClickListener(this)
         }
         override fun onClick(v: View?) {
-            viewModel.navigateToDetails(productArray[adapterPosition].first)
+            viewModel.navigateToDetails(productArray[adapterPosition])
         }
 
     }
 
-    fun loadData( productArray:List<Pair<Products,String>> ){
+
+    fun loadData( productArray:List<Products> ){
         this.productArray = productArray
         notifyDataSetChanged()
     }
-
 }

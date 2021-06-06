@@ -41,7 +41,7 @@ class ShopViewModel: ViewModel() {
     private var _copyAction = MutableLiveData<Event<String>>()
 
     private var _navigateToWish = MutableLiveData<Event<Boolean>>()
-
+    private var _navigateToCart = MutableLiveData<Event<Boolean>>()
     private var _navigateToShopProduct = MutableLiveData<Event<Pair<Long,String>>>()
 
     val loading : LiveData<Int>
@@ -77,6 +77,9 @@ class ShopViewModel: ViewModel() {
 
     val navigateToWish: LiveData<Event<Boolean>>
         get() = _navigateToWish
+
+    val navigateToCart: LiveData<Event<Boolean>>
+        get() = _navigateToCart
 
     val navigateToShopProduct: LiveData<Event<Pair<Long,String>>>
         get() = _navigateToShopProduct
@@ -182,5 +185,9 @@ class ShopViewModel: ViewModel() {
 
     fun navigateToWish(){
         _navigateToWish.postValue(Event(true))
+    }
+
+    fun navigateToCart(){
+        _navigateToCart.postValue(Event(true))
     }
 }

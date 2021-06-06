@@ -71,6 +71,7 @@ class ShopFragment : Fragment() {
         observeShowErrorDialog()
         observeShowSuccessDialog()
         observeToWishList()
+        observeToCartList()
         observeNavigateToShopProduct()
     }
 
@@ -99,6 +100,14 @@ class ShopFragment : Fragment() {
         viewModel.navigateToWish.observe(viewLifecycleOwner,{
             it.getContentIfNotHandled()?.let {
                 val navigate = ShopFragmentDirections.actionShopFragmentToWishListFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
+    private fun observeToCartList(){
+        viewModel.navigateToCart.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ShopFragmentDirections.actionShopFragmentToShoppingPageFragment()
                 findNavController().navigate(navigate)
             }
         })

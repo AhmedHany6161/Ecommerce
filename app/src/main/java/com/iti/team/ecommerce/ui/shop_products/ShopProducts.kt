@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.shop_products
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,9 @@ class ShopProducts: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentShopProductsBinding.inflate(inflater)
-        init()
+
+            init()
+
         return binding.root
     }
 
@@ -58,7 +61,7 @@ class ShopProducts: Fragment() {
     }
 
     private fun observeData(){
-
+      Log.i("observeData","observeData")
     }
     override fun onResume() {
         super.onResume()

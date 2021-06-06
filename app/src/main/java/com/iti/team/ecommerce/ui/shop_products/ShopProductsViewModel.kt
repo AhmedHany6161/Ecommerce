@@ -41,43 +41,32 @@ class ShopProductsViewModel:ViewModel() {
     fun getData(imageUrl: String){
         _shopProductImage.postValue(imageUrl)
     }
-
-    private suspend fun fetchImages(list: List<Products>) {
-        list.forEach {
-            when (val im = modelRepository.getProductImages(it.productId!!)) {
-                is Result.Success -> {
-                    dataOfProduct.add(Pair(it, im.data?.images?.get(0)?.src!!))
-                }
-            }
-        }
-        shopProductAdapter.loadData(dataOfProduct)
-
-    }
     fun getProducts(collectionId:Long){
-
-        viewModelScope.launch(Dispatchers.IO)  {
-            when(val result = modelRepository.getProducts(collectionId)){
-                is Result.Success->{
-                    Log.i("getProducts:", "${result.data?.product}")
-                    withContext(Dispatchers.Main){
-                        result.data?.product?.let {
-                               fetchImages(it)
-                            _loading.postValue(View.GONE)
-                                //shopProductAdapter.loadData(Pair(it,""))
+            viewModelScope.launch(Dispatchers.IO) {
+                when (val result = modelRepository.getProducts(collectionId)) {
+                    is Result.Success -> {
+                        Log.i("getProducts:", "${result.data?.product}")
+                        withContext(Dispatchers.Main) {
+                            dataOfProduct.clear()
+                            shopProductAdapter.loadData(ArrayList())
+                            _loading.postValue(View.VISIBLE)
+                            result.data?.product?.let {
+                                shopProductAdapter.loadData(it)
+                                _loading.postValue(View.GONE)
+                            }
                         }
                     }
-                }
 
-                is Result.Error ->{
-                    Log.e("getDiscount:", "${result.exception.message}")
-                    _loading.postValue(View.GONE)
+                    is Result.Error -> {
+                        Log.e("getDiscount:", "${result.exception.message}")
+                        _loading.postValue(View.GONE)
+                    }
+                    is Result.Loading -> {
+                        _loading.postValue(View.GONE)
+                        Log.i("getDiscount", "Loading")
+                    }
                 }
-                is Result.Loading ->{
-                    _loading.postValue(View.GONE)
-                    Log.i("getDiscount","Loading")}
             }
-        }
-
     }
 
     fun navigateToDetails(product: Products){

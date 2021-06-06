@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.product_details
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,8 @@ class ProductDetailsViewModel: ViewModel() {
     private var _imageProduct = MutableLiveData<List<Images>>()
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
+    private var _fragmentVisibility = MutableLiveData<Int>()
+
     val descriptionText:LiveData<String>
     get() = _descriptionText
 
@@ -51,6 +54,13 @@ class ProductDetailsViewModel: ViewModel() {
     val imageProduct:LiveData<List<Images>>
         get() = _imageProduct
 
+    val fragmentVisibility:LiveData<Int>
+        get() = _fragmentVisibility
+
+
+    init {
+        _fragmentVisibility.postValue(View.GONE)
+    }
     fun setProduct(productObject: String){
         convertStringToObject(productObject)
 
@@ -69,7 +79,7 @@ class ProductDetailsViewModel: ViewModel() {
             it.description?.let { it1 -> _descriptionText.value = it1 }
             it.vendor?.let { it1 -> _vendor.value = it1 }
             it.title?.let { it1 -> _title.value = it1 }
-            it.variants[0]?.price?.let { it1 -> _price.value = it1 }
+            it.variants[0]?.price?.let { it1 -> _price.value = "EGP $it1" }
             it.variants[0]?.quantity?.let { it1 -> _quantity.value = it1.toString() }
             it.variants[0]?.taxable?.let { it1 -> _taxable.value = it1.toString() }
 
@@ -100,5 +110,18 @@ class ProductDetailsViewModel: ViewModel() {
     }
     fun backButtonClicked(){
         _buttonBackClicked.postValue(Event(true))
+    }
+
+    fun moreMenuClicked(){
+        if (_fragmentVisibility.value == View.VISIBLE){
+            _fragmentVisibility.postValue(View.GONE)
+        }else{
+            _fragmentVisibility.postValue(View.VISIBLE)
+        }
+    }
+    fun layoutClicked(){
+        if (_fragmentVisibility.value == View.VISIBLE){
+            _fragmentVisibility.postValue(View.GONE)
+        }
     }
 }
