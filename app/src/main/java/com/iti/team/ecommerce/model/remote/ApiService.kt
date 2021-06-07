@@ -16,6 +16,10 @@ interface ApiService {
             Response<ProductsModel>
 
     @GET("products.json?")
+    suspend fun getProductsByVendor(@Query("vendor") vendor: String):
+            Response<ProductsModel>
+
+    @GET("products.json?")
     suspend fun getProductsFromType(@Query("product_type") productType: String):
             Response<ProductsModel>
 

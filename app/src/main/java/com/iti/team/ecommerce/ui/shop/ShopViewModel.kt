@@ -92,9 +92,9 @@ class ShopViewModel: ViewModel() {
 
     init {
         showHideItems(View.GONE)
-        productTypeSet.add("t-shirts")
-        productTypeSet.add("shoes")
-        productTypeSet.add("accessories")
+//        productTypeSet.add("t-shirts")
+//        productTypeSet.add("shoes")
+//        productTypeSet.add("accessories")
     }
 
     private fun createDiscount(discount:Discount){
@@ -154,7 +154,7 @@ class ShopViewModel: ViewModel() {
                         result.data?.smart_collections?.let {
                             shopAdapter.loadData(it)
                             for(i in it){
-                                //i.handle?.let { it1 -> productTypeSet.add(it1) }
+                                i.handle?.let { it1 -> productTypeSet.add(it1) }
                             }
                         }
                     }

@@ -23,4 +23,6 @@ interface ModelRepo {
     suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Result<CustomerModel?>
 
     suspend fun login(email: String): Result<CustomerLoginModel?>
+
+    suspend fun getProductsFromVendor(vendor: String): Result<ProductsModel?>
 }

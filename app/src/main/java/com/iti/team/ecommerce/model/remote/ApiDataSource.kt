@@ -38,6 +38,10 @@ class ApiDataSource: ApiInterface {
         return _apiService.getProductsFromType(productType)
     }
 
+    override suspend fun getProductsFromVendor(vendor: String): Response<ProductsModel> {
+        return _apiService.getProductsByVendor(vendor)
+    }
+
     override suspend fun smartCollection(): Response<SmartCollectionModel> {
         return  _apiService.smartCollection()
     }
