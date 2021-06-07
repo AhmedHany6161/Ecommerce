@@ -13,5 +13,8 @@ interface OfflineRepo {
 
     suspend fun removeFromWishList(id: Long)
 
+    suspend fun addToCart(product: Product)
+
+    suspend fun removeFromCart(id: Long)
     suspend fun reset()
 }

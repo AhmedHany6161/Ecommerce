@@ -9,7 +9,6 @@ import com.iti.team.ecommerce.model.remote.ApiInterface
 import com.iti.team.ecommerce.model.remote.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 import java.io.IOException
 
 
@@ -231,8 +230,15 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
     }
 
     override suspend fun removeFromWishList(id: Long) {
-        offlineDB?.removeFromWishList(id)
+        offlineDB?.removeFromWishList(offlineDB.getById(id))
+    }
 
+    override suspend fun addToCart(product: Product) {
+        offlineDB?.addToCart(product)
+    }
+
+    override suspend fun removeFromCart(id: Long) {
+        offlineDB?.removeFromCart(offlineDB.getById(id))
     }
 
     override suspend fun reset() {
