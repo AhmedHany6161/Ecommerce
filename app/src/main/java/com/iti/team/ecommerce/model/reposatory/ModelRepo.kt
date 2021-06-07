@@ -19,4 +19,8 @@ interface ModelRepo {
     suspend fun getProductsFromType(productType: String): Result<ProductsModel?>
 
     suspend fun smartCollection(): Result<SmartCollectionModel?>
+
+    suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Result<CustomerModel?>
+
+    suspend fun login(email: String): Result<CustomerLoginModel?>
 }

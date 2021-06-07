@@ -5,16 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentShopBinding
+import com.iti.team.ecommerce.ui.MainActivity
 
 class ShopFragment : Fragment() {
 
     private lateinit var viewModel: ShopViewModel
     private lateinit var binding: FragmentShopBinding
+    val args:ShopFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -29,6 +33,13 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (args.backFromDetails){
+            (activity as MainActivity).bottomNavigation.isGone = false
+        }
     }
     private fun init(){
         binding.viewModel = viewModel
@@ -60,6 +71,8 @@ class ShopFragment : Fragment() {
         observeShowErrorDialog()
         observeShowSuccessDialog()
         observeToWishList()
+        observeToCartList()
+        observeToSearch()
         observeNavigateToShopProduct()
     }
 
@@ -88,6 +101,22 @@ class ShopFragment : Fragment() {
         viewModel.navigateToWish.observe(viewLifecycleOwner,{
             it.getContentIfNotHandled()?.let {
                 val navigate = ShopFragmentDirections.actionShopFragmentToWishListFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
+    private fun observeToCartList(){
+        viewModel.navigateToCart.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ShopFragmentDirections.actionShopFragmentToShoppingPageFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
+    private fun observeToSearch(){
+        viewModel.navigateToSearch.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ShopFragmentDirections.actionShopFragmentToSearchFragment(it)
                 findNavController().navigate(navigate)
             }
         })

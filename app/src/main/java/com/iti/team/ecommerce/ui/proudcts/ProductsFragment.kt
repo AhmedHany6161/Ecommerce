@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
@@ -29,19 +31,39 @@ class ProductsFragment : Fragment() {
         val productRecyclerView: RecyclerView = view.findViewById(R.id.products_rec)
         val brandRecyclerView: RecyclerView = view.findViewById(R.id.brand_rec)
         val search: SearchView = view.findViewById(R.id.product_search)
+        val title: TextView = view.findViewById(R.id.textView)
+        val profile: LottieAnimationView = view.findViewById(R.id.shapeableImageView)
+        title.text = arg.productType
         val viewModel: ProductsViewModel by viewModels()
-        val productAdapter = ProductAdapter(ArrayList(),viewModel)
-        val brandAdapter = BrandAdapter(ArrayList(),viewModel)
+        val productAdapter = ProductAdapter(ArrayList(), viewModel)
+        val brandAdapter = BrandAdapter(ArrayList(), viewModel)
         setupProductRecyclerView(productRecyclerView, productAdapter)
-        setupBrandRecyclerView(brandRecyclerView,brandAdapter)
+        setupBrandRecyclerView(brandRecyclerView, brandAdapter)
         listeningForProducts(viewModel, productAdapter)
         setupSearch(search, viewModel)
         listeningForBrand(viewModel, brandAdapter)
         viewModel.getProductsFromType(arg.productType)
+        listeningForLoginState(viewModel, profile)
+        profile.setOnClickListener {
+
+        }
         listeningForNavigate(viewModel)
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
         return view
+    }
+
+    private fun listeningForLoginState(
+        viewModel: ProductsViewModel,
+        profile: LottieAnimationView
+    ) {
+        viewModel.getLogInState().observe(viewLifecycleOwner, {
+            if (it) {
+                profile.setAnimation(R.raw.login_profile)
+            } else {
+                profile.setAnimation(R.raw.error_animation)
+            }
+        })
     }
 
     override fun onResume() {

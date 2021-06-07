@@ -42,8 +42,8 @@ data class Customer(
     val addresses: List<Address>? = listOf(),
 
     @Json(name = "password")
-    val password: String?,
+    val password: String? = "",
 
     @Json(name = "password_confirmation")
-    val passwordConfirmation: String?,
+    val passwordConfirmation: String? = "",
 )

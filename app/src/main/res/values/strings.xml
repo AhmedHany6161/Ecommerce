@@ -15,6 +15,9 @@
     <string name="special_offer">Special\nOffer</string>
     <string name="shop">Shop</string>
     <string name="category">Category</string>
+    <string name="home">Home</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="cart">Cart</string>
     <!--    wesam-->
 
     <!--    norhan-->
@@ -26,6 +29,10 @@
     <string name="login">Login</string>
     <string name="register_now">New user? Register Now</string>
     <string name="other_methods">Use other Methods</string>
+
+    <string name="fb_login_protocol_scheme">fb2968165746788869</string>
+    <string name="facebook_application_id">2968165746788869</string>
+
 
 
     <!--  norhan-->
