@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface OfflineDB {
 
-    fun getAllProducts(): Flow<List<Product>>
+    fun getWishList(): Flow<List<Product>>
+
+    fun getCart(): Flow<List<Product>>
 
     fun getAllId(): Flow<List<Long>>
 

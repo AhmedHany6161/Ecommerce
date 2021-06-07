@@ -207,23 +207,25 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
             }else{
                 Log.i("ModelRepository","error ${response.code()}")
             }
-        }catch (e: IOException){
+        } catch (e: IOException) {
             result = Result.Error(e)
-            Log.e("ModelRepository","IOException ${e.message}")
-            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+            Log.e("ModelRepository", "IOException ${e.message}")
+            Log.e("ModelRepository", "IOException ${e.localizedMessage}")
 
         }
         return result
     }
 
 
-    override fun getAllWishListProducts(): Flow<List<Product>> {
-        return offlineDB?.getAllProducts() ?: flow { emit(listOf<Product>()) }
-    }
+    override fun getAllWishListProducts(): Flow<List<Product>> =
+        offlineDB?.getWishList() ?: flow { emit(listOf<Product>()) }
 
-    override fun getAllId(): Flow<List<Long>> {
-        return offlineDB?.getAllId() ?: flow { emit(listOf<Long>()) }
-    }
+    override fun getCartProducts(): Flow<List<Product>> =
+        offlineDB?.getCart() ?: flow { emit(listOf<Product>()) }
+
+    override fun getAllId(): Flow<List<Long>> =
+        offlineDB?.getAllId() ?: flow { emit(listOf<Long>()) }
+
 
     override suspend fun addToWishList(product: Product) {
         offlineDB?.addToWishList(product)

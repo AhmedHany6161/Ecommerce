@@ -23,8 +23,9 @@ class OfflineDatabase private constructor(): OfflineDB {
 
     }
 
-    override fun getAllProducts(): Flow<List<Product>> = db.getWishList()
+    override fun getWishList(): Flow<List<Product>> = db.getWishList()
 
+    override fun getCart(): Flow<List<Product>> = db.getCart()
 
     override fun getAllId(): Flow<List<Long>> = db.getAllIds()
 
