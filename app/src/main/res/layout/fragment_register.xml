@@ -191,9 +191,9 @@
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:src="@drawable/ic_back_img"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onLoginClick"
         android:adjustViewBounds="false"/>
 </RelativeLayout>

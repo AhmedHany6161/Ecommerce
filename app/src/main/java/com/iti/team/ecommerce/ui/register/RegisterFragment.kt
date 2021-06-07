@@ -35,6 +35,9 @@ class RegisterFragment: Fragment() {
         binding.loginTxt.setOnClickListener(View.OnClickListener {
             navigateToLogin()
         })
+        binding.backToLogin.setOnClickListener(View.OnClickListener {
+            navigateToLogin()
+        })
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
