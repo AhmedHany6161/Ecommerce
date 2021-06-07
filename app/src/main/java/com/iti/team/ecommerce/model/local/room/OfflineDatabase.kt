@@ -54,7 +54,11 @@ class OfflineDatabase private constructor(): OfflineDB {
             db.update(product)
         } else {
             product.inCart = true
-            product.count = 1
+            if (product.count == 0) {
+                product.count = 1
+            } else {
+                product.count = -product.count
+            }
             db.add(product)
         }
     }
