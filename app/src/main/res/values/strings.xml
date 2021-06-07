@@ -47,6 +47,8 @@
     <string name="register_city_hint">City</string>
     <string name="register_country_hint">Country</string>
     <string name="register_Street_hint">Street</string>
+    <string name="setting_of_the_app">Setting of the app</string>
+    <string name="shopping_cart">shopping cart</string>
 
     <!--    nermeen-->
 </resources>
