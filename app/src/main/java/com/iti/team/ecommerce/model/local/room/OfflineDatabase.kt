@@ -1,6 +1,5 @@
 package com.iti.team.ecommerce.model.local.room
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.iti.team.ecommerce.model.data_classes.Product
@@ -14,8 +13,8 @@ class OfflineDatabase private constructor(): OfflineDB {
         fun getInstance(context: Context): OfflineDatabase =
             INSTANCE ?: buildDatabase(context)
         @JvmStatic
-        private fun buildDatabase(context: Context):OfflineDatabase {
-            db= Room.databaseBuilder(
+        private fun buildDatabase(context: Context): OfflineDatabase {
+            db = Room.databaseBuilder(
                 context,
                 AppDatabase::class.java, "store.db"
             ).build().productDao()
@@ -24,24 +23,54 @@ class OfflineDatabase private constructor(): OfflineDB {
 
     }
 
-    override fun getAllProducts(): Flow<List<Product>> {
-       return db.getAllProducts()
-    }
+    override fun getAllProducts(): Flow<List<Product>> = db.getWishList()
 
-    override fun getAllId(): Flow<List<Long>> {
-        return db.getAllIds()
-    }
+
+    override fun getAllId(): Flow<List<Long>> = db.getAllIds()
+
 
     override suspend fun addToWishList(product: Product) {
-           db.addToWishList(product)
+        product.inWish = true
+        db.add(product)
     }
 
-    override suspend fun removeFromWishList(id: Long) {
-          db.removeFromWishList(id)
+    override suspend fun removeFromWishList(product: Product) {
+        if (product.inCart) {
+            product.inWish = false
+            db.update(product)
+        } else {
+            db.remove(product.id)
+        }
     }
 
-    override suspend fun reset() {
-        db.reset()
+    override suspend fun addToCart(product: Product) {
+        if (product.inCart) {
+            if (product.count > 0) {
+                product.count += 1
+            } else {
+                product.count = -product.count
+            }
+            db.update(product)
+        } else {
+            product.inCart = true
+            product.count = 1
+            db.add(product)
+        }
     }
+
+    override suspend fun removeFromCart(product: Product) {
+        if (product.inWish) {
+            product.inCart = false
+            product.count = 0
+            db.update(product)
+        } else {
+            db.remove(product.id)
+        }
+    }
+
+    override suspend fun getById(id: Long): Product = db.getById(id)
+
+
+    override suspend fun reset() = db.reset()
 
 }
