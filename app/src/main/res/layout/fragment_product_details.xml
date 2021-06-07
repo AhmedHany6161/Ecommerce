@@ -48,7 +48,7 @@
             android:id="@+id/img_header"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/teal_700"
+            android:background="@color/primaryTextColor"
             app:layout_constraintTop_toTopOf="parent"
             />
         <ImageView

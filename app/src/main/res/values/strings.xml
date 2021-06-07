@@ -17,6 +17,7 @@
     <string name="category">Category</string>
     <string name="home">Home</string>
     <string name="wishlist">Wishlist</string>
+    <string name="no_search_result">Your search did not match any products.</string>
     <string name="cart">Cart</string>
     <!--    wesam-->
 

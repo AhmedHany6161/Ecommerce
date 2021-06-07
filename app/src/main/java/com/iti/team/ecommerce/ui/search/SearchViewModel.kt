@@ -30,6 +30,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private var _navigateToDetails = MutableLiveData<Event<String>>()
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
+    private var _animationVisibility = MutableLiveData<Int>()
+    private var _recyclerVisibility = MutableLiveData<Int>()
+
+    private var _searchText = MutableLiveData<String>()
+
     private var idSet: HashSet<Long> = hashSetOf()
 
     val navigateToDetails: LiveData<Event<String>>
@@ -45,6 +50,14 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
 
+    val animationVisibility: LiveData<Int>
+        get() = _animationVisibility
+
+    val recyclerVisibility: LiveData<Int>
+        get() = _recyclerVisibility
+
+    val searchText: LiveData<String>
+        get() = _searchText
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,6 +67,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 }
             }
         }
+        _loading.postValue(View.GONE)
+        _animationVisibility.postValue(View.GONE)
     }
 
     fun getData(product: String,type: String) {
@@ -72,12 +87,17 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 getProductsByVendor(product)
             }
             else -> {
+                _recyclerVisibility.postValue(View.GONE)
+                _animationVisibility.postValue(View.VISIBLE)
                 Log.i("getData","not get data")
             }
         }
     }
 
    private fun getProductsByType(productType: String) {
+       _loading.postValue(View.VISIBLE)
+       _animationVisibility.postValue(View.GONE)
+       _recyclerVisibility.postValue(View.GONE)
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = modelRepository.getProductsFromType(productType)) {
                 is Result.Success -> {
@@ -85,36 +105,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                     withContext(Dispatchers.Main) {
                         dataOfProduct.clear()
                         searchProductAdapter.loadData(ArrayList())
-                        //_loading.postValue(View.VISIBLE)
                         result.data?.product?.let {
-                            searchProductAdapter.loadData(it)
-                           // _loading.postValue(View.GONE)
-                        }
-                    }
-                }
-
-                is Result.Error -> {
-                    Log.e("getDiscount:", "${result.exception.message}")
-                    _loading.postValue(View.GONE)
-                }
-                is Result.Loading -> {
-                    _loading.postValue(View.GONE)
-                    Log.i("getDiscount", "Loading")
-                }
-            }
-        }
-    }
-
-    fun getProductsByVendor(vendor: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            when (val result = modelRepository.getProductsFromVendor(vendor)) {
-                is Result.Success -> {
-                    Log.i("getProducts:", "${result.data?.product}")
-                    withContext(Dispatchers.Main) {
-                        dataOfProduct.clear()
-                        searchProductAdapter.loadData(ArrayList())
-                        _loading.postValue(View.VISIBLE)
-                        result.data?.product?.let {
+                            _recyclerVisibility.postValue(View.VISIBLE)
                             searchProductAdapter.loadData(it)
                             _loading.postValue(View.GONE)
                         }
@@ -124,6 +116,39 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                 is Result.Error -> {
                     Log.e("getDiscount:", "${result.exception.message}")
                     _loading.postValue(View.GONE)
+                    _animationVisibility.postValue(View.VISIBLE)
+                }
+                is Result.Loading -> {
+                    _loading.postValue(View.GONE)
+                    Log.i("getDiscount", "Loading")
+                }
+            }
+        }
+    }
+
+   private fun getProductsByVendor(vendor: String) {
+       _loading.postValue(View.VISIBLE)
+       _animationVisibility.postValue(View.GONE)
+       _recyclerVisibility.postValue(View.GONE)
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = modelRepository.getProductsFromVendor(vendor)) {
+                is Result.Success -> {
+                    Log.i("getProducts:", "${result.data?.product}")
+                    withContext(Dispatchers.Main) {
+                        dataOfProduct.clear()
+                        searchProductAdapter.loadData(ArrayList())
+                        result.data?.product?.let {
+                            _recyclerVisibility.postValue(View.VISIBLE)
+                            searchProductAdapter.loadData(it)
+                            _loading.postValue(View.GONE)
+                        }
+                    }
+                }
+
+                is Result.Error -> {
+                    Log.e("getDiscount:", "${result.exception.message}")
+                    _loading.postValue(View.GONE)
+                    _animationVisibility.postValue(View.VISIBLE)
                 }
                 is Result.Loading -> {
                     _loading.postValue(View.GONE)
@@ -151,6 +176,22 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         return idSet.contains(id)
     }
 
+    fun shoesChipClicked() {
+        getProductsByType("shoes")
+        _searchText.postValue("shoes")
+    }
+
+    fun shirtChipClicked() {
+        getProductsByType("t-shirts")
+        _searchText.postValue("t-shirts")
+
+    }
+
+    fun accessoriesChipClicked() {
+        getProductsByType("accessories")
+        _searchText.postValue("accessories")
+    }
+
     fun addToWishList(products: Products, image: String) {
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.addToWishList(
@@ -171,4 +212,5 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         }
 
     }
+
 }

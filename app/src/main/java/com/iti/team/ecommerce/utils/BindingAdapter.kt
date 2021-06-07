@@ -141,6 +141,19 @@ fun setMutableText(view: Button, @Nullable text: LiveData<String>?,
 }
 
 /**
+ * Set [CompoundButton] text.
+ */
+@BindingAdapter("mutableText",requireAll = false)
+fun setMutableText(view: SearchView, @Nullable text: LiveData<String>?) {
+    val parentActivity: AppCompatActivity? = view.getParentActivity()
+
+    if (parentActivity != null) {
+        text?.let { text.observe(parentActivity, Observer { value -> view.setQuery(value, false)}) }
+
+    }
+}
+
+/**
  * Set [AppCompatEditText] text.
  */
 @BindingAdapter("mutableText", "mutableTextId", requireAll = false)
