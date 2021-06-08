@@ -18,5 +18,7 @@ interface ApiInterface {
 
     suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Response<CustomerModel>
     suspend fun login(email: String): Response<CustomerLoginModel>
+    suspend fun addOrder(order: AddOrderModel): Response<GettingOrderModel>
+
 
 }

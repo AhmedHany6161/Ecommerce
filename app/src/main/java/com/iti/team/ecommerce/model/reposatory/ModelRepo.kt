@@ -25,4 +25,6 @@ interface ModelRepo {
     suspend fun login(email: String): Result<CustomerLoginModel?>
 
     suspend fun getProductsFromVendor(vendor: String): Result<ProductsModel?>
+
+    suspend fun addOrder(order: AddOrderModel): Result<GettingOrderModel?>
 }

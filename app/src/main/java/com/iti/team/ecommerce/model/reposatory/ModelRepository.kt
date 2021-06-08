@@ -237,6 +237,27 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
         return result
     }
 
+    override suspend fun addOrder(order: AddOrderModel): Result<GettingOrderModel?> {
+        var result:Result<GettingOrderModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.addOrder(order)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+    }
+
 
     override fun getAllWishListProducts(): Flow<List<Product>> {
         return offlineDB?.getAllProducts() ?: flow { emit(listOf<Product>()) }
