@@ -87,14 +87,6 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/forgot_password"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="@dimen/newsMoreTextSize" />
 
 
                 <Button
@@ -114,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/loginViewsMargin"
                     android:gravity="center"
-                    android:onClick="onLoginClick"
+                    android:id="@+id/registerNow"
                     android:text="@string/register_now"
                     android:textAlignment="center"
                     android:textColor="@color/primaryTextColor"
@@ -193,7 +185,7 @@
             android:src="@drawable/ic_add_img"
             android:layout_marginRight="11dp"
             android:layout_marginBottom="30dp"
-            android:onClick="onLoginClick" />
+            android:id="@+id/goToRegister"/>
     </RelativeLayout>
 </layout>
 
