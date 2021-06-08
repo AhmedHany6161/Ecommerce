@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splash">
     <fragment
         android:id="@+id/splash"
         android:name="com.iti.team.ecommerce.ui.splash.Splash"
@@ -35,12 +35,28 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" >
+
+        <action
+            android:id="@+id/action_from_loginFragment_to_RegisterFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_Cateogre"
+            app:destination="@id/categoriesFragment" />
+    </fragment>
     <fragment
  
         android:id="@+id/registerFragment"
         android:name="com.iti.team.ecommerce.ui.register.RegisterFragment"
         android:label="RegisterFragment" />
+    <action
+        android:id="@+id/action_from_Register_to_LoginFragment"
+        app:destination="@id/loginFragment"/>
+
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.iti.team.ecommerce.ui.product_details.ProductDetailsFragment"

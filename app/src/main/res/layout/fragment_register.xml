@@ -241,6 +241,5 @@
         android:src="@drawable/ic_back_img"
         android:layout_marginRight="11dp"
         android:layout_marginBottom="30dp"
-        android:onClick="onLoginClick"
         android:adjustViewBounds="false"/>
 </RelativeLayout>

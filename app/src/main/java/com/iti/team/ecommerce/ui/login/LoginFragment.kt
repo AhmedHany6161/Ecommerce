@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -36,9 +37,82 @@ class LoginFragment: Fragment()  {
         binding = FragmentLoginBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        viewModel.login("wessam@gmail.com")
-
+        binding.cirLoginButton.setOnClickListener {
+            validationEmail()
+        }
+        binding.goToRegister.setOnClickListener { animationToRegister() }
+        binding.registerNow.setOnClickListener { animationToRegister() }
         return binding.root
+    }
+
+    private fun validationEmail() {
+        val email: String = binding.editTextEmail.getText().toString()
+        viewModel.validationEmpty(email)
+        viewModel.getLogInResult().observe(viewLifecycleOwner,{
+            when(it){
+                "empty" ->{
+                    binding.textInputEmail.setError("Field can’t be empty")
+                }
+                "not empty" ->{
+                    viewModel.login(email)
+                    binding.textInputEmail.setError(null)
+                    binding.textInputEmail.setErrorEnabled(false)
+                    observeData(email)
+                }
+            }
+
+
+        })
+    }
+
+    private fun observeData(email :String) {
+        viewModel.getLogInState().observe(viewLifecycleOwner,{
+            when(it){
+                "null" ->{ }
+                "false" ->{ binding.textInputEmail.setError("Invalid email address")}
+                "true" ->{
+                    binding.textInputEmail.setError(null)
+                    binding.textInputEmail.setErrorEnabled(false)
+                    validaePassword()
+                }
+            }
+
+        })
+    }
+
+    private fun validaePassword() {
+        val pass = binding.editTextPassword.getText().toString()
+        viewModel.validationPassword(pass)
+        viewModel.getvalidation().observe(viewLifecycleOwner,{
+            when(it) {
+                "empty" -> {
+                    binding.textInputPassword.setError("Field can’t be empty")
+                }
+                "not empty" -> {
+                    if (! pass.equals(viewModel.password)) {
+                        binding.textInputPassword.setError("Wrong Password")
+                    } else {
+                        binding.textInputPassword.setError(null)
+                        binding.textInputPassword.setErrorEnabled(false)
+                        navigation()
+                    }
+
+                }
+            }
+        })
+    }
+
+
+    private fun animationToRegister() {
+
+        val action = LoginFragmentDirections.actionFromLoginFragmentToRegisterFragment()
+        findNavController().navigate(action)
+
+    }
+
+    private fun navigation() {
+        findNavController().navigate(R.id.categoriesFragment)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,11 +159,10 @@ class LoginFragment: Fragment()  {
     }
 
     private fun observeAuthenticationState() {
-        val navController = findNavController()
+        val action = LoginFragmentDirections.actionLoginFragmentToCateogre()
         viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
-                LoginViewModel.AuthenticationState.AUTHENTICATED ->navController.navigate(
-                    R.id.categoriesFragment)
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> findNavController().navigate(action)
 
                 else -> {
                     binding.googleBtn.setOnClickListener { launchSignInGoogle() }
