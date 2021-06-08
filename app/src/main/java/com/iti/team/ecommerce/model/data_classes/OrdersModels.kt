@@ -5,6 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class OrdersModels(
-    @Json(name = "order")
-    val order:List<SendedOrder?> = listOf()
+    @Json(name = "orders")
+    val order:List<Order?> = listOf()
 )

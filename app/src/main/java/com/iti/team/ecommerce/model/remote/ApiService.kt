@@ -57,4 +57,8 @@ interface ApiService {
     suspend fun addOrder(@Body order:AddOrderModel):
             Response<GettingOrderModel>
 
+    @GET("orders.json?")
+    suspend fun getOrders(@Query("email") email: String):
+            Response<OrdersModels>
+
 }

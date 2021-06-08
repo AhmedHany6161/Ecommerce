@@ -27,4 +27,6 @@ interface ModelRepo {
     suspend fun getProductsFromVendor(vendor: String): Result<ProductsModel?>
 
     suspend fun addOrder(order: AddOrderModel): Result<GettingOrderModel?>
+
+    suspend fun getOrders(email:String): Result<OrdersModels?>
 }

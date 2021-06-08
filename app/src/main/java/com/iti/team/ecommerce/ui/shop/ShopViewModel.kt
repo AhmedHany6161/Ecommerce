@@ -94,7 +94,6 @@ class ShopViewModel: ViewModel() {
 //        productTypeSet.add("t-shirts")
 //        productTypeSet.add("shoes")
 //        productTypeSet.add("accessories")
-        addOrder()
     }
 
     private fun createDiscount(discount:Discount){
@@ -210,26 +209,6 @@ class ShopViewModel: ViewModel() {
         Log.i("navigateToSearch","$productTypeSet")
     }
 
-    fun addOrder(){
-        val lineItems = listOf(LineItems(39853312639174,1))
-        val billingShippingAddress = BillingShippingAddress("test",
-        "test","test address","cario",
-        "country")
-        val discountCodes = listOf(DiscountCodes("FAKE30","10.0"))
-        val order = SendedOrder(email = "www@tes.com",billingAddress =billingShippingAddress,
-        shippingAddress = billingShippingAddress,lineItems = lineItems, financialStatus = "paid"
-            ,discountCodes = discountCodes)
-        val addOrderModel = AddOrderModel(order)
-        viewModelScope.launch(Dispatchers.IO)  {
-            when(val result = modelRepository.addOrder(order = addOrderModel)){
-                is Result.Success->{
-                    Log.i("addOrder:", "${result.data?.order}")}
-                is Result.Error ->{
-                    Log.e("addOrder:", "${result.exception.message}")}
-                is Result.Loading ->{
-                    Log.i("addOrder","Loading")}
-            }
-        }
-    }
+
 
 }

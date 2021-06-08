@@ -61,4 +61,8 @@ class ApiDataSource: ApiInterface {
       return _apiService.addOrder(order)
     }
 
+    override suspend fun getOrders(email: String): Response<OrdersModels> {
+        return _apiService.getOrders(email)
+    }
+
 }

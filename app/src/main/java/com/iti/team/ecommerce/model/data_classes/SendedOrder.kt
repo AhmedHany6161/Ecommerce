@@ -6,7 +6,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class SendedOrder(
 
-
     @Json(name = "email")
     val email: String? = "",
 

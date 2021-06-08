@@ -20,5 +20,6 @@ interface ApiInterface {
     suspend fun login(email: String): Response<CustomerLoginModel>
     suspend fun addOrder(order: AddOrderModel): Response<GettingOrderModel>
 
+    suspend fun getOrders(email:String): Response<OrdersModels>
 
 }

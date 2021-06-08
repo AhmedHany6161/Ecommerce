@@ -11,6 +11,7 @@ data class Order(
 
     @Json(name = "app_id")
     val orderNumber: Long? = 0,
+
     @Json(name = "created_at")
     val createdAt: String? = "",
 
@@ -19,4 +20,12 @@ data class Order(
 
     @Json(name = "current_total_discounts")
     val totalDiscount: String? = "",
+
+//    @Json(name = "quantity")
+//    val quantity: Long? = 0,
+
+    @Json(name = "financial_status")
+    val financialStatus: String? = "",
+
+
 )
