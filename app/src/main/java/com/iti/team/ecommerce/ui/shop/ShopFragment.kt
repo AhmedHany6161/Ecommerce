@@ -26,7 +26,7 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentShopBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
+        viewModel = ShopViewModel(requireActivity().application)
         init()
         return binding.root
     }

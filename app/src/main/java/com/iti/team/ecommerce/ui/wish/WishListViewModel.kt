@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class WishListViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+        ModelRepository(OfflineDatabase.getInstance(application),application)
     private var dataOfProduct: List<Product> = mutableListOf()
     private val productFlowData: MutableLiveData<List<Product>> by lazy { MutableLiveData() }
 

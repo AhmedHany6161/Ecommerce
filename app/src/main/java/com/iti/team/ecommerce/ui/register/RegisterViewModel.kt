@@ -1,6 +1,8 @@
 package com.iti.team.ecommerce.ui.register
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
@@ -10,9 +12,10 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RegisterViewModel: ViewModel()  {
+class RegisterViewModel(application: Application): AndroidViewModel(application)  {
 
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+    private val  modelRepository: ModelRepo =
+        ModelRepository(null,application.applicationContext)
 
     fun createCustomer(customer:CustomerModel){
         viewModelScope.launch(Dispatchers.IO) {

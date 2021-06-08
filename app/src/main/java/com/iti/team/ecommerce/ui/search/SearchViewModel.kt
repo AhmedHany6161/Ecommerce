@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
 
     var searchProductAdapter = SearchProductAdapter(this)
@@ -27,7 +27,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
 
     private var _loading = MutableLiveData<Int>()
-    private var _navigateToDetails = MutableLiveData<Event<String>>()
+    private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
     private var _animationVisibility = MutableLiveData<Int>()
@@ -37,7 +37,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private var idSet: HashSet<Long> = hashSetOf()
 
-    val navigateToDetails: LiveData<Event<String>>
+    val navigateToDetails: LiveData<Event<Pair<String,Boolean?>>>
         get() = _navigateToDetails
 
 
@@ -162,14 +162,16 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         convertObjectToString(product)
     }
 
-    private fun convertObjectToString(productObject: Products) {
+
+    private fun convertObjectToString(productObject: Products){
+        val inWish = productObject.productId?.let { inWishList(it) }
         val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
-        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject),inWish)
     }
 
 
-    private fun sendObjectToDetailsScreen(objectString: String) {
-        _navigateToDetails.postValue(Event(objectString))
+    private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
+        _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
     }
 
     fun inWishList(id: Long): Boolean {

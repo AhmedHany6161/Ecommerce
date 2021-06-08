@@ -19,7 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
-    private val  modelRepository: ModelRepository = ModelRepository(OfflineDatabase.getInstance(application))
+    private val  modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
     private var  inWishL: Boolean? = false
     private var  product:Products? = null

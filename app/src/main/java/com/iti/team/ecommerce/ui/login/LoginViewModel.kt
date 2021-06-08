@@ -1,6 +1,8 @@
 package com.iti.team.ecommerce.ui.login
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 
@@ -11,8 +13,8 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel: ViewModel()  {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class LoginViewModel( application: Application): AndroidViewModel(application)  {
+    private val  modelRepository: ModelRepo = ModelRepository(null,application)
 
     fun login(email: String?){
 

@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class ShopProductsViewModel(application: Application) : AndroidViewModel(application) {
     private val  modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+        ModelRepository(OfflineDatabase.getInstance(application),application)
 
 
     var shopProductAdapter = ShopProductAdapter(this)

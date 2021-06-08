@@ -1,12 +1,10 @@
 package com.iti.team.ecommerce.ui.shop
 
 
+import android.app.Application
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
@@ -17,8 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShopViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class ShopViewModel(application: Application): AndroidViewModel(application)  {
+    private val  modelRepository: ModelRepo =
+        ModelRepository(null, application.applicationContext)
     private var code:String = ""
     var shopAdapter = ShopAdapter(this)
 

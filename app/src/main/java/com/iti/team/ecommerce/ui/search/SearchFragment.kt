@@ -79,14 +79,15 @@ class SearchFragment: Fragment() {
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let {it1->
-                navigate(it1)
+                it1.second?.let { it2 -> navigate(it1.first, it2) }
             }
         })
     }
 
 
-    private fun navigate(productObject: String){
-        val action = SearchFragmentDirections.actionSearchFragmentToProductDetailsFragment(productObject)
+    private fun navigate(productObject: String,inWish:Boolean){
+        val action = SearchFragmentDirections
+            .actionSearchFragmentToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
 }
