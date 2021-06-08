@@ -32,6 +32,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     private var _animationVisibility = MutableLiveData<Int>()
     private var _recyclerVisibility = MutableLiveData<Int>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     private var _searchText = MutableLiveData<String>()
 
@@ -39,6 +40,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     val navigateToDetails: LiveData<Event<Pair<String,Boolean?>>>
         get() = _navigateToDetails
+
 
 
     val shopProductImage: LiveData<String>
@@ -58,6 +60,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     val searchText: LiveData<String>
         get() = _searchText
+
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -213,6 +218,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             modelRepository.removeFromWishList(id)
         }
 
+    }
+
+    fun isLogin():Boolean = modelRepository.isLogin()
+    fun navigateToLogin(){
+        _navigateToLogin.postValue(Event(true))
     }
 
 }
