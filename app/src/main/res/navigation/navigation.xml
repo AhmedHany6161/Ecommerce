@@ -60,6 +60,10 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_shoppingPageFragment"
             app:destination="@id/shoppingPageFragment" />
+        <argument
+            android:name="inWish"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"

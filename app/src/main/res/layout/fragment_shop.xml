@@ -174,7 +174,7 @@
            <androidx.recyclerview.widget.RecyclerView
                android:id="@+id/shop_recycler"
                android:layout_height="match_parent"
-               android:layout_width="wrap_content"
+               android:layout_width="match_parent"
                app:layout_constraintTop_toBottomOf="@+id/text_shop"
                app:layout_constraintBottom_toBottomOf="parent"
                android:layout_marginBottom="16dp"
@@ -182,6 +182,7 @@
                adapter="@{viewModel.shopAdapter}"
                android:nestedScrollingEnabled="false"
                android:layout_marginStart="16dp"
+               android:layout_marginEnd="16dp"
                />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

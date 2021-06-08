@@ -152,9 +152,11 @@ class ShopViewModel: ViewModel() {
                     withContext(Dispatchers.Main){
                         result.data?.smart_collections?.let {
                             shopAdapter.loadData(it)
-                            for(i in it){
-                                i.handle?.let { it1 -> productTypeSet.add(it1) }
-                            }
+                        }
+                    }
+                    result.data?.smart_collections?.let {
+                        for (i in it) {
+                            i.handle?.let { it1 -> productTypeSet.add(it1) }
                         }
                     }
                 }

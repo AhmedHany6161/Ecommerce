@@ -1,13 +1,15 @@
 package com.iti.team.ecommerce.ui.product_details
 
+import android.app.Application
+import android.graphics.Color
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Images
+import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -16,9 +18,11 @@ import com.iti.team.ecommerce.utils.moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductDetailsViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
+    private val  modelRepository: ModelRepository = ModelRepository(OfflineDatabase.getInstance(application))
 
+    private var  inWishL: Boolean? = false
+    private var  product:Products? = null
     private var _descriptionText = MutableLiveData<String>()
     private var _taxable = MutableLiveData<String>()
     private var _quantity = MutableLiveData<String>()
@@ -29,6 +33,10 @@ class ProductDetailsViewModel: ViewModel() {
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
     private var _fragmentVisibility = MutableLiveData<Int>()
+    private var _inWish = MutableLiveData<Event<Boolean>>()
+    private var _notInWishClicked = MutableLiveData<Event<Boolean>>()
+    private var _inWishClicked = MutableLiveData<Event<Boolean>>()
+    private var _favoriteIconColor = MutableLiveData<Int>()
 
     val descriptionText:LiveData<String>
     get() = _descriptionText
@@ -57,6 +65,17 @@ class ProductDetailsViewModel: ViewModel() {
     val fragmentVisibility:LiveData<Int>
         get() = _fragmentVisibility
 
+    val inWish:LiveData<Event<Boolean>>
+        get() = _inWish
+
+    val inWishClicked:LiveData<Event<Boolean>>
+        get() = _inWishClicked
+
+    val notInWishClicked:LiveData<Event<Boolean>>
+        get() = _notInWishClicked
+
+    val favoriteIconColor:LiveData<Int>
+        get() = _favoriteIconColor
 
     init {
         _fragmentVisibility.postValue(View.GONE)
@@ -68,7 +87,7 @@ class ProductDetailsViewModel: ViewModel() {
 
     private fun convertStringToObject(productObject: String){
         val productAdapter = moshi.adapter(Products::class.java)
-        val product:Products? = productAdapter.fromJson(productObject)
+        product = productAdapter.fromJson(productObject)
         updateProduct(product)
     }
 
@@ -119,9 +138,56 @@ class ProductDetailsViewModel: ViewModel() {
             _fragmentVisibility.postValue(View.VISIBLE)
         }
     }
+
+    fun favoriteIconClicked(){
+        if(inWishL == true){
+            _favoriteIconColor.postValue(Color.GRAY)
+            product?.productId?.let {
+                removeFromWishList(it)
+                inWishL = false
+            }
+        }else{
+            _favoriteIconColor.postValue(Color.RED)
+            product?.image?.src?.let {
+                product?.let { it1 -> addToWishList(it1, it) }
+                inWishL = true
+            }
+
+        }
+
+    }
     fun layoutClicked(){
         if (_fragmentVisibility.value == View.VISIBLE){
             _fragmentVisibility.postValue(View.GONE)
         }
+    }
+
+    fun inWish(inWishL: Boolean) {
+        this.inWishL = inWishL
+        _inWish.postValue(Event(true))
+        if(inWishL){
+            _favoriteIconColor.postValue(Color.RED)
+        }
+    }
+
+    fun addToWishList(products: Products, image: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToWishList(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    fun removeFromWishList(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.removeFromWishList(id)
+        }
+
     }
 }
