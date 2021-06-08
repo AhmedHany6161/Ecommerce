@@ -22,6 +22,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     private var  inWishL: Boolean? = false
     private var  product:Products? = null
+    var sizeAdapter = SizeAdapter()
     private var _descriptionText = MutableLiveData<String>()
     private var _taxable = MutableLiveData<String>()
     private var _quantity = MutableLiveData<String>()
@@ -96,7 +97,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
             it.variants[0]?.price?.let { it1 -> _price.value = "EGP $it1" }
             it.variants[0]?.quantity?.let { it1 -> _quantity.value = it1.toString() }
             it.variants[0]?.taxable?.let { it1 -> _taxable.value = it1.toString() }
-
+            it.options[0]?.values?.let { it1 -> sizeAdapter.loadData(it1) }
         }
 
     }

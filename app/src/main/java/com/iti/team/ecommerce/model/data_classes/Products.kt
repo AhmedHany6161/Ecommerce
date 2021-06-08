@@ -27,8 +27,9 @@ data class Products(
     val variants: List<Variants?> = listOf(),
 
 
-//    @Json(name = "options")
-//    val options: List<Options?> = listOf(),
+    @Json(name = "options")
+    val options: List<Options?> = listOf(),
+
     @Json(name = "image")
     val image: Images
 
