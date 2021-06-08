@@ -61,13 +61,12 @@ class ProductsFragment : Fragment() {
         viewModel: ProductsViewModel,
         profile: LottieAnimationView
     ) {
-        viewModel.getLogInState().observe(viewLifecycleOwner, {
-            if (it) {
-                profile.setAnimation(R.raw.login_profile)
-            } else {
-                profile.setAnimation(R.raw.error_animation)
-            }
-        })
+
+        if (viewModel.getLogInState()) {
+            profile.setAnimation(R.raw.login_profile)
+        } else {
+            profile.setAnimation(R.raw.error_animation)
+        }
     }
 
     override fun onResume() {
