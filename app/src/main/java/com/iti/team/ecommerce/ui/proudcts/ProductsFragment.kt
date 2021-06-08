@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,6 +48,9 @@ class ProductsFragment : Fragment() {
         profile.setOnClickListener {
 
         }
+        viewModel.addToCart.observe(viewLifecycleOwner,{
+            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
+        })
         listeningForNavigate(viewModel)
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()

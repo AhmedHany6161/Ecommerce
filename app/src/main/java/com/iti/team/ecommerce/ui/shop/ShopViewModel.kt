@@ -97,7 +97,7 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
 //        productTypeSet.add("t-shirts")
 //        productTypeSet.add("shoes")
 //        productTypeSet.add("accessories")
-        modelRepository.setLogin(true)
+       //modelRepository.setLogin(false)
     }
 
     private fun createDiscount(discount:Discount){

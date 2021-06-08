@@ -312,15 +312,27 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
     }
 
     override suspend fun removeFromWishList(id: Long) {
-        offlineDB?.removeFromWishList(offlineDB.getById(id))
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromWishList(product)
+        }
+
     }
 
     override suspend fun addToCart(product: Product) {
-        offlineDB?.addToCart(product)
+        val conProduct = offlineDB?.getById(product.id)
+        if (conProduct == null) {
+            offlineDB?.addToCart(product)
+        } else {
+            offlineDB?.addToCart(conProduct)
+        }
     }
 
     override suspend fun removeFromCart(id: Long) {
-        offlineDB?.removeFromCart(offlineDB.getById(id))
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromCart(product)
+        }
     }
 
     override suspend fun reset() {

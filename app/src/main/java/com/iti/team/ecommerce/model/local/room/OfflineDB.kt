@@ -19,7 +19,7 @@ interface OfflineDB {
 
     suspend fun removeFromCart(product: Product)
 
-    suspend fun getById(id: Long):Product
+    suspend fun getById(id: Long):Product?
 
     suspend fun reset()
 }

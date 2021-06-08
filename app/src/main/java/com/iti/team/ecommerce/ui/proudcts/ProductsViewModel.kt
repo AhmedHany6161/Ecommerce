@@ -2,7 +2,6 @@ package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
@@ -31,10 +30,16 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
     private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
+
     private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
 
     val navigateToDetails:LiveData<Event<Pair<String,Boolean?>>>
     get() = _navigateToDetails
+
+    private val _addToCart = MutableLiveData<String>()
+    val addToCart: LiveData<String> get() = _addToCart
+
+
 
     private var idSet: HashSet<Long> = hashSetOf()
 
@@ -180,12 +185,28 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-     fun inFilteredList(name : String):Boolean{
-        return filteredSet.contains(name)
-     }
 
-    fun navigateToDetails(product: Products){
-            convertObjectToString(product)
+    fun inFilteredList(name: String): Boolean {
+        return filteredSet.contains(name)
+    }
+
+    fun navigateToDetails(product: Products) {
+        convertObjectToString(product)
+    }
+
+    fun addToCart(products: Products, image: String) {
+        _addToCart.value = "product successfully added to cart"
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToCart(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
     }
 
     private fun convertObjectToString(productObject: Products){
@@ -197,5 +218,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
         _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
+
     }
 }
