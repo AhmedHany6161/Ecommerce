@@ -8,8 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.PriceRule
+import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -92,9 +91,9 @@ class ShopViewModel: ViewModel() {
 
     init {
         showHideItems(View.GONE)
-        productTypeSet.add("t-shirts")
-        productTypeSet.add("shoes")
-        productTypeSet.add("accessories")
+//        productTypeSet.add("t-shirts")
+//        productTypeSet.add("shoes")
+//        productTypeSet.add("accessories")
     }
 
     private fun createDiscount(discount:Discount){
@@ -154,7 +153,7 @@ class ShopViewModel: ViewModel() {
                         result.data?.smart_collections?.let {
                             shopAdapter.loadData(it)
                             for(i in it){
-                                //i.handle?.let { it1 -> productTypeSet.add(it1) }
+                                i.handle?.let { it1 -> productTypeSet.add(it1) }
                             }
                         }
                     }
@@ -209,6 +208,7 @@ class ShopViewModel: ViewModel() {
         _navigateToSearch.postValue(Event(productTypeSet.toString()))
         Log.i("navigateToSearch","$productTypeSet")
     }
+
 
 
 }

@@ -16,6 +16,10 @@ interface ApiService {
             Response<ProductsModel>
 
     @GET("products.json?")
+    suspend fun getProductsByVendor(@Query("vendor") vendor: String):
+            Response<ProductsModel>
+
+    @GET("products.json?")
     suspend fun getProductsFromType(@Query("product_type") productType: String):
             Response<ProductsModel>
 
@@ -48,5 +52,13 @@ interface ApiService {
     @GET("customers.json?")
     suspend fun login(@Query("email") email: String):
             Response<CustomerLoginModel>
+
+    @POST("orders.json")
+    suspend fun addOrder(@Body order:AddOrderModel):
+            Response<GettingOrderModel>
+
+    @GET("orders.json?")
+    suspend fun getOrders(@Query("email") email: String):
+            Response<OrdersModels>
 
 }

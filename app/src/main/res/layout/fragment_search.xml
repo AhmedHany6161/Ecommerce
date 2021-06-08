@@ -1,9 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.iti.team.ecommerce.ui.search.SearchViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/img_header"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:background="@color/primaryTextColor"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.8"
+            android:elevation="20dp"
+            android:layoutDirection="ltr"
+            android:background="@drawable/search_background"
+            android:layout_marginTop="32dp"
+            mutableText="@{viewModel.searchText}"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            app:singleSelection="true">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/text_shoes"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shoes"
+                app:chipBackgroundColor="@drawable/bg_chip_state"
+                android:onClick="@{()->viewModel.shoesChipClicked()}"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/text_shirt"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/t_shirt"
+                app:chipBackgroundColor="@drawable/bg_chip_state"
+                android:onClick="@{()->viewModel.shirtChipClicked()}"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/text_accessories"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accessory"
+                app:chipBackgroundColor="@drawable/bg_chip_state"
+                android:onClick="@{()->viewModel.accessoriesChipClicked()}"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/product_recycler"
+            adapter="@{viewModel.searchProductAdapter}"
+            mutableVisibility="@{viewModel.recyclerVisibility}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chip_group"
+            tools:listitem="@layout/shop_product_row_item" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/chip_group"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            mutableVisibility="@{viewModel.loading}"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/teal_700"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_search_result"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_header"
+            android:layout_marginTop="8dp"
+            app:lottie_rawRes="@raw/no_search_result"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:scaleType="fitXY"
+            mutableVisibility="@{viewModel.animationVisibility}"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/no_search_result"
+            android:textSize="12sp"
+            android:text="@string/no_search_result"
+            android:gravity="center"
+            mutableVisibility="@{viewModel.animationVisibility}"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
