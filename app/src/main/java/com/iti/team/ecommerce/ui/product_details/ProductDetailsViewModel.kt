@@ -5,13 +5,11 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
-import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Images
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
 import com.iti.team.ecommerce.utils.moshi
@@ -19,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
-    private val  modelRepository: ModelRepository =
+     val  modelRepository: ModelRepository =
         ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
     private var  inWishL: Boolean? = false
@@ -35,9 +33,8 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     private var _fragmentVisibility = MutableLiveData<Int>()
     private var _inWish = MutableLiveData<Event<Boolean>>()
-    private var _notInWishClicked = MutableLiveData<Event<Boolean>>()
-    private var _inWishClicked = MutableLiveData<Event<Boolean>>()
     private var _favoriteIconColor = MutableLiveData<Int>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     val descriptionText:LiveData<String>
     get() = _descriptionText
@@ -69,14 +66,11 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
     val inWish:LiveData<Event<Boolean>>
         get() = _inWish
 
-    val inWishClicked:LiveData<Event<Boolean>>
-        get() = _inWishClicked
-
-    val notInWishClicked:LiveData<Event<Boolean>>
-        get() = _notInWishClicked
-
     val favoriteIconColor:LiveData<Int>
         get() = _favoriteIconColor
+
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
 
     init {
         _fragmentVisibility.postValue(View.GONE)
@@ -141,21 +135,24 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun favoriteIconClicked(){
-        if(inWishL == true){
-            _favoriteIconColor.postValue(Color.GRAY)
-            product?.productId?.let {
-                removeFromWishList(it)
-                inWishL = false
+        if(modelRepository.isLogin()) {
+            if (inWishL == true) {
+                _favoriteIconColor.postValue(Color.GRAY)
+                product?.productId?.let {
+                    removeFromWishList(it)
+                    inWishL = false
+                }
+            } else {
+                _favoriteIconColor.postValue(Color.RED)
+                product?.image?.src?.let {
+                    product?.let { it1 -> addToWishList(it1, it) }
+                    inWishL = true
+                }
+
             }
         }else{
-            _favoriteIconColor.postValue(Color.RED)
-            product?.image?.src?.let {
-                product?.let { it1 -> addToWishList(it1, it) }
-                inWishL = true
-            }
-
+            _navigateToLogin.postValue(Event(true))
         }
-
     }
     fun layoutClicked(){
         if (_fragmentVisibility.value == View.VISIBLE){

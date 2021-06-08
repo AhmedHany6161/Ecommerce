@@ -52,11 +52,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                 }
             }
             launch {
-                modelRepository.getAllId().collect {
-                    idSet = HashSet(it)
-                }
-            }
-            launch {
                val pref= application.getSharedPreferences("app", Context.MODE_PRIVATE)
                 if(MySharedPreference(pref).getBoolean("logIn")){
                     isLogin.emit(true)
@@ -137,6 +132,12 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun getProductsFromType(productType: String) {
+        Log.i("getProductsFromType","productType")
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.getAllId().collect {
+                idSet = HashSet(it)
+            }
+        }
         stateProductType.value = productType
     }
 

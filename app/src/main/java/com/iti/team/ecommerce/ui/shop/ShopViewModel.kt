@@ -42,6 +42,7 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
     private var _navigateToCart = MutableLiveData<Event<Boolean>>()
     private var _navigateToSearch = MutableLiveData<Event<String>>()
     private var _navigateToShopProduct = MutableLiveData<Event<Pair<Long,String>>>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     private var productTypeSet: HashSet<String> = hashSetOf()
 
@@ -88,11 +89,15 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
     val navigateToShopProduct: LiveData<Event<Pair<Long,String>>>
         get() = _navigateToShopProduct
 
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
+
     init {
         showHideItems(View.GONE)
 //        productTypeSet.add("t-shirts")
 //        productTypeSet.add("shoes")
 //        productTypeSet.add("accessories")
+        modelRepository.setLogin(true)
     }
 
     private fun createDiscount(discount:Discount){
@@ -197,11 +202,20 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
     }
 
     fun navigateToWish(){
-        _navigateToWish.postValue(Event(true))
+        if(modelRepository.isLogin()) {
+            _navigateToWish.postValue(Event(true))
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
     }
 
     fun navigateToCart(){
-        _navigateToCart.postValue(Event(true))
+        if(modelRepository.isLogin()){
+            _navigateToCart.postValue(Event(true))
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
+
     }
 
     fun navigateToSearch(){

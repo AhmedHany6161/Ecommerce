@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
 class ShopProducts: Fragment() {
 
@@ -52,6 +53,14 @@ class ShopProducts: Fragment() {
             }
         })
     }
+    private fun observeToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ShopProductsDirections.actionShopProductsToLoginFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
     private fun setUpRecyclerView(){
         binding.shopProductRecycler.layoutManager = GridLayoutManager(context,2)
     }
@@ -64,6 +73,7 @@ class ShopProducts: Fragment() {
     private fun observeData(){
       Log.i("observeData","observeData")
         observeButtonBackClicked()
+        observeToLogin()
     }
     private fun observeButtonBackClicked(){
         viewModel.buttonBackClicked.observe(viewLifecycleOwner,{

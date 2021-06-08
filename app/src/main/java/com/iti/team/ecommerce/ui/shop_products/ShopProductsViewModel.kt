@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShopProductsViewModel(application: Application) : AndroidViewModel(application) {
-    private val  modelRepository: ModelRepository =
+     val  modelRepository: ModelRepository =
         ModelRepository(OfflineDatabase.getInstance(application),application)
 
 
@@ -29,6 +29,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
     private var _loading = MutableLiveData<Int>()
     private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     private var idSet: HashSet<Long> = hashSetOf()
 
@@ -44,6 +45,9 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     val buttonBackClicked:LiveData<Event<Boolean>>
         get() = _buttonBackClicked
+
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
 
    private fun readWishList(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -129,5 +133,8 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     fun backButtonClicked(){
         _buttonBackClicked.postValue(Event(true))
+    }
+    fun navToLogin(){
+        _navigateToLogin.postValue(Event(true))
     }
 }
