@@ -2,7 +2,6 @@ package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
@@ -31,10 +30,13 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
     private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    private var _navigateToDetails = MutableLiveData<Event<String>>()
+    private val _addToCart = MutableLiveData<String>()
+    val addToCart: LiveData<String> get() = _addToCart
 
-    val navigateToDetails:LiveData<Event<String>>
-    get() = _navigateToDetails
+
+    private var _navigateToDetails = MutableLiveData<Event<String>>()
+    val navigateToDetails: LiveData<Event<String>>
+        get() = _navigateToDetails
 
     private var idSet: HashSet<Long> = hashSetOf()
 
@@ -179,20 +181,36 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-     fun inFilteredList(name : String):Boolean{
+
+    fun inFilteredList(name: String): Boolean {
         return filteredSet.contains(name)
-     }
-
-    fun navigateToDetails(product: Products){
-            convertObjectToString(product)
     }
 
-    private fun convertObjectToString(productObject: Products){
+    fun navigateToDetails(product: Products) {
+        convertObjectToString(product)
+    }
+
+    fun addToCart(products: Products, image: String) {
+        _addToCart.value = "product successfully added to cart"
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToCart(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    private fun convertObjectToString(productObject: Products) {
         val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
-         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
     }
 
-    private fun sendObjectToDetailsScreen(objectString: String){
+    private fun sendObjectToDetailsScreen(objectString: String) {
         _navigateToDetails.postValue(Event(objectString))
     }
 }
