@@ -76,6 +76,13 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_shoppingPageFragment"
             app:destination="@id/shoppingPageFragment" />
+        <argument
+            android:name="inWish"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"
@@ -100,6 +107,9 @@
         <action
             android:id="@+id/action_shopFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -119,6 +129,9 @@
         <argument
             android:name="imageUrl"
             app:argType="string" />
+        <action
+            android:id="@+id/action_shopProducts_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreMenu"

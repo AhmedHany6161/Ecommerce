@@ -35,7 +35,7 @@ class LoginFragment: Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        viewModel = LoginViewModel(requireActivity().application)
 
         binding.cirLoginButton.setOnClickListener {
             validationEmail()

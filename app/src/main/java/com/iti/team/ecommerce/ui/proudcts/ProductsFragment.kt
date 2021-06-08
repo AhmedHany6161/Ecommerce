@@ -101,7 +101,7 @@ class ProductsFragment : Fragment() {
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
            it.getContentIfNotHandled()?.let {it1->
-              navigate(it1)
+               it1.second?.let { it2 -> navigate(it1.first, it2) }
            }
         })
     }
@@ -141,8 +141,9 @@ class ProductsFragment : Fragment() {
         })
     }
 
-    private fun navigate(productObject: String){
-        val action = ProductsFragmentDirections.actionProductsToProductDetailsFragment(productObject)
+    private fun navigate(productObject: String,inWish:Boolean){
+        val action = ProductsFragmentDirections
+            .actionProductsToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
 }

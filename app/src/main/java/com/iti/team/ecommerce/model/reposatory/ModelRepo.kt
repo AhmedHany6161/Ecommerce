@@ -29,4 +29,7 @@ interface ModelRepo {
     suspend fun addOrder(order: AddOrderModel): Result<GettingOrderModel?>
 
     suspend fun getOrders(email:String): Result<OrdersModels?>
+
+    fun isLogin():Boolean
+    fun setLogin(login:Boolean)
 }

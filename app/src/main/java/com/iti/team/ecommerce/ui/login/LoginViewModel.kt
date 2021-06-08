@@ -1,18 +1,20 @@
 package com.iti.team.ecommerce.ui.login
 
+import android.app.Application
 import android.util.Log
+
 import androidx.lifecycle.*
+
 
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LoginViewModel: ViewModel()  {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class LoginViewModel( application: Application): AndroidViewModel(application)  {
+    private val  modelRepository: ModelRepo = ModelRepository(null,application)
 
     var password =""
     private val emptyResult = MutableLiveData<String>()

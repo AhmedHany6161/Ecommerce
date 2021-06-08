@@ -15,7 +15,7 @@ class CategoriesFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this).get(CategoriesViewModel::class.java)
+        viewModel = CategoriesViewModel(requireActivity().application)
         init()
         return inflater.inflate(R.layout.fragment_categories, container, false)
     }

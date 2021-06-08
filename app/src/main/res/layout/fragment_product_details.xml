@@ -26,23 +26,6 @@
             android:onClick="@{()->viewModel.layoutClicked()}"
             >
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="@+id/img_back"
-            app:srcCompat="@drawable/ic_favorite"
-            app:tint="@color/white"/>
-
-        <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/img_header"
-            app:layout_constraintBottom_toBottomOf="@id/img_header"
-            android:background="@color/black"/>
 
         <ImageView
             android:id="@+id/img_header"
@@ -63,7 +46,17 @@
             app:tint="@color/white"
             android:onClick="@{()->viewModel.backButtonClicked()}"
             />
-
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/more"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="@+id/img_back"
+                app:srcCompat="@drawable/ic_favorite"
+                app:tint="@color/white"
+                colorImage="@{viewModel.favoriteIconColor}"
+                android:onClick="@{()->viewModel.favoriteIconClicked()}"/>
         <ImageView
             android:id="@+id/more"
             android:layout_width="wrap_content"

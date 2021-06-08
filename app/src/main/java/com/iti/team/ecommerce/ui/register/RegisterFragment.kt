@@ -28,7 +28,7 @@ class RegisterFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = RegisterViewModel()
+        viewModel = RegisterViewModel(requireActivity().application)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }

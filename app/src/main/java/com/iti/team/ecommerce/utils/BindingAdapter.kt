@@ -212,13 +212,20 @@ fun bindingAdapterCompoundButton(view: CompoundButton, @Nullable checked: LiveDa
     }
 }
 
-@BindingAdapter("mutableSrc")
-fun setImage(view:ImageView, @Nullable drawableId: LiveData<Int?>?){
+@BindingAdapter("mutableSrc","colorImage", requireAll = false)
+fun setImage(view:ImageView, @Nullable drawableId: LiveData<Int?>?,@Nullable color:LiveData<Int?>? ){
     view.getParentActivity()?.let { parentActivity ->
         drawableId?.let {
             drawableId->
             drawableId.observe(parentActivity,
             {value-> value?.let{view.setImageResource(it)}})
+        }
+    }
+    view.getParentActivity()?.let { parentActivity ->
+        color?.let {
+                color->
+            color.observe(parentActivity,
+                {value-> value?.let{view.setColorFilter(it)}})
         }
     }
 }
