@@ -9,6 +9,7 @@ import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,32 +18,33 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
     private val  modelRepository: ModelRepo = ModelRepository(null,application)
 
     var password =""
-    private val emptyResult = MutableLiveData<String>()
-    private val validate = MutableLiveData<String>()
-    private val isValid = MutableLiveData<String>("null")
-
-    fun getLogInResult(): LiveData<String> = emptyResult
-    fun getvalidation(): LiveData<String> = validate
-    fun getLogInState(): LiveData<String> = isValid
+    private val isEmptyEmail = MutableLiveData<Boolean>()
+    private val isEmptyPass = MutableLiveData<Boolean>()
+    private val isValid = MutableLiveData<Boolean>()
 
 
+    fun isEmailEmpty(): LiveData<Boolean> = isEmptyEmail
+    fun isPassEmpty(): LiveData<Boolean> = isEmptyPass
+    fun isValidEmail(): LiveData<Boolean> = isValid
 
-    fun validationEmpty(txt_val:String ) {
 
-        if (txt_val.isBlank()) {
-            emptyResult.value = "empty"
+
+    fun emailResult(txt_email:String ) {
+
+        if (txt_email.isBlank()) {
+            isEmptyEmail.value = false
             return
         }
-        emptyResult.value = "not empty"
+        isEmptyEmail.value = true
     }
 
-    fun validationPassword(txt_val:String ) {
+    fun passwordResult(txt_pass:String ) {
 
-        if (txt_val.isBlank()) {
-            validate.value = "empty"
+        if (txt_pass.isBlank()) {
+            isEmptyPass.value = false
             return
         }
-        validate.value = "not empty"
+        isEmptyPass.value = true
     }
 
     fun login(email: String?){
@@ -53,14 +55,15 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
                     Log.i("login:", "${result.data}")
                     if (result.data?.customer?.isEmpty()!! || result.data.customer.size > 1){
                         withContext(Dispatchers.Main) {
-                            isValid.value = "false"
+                            isValid.value = false
                             Log.i("login:", "invalid email , customer =null")
                         }
                     }else{
-                        Log.i("login:", "valid email")
                         withContext(Dispatchers.Main) {
-                            isValid.value ="true"
                             password = result.data.customer.get(0)?.note.toString()
+                            isValid.value = true
+                            Log.i("login:", "valid email")
+                            Log.i("login:", password)
                         }
                     }
                 }
@@ -72,7 +75,6 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
         }
 
     }
-
 
     enum class AuthenticationState{
         AUTHENTICATED , UNAUTHENTICATED
