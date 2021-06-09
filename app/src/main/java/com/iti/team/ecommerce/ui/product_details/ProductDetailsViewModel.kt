@@ -36,6 +36,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
     private var _inWish = MutableLiveData<Event<Boolean>>()
     private var _favoriteIconColor = MutableLiveData<Int>()
     private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
+    private var _addToCart = MutableLiveData<Event<Boolean>>()
 
     val descriptionText:LiveData<String>
     get() = _descriptionText
@@ -72,6 +73,9 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     val navigateToLogin: LiveData<Event<Boolean>>
         get() = _navigateToLogin
+
+    val addToCart: LiveData<Event<Boolean>>
+        get() = _addToCart
 
     init {
         _fragmentVisibility.postValue(View.GONE)
@@ -188,5 +192,29 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
             modelRepository.removeFromWishList(id)
         }
 
+    }
+
+    fun addToCart(){
+        if(modelRepository.isLogin()){
+            viewModelScope.launch(Dispatchers.IO) {
+                product?.image?.src?.let {
+                    Product(
+                        product?.productId ?: 0,
+                        product?.title ?: "",
+                        it,
+                        product?.vendor ?: "",
+                        (product?.variants?.get(0)?.price ?: "")
+                    )
+                }?.let {
+                    modelRepository.addToCart(
+                        it
+                    )
+                }
+                _addToCart.postValue(Event(true))
+            }
+
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
     }
 }
