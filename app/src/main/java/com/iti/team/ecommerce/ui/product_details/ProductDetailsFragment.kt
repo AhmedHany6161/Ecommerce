@@ -1,21 +1,18 @@
 package com.iti.team.ecommerce.ui.product_details
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentProductDetailsBinding
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsViewModel
 
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
 import com.smarteist.autoimageslider.SliderAnimations
@@ -73,6 +70,7 @@ class ProductDetailsFragment: Fragment() {
         observeButtonBackClicked()
         //observeInWish()
         observeToLogin()
+        observeAddToCart()
 
     }
 
@@ -109,6 +107,14 @@ class ProductDetailsFragment: Fragment() {
         })
     }
 
+    private fun observeAddToCart(){
+        viewModel.addToCart.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 
     private fun setMenu(){
 
@@ -117,11 +123,6 @@ class ProductDetailsFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = true
-    }
-
-
-    companion object {
-
     }
 
 }
