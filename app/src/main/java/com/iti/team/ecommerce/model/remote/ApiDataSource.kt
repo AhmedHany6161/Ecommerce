@@ -38,6 +38,10 @@ class ApiDataSource: ApiInterface {
         return _apiService.getProductsFromType(productType)
     }
 
+    override suspend fun getProductsFromVendor(vendor: String): Response<ProductsModel> {
+        return _apiService.getProductsByVendor(vendor)
+    }
+
     override suspend fun smartCollection(): Response<SmartCollectionModel> {
         return  _apiService.smartCollection()
     }
@@ -51,6 +55,14 @@ class ApiDataSource: ApiInterface {
 
     override suspend fun login(email: String): Response<CustomerLoginModel> {
         return _apiService.login(email)
+    }
+
+    override suspend fun addOrder(order: AddOrderModel): Response<GettingOrderModel> {
+      return _apiService.addOrder(order)
+    }
+
+    override suspend fun getOrders(email: String): Response<OrdersModels> {
+        return _apiService.getOrders(email)
     }
 
 }

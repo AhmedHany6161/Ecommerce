@@ -2,7 +2,6 @@ package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class ProductsViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
     private val filteredSet: MutableSet<String> = HashSet()
@@ -31,10 +30,16 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
     private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    private var _navigateToDetails = MutableLiveData<Event<String>>()
 
-    val navigateToDetails:LiveData<Event<String>>
+    private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
+
+    val navigateToDetails:LiveData<Event<Pair<String,Boolean?>>>
     get() = _navigateToDetails
+
+    private val _addToCart = MutableLiveData<String>()
+    val addToCart: LiveData<String> get() = _addToCart
+
+
 
     private var idSet: HashSet<Long> = hashSetOf()
 
@@ -49,11 +54,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                         brandFlowData.postValue(dataOfBrand)
                         fetchImages(list)
                     }
-                }
-            }
-            launch {
-                modelRepository.getAllId().collect {
-                    idSet = HashSet(it)
                 }
             }
             launch {
@@ -137,6 +137,12 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun getProductsFromType(productType: String) {
+        Log.i("getProductsFromType","productType")
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.getAllId().collect {
+                idSet = HashSet(it)
+            }
+        }
         stateProductType.value = productType
     }
 
@@ -179,20 +185,39 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-     fun inFilteredList(name : String):Boolean{
-        return filteredSet.contains(name)
-     }
 
-    fun navigateToDetails(product: Products){
-            convertObjectToString(product)
+    fun inFilteredList(name: String): Boolean {
+        return filteredSet.contains(name)
+    }
+
+    fun navigateToDetails(product: Products) {
+        convertObjectToString(product)
+    }
+
+    fun addToCart(products: Products, image: String) {
+        _addToCart.value = "product successfully added to cart"
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToCart(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
     }
 
     private fun convertObjectToString(productObject: Products){
+        val inWish = productObject.productId?.let { inWishList(it) }
         val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
-         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject),inWish)
     }
 
-    private fun sendObjectToDetailsScreen(objectString: String){
-        _navigateToDetails.postValue(Event(objectString))
+
+    private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
+        _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
+
     }
 }

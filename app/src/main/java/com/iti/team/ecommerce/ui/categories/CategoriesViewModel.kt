@@ -1,6 +1,8 @@
 package com.iti.team.ecommerce.ui.categories
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.remote.Result
@@ -9,9 +11,10 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CategoriesViewModel: ViewModel() {
+class CategoriesViewModel( application: Application): AndroidViewModel(application)  {
 
-    private val  modelRepository:ModelRepo = ModelRepository(null)
+    private val  modelRepository:ModelRepo =
+        ModelRepository(null,application.applicationContext)
 
     fun getCategories(){
         viewModelScope.launch(Dispatchers.IO)  {

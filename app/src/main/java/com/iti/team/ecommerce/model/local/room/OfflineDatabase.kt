@@ -27,7 +27,7 @@ class OfflineDatabase private constructor(): OfflineDB {
 
     override fun getCart(): Flow<List<Product>> = db.getCart()
 
-    override fun getAllId(): Flow<List<Long>> = db.getAllIds()
+    override fun getAllId(): Flow<List<Long>> = db.getAllWishListIds()
 
 
     override suspend fun addToWishList(product: Product) {
@@ -73,7 +73,7 @@ class OfflineDatabase private constructor(): OfflineDB {
         }
     }
 
-    override suspend fun getById(id: Long): Product = db.getById(id)
+    override suspend fun getById(id: Long): Product? = db.getById(id)
 
 
     override suspend fun reset() = db.reset()

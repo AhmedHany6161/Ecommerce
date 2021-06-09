@@ -1,15 +1,12 @@
 package com.iti.team.ecommerce.ui.shop
 
 
+import android.app.Application
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.data_classes.Discount
-import com.iti.team.ecommerce.model.data_classes.PriceRule
+import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -18,8 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShopViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class ShopViewModel(application: Application): AndroidViewModel(application)  {
+    private val  modelRepository: ModelRepo =
+        ModelRepository(null, application.applicationContext)
     private var code:String = ""
     var shopAdapter = ShopAdapter(this)
 
@@ -44,6 +42,7 @@ class ShopViewModel: ViewModel() {
     private var _navigateToCart = MutableLiveData<Event<Boolean>>()
     private var _navigateToSearch = MutableLiveData<Event<String>>()
     private var _navigateToShopProduct = MutableLiveData<Event<Pair<Long,String>>>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     private var productTypeSet: HashSet<String> = hashSetOf()
 
@@ -90,11 +89,15 @@ class ShopViewModel: ViewModel() {
     val navigateToShopProduct: LiveData<Event<Pair<Long,String>>>
         get() = _navigateToShopProduct
 
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
+
     init {
         showHideItems(View.GONE)
-        productTypeSet.add("t-shirts")
-        productTypeSet.add("shoes")
-        productTypeSet.add("accessories")
+//        productTypeSet.add("t-shirts")
+//        productTypeSet.add("shoes")
+//        productTypeSet.add("accessories")
+       //modelRepository.setLogin(false)
     }
 
     private fun createDiscount(discount:Discount){
@@ -153,9 +156,11 @@ class ShopViewModel: ViewModel() {
                     withContext(Dispatchers.Main){
                         result.data?.smart_collections?.let {
                             shopAdapter.loadData(it)
-                            for(i in it){
-                                //i.handle?.let { it1 -> productTypeSet.add(it1) }
-                            }
+                        }
+                    }
+                    result.data?.smart_collections?.let {
+                        for (i in it) {
+                            i.handle?.let { it1 -> productTypeSet.add(it1) }
                         }
                     }
                 }
@@ -197,11 +202,20 @@ class ShopViewModel: ViewModel() {
     }
 
     fun navigateToWish(){
-        _navigateToWish.postValue(Event(true))
+        if(modelRepository.isLogin()) {
+            _navigateToWish.postValue(Event(true))
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
     }
 
     fun navigateToCart(){
-        _navigateToCart.postValue(Event(true))
+        if(modelRepository.isLogin()){
+            _navigateToCart.postValue(Event(true))
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
+
     }
 
     fun navigateToSearch(){
@@ -209,6 +223,7 @@ class ShopViewModel: ViewModel() {
         _navigateToSearch.postValue(Event(productTypeSet.toString()))
         Log.i("navigateToSearch","$productTypeSet")
     }
+
 
 
 }

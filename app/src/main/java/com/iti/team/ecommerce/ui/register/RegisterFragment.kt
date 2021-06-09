@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
+import com.iti.team.ecommerce.ui.login.LoginFragment
+import com.iti.team.ecommerce.ui.login.LoginFragmentDirections
 import com.iti.team.ecommerce.ui.main.MainViewModel
 
 class RegisterFragment: Fragment() {
@@ -25,7 +28,7 @@ class RegisterFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = RegisterViewModel()
+        viewModel = RegisterViewModel(requireActivity().application)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,6 +44,18 @@ class RegisterFragment: Fragment() {
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
+        binding.backToLogin.setOnClickListener {
+            navigate()
+        }
+    }
+
+    private fun navigate() {
+//        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id.registerFragment,LoginFragment())
+//            .addToBackStack(null)
+//            .commit()
+        val action = RegisterFragmentDirections.actionFromRegisterToLoginFragment()
+        findNavController().navigate(action)
     }
 
     private fun navigateToLogin() {

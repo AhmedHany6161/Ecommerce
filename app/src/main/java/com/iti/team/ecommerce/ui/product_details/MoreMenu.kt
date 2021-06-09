@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.iti.team.ecommerce.databinding.FragmentMoreMenuBinding
 
-class MoreMenu: Fragment() {
+class MoreMenu(val viewModel: ProductDetailsViewModel): Fragment() {
 
     private lateinit var binding: FragmentMoreMenuBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMoreMenuBinding.inflate(inflater)
         init()
         return binding.root
@@ -24,10 +24,15 @@ class MoreMenu: Fragment() {
         itemClicked()
     }
     private fun itemClicked(){
+
         binding.favoriteLayout.setOnClickListener {
-            val navigateToWishList = ProductDetailsFragmentDirections
-                .actionProductDetailsFragmentToWishListFragment()
-            findNavController().navigate(navigateToWishList)
+            if (viewModel.modelRepository.isLogin()) {
+                val navigateToWishList = ProductDetailsFragmentDirections
+                    .actionProductDetailsFragmentToWishListFragment()
+                findNavController().navigate(navigateToWishList)
+            } else {
+                 navigateToLogin()
+            }
         }
 
         binding.homeLayout.setOnClickListener {
@@ -36,10 +41,24 @@ class MoreMenu: Fragment() {
             findNavController().navigate(navigateToWishList)
         }
 
-        binding.bagLayout.setOnClickListener{
-            val navigateToWishList = ProductDetailsFragmentDirections
-                .actionProductDetailsFragmentToShoppingPageFragment()
-            findNavController().navigate(navigateToWishList)
+
+        binding.bagLayout.setOnClickListener {
+            if (viewModel.modelRepository.isLogin()) {
+                val navigateToWishList = ProductDetailsFragmentDirections
+                    .actionProductDetailsFragmentToShoppingPageFragment()
+                findNavController().navigate(navigateToWishList)
+            } else {
+                navigateToLogin()
+            }
         }
+    }
+
+    private fun navigateToLogin(){
+        val navigate = ProductDetailsFragmentDirections
+            .actionProductDetailsFragmentToLoginFragment()
+        findNavController().navigate(navigate)
+    }
+    companion object{
+        fun instance(viewModel: ProductDetailsViewModel) = MoreMenu(viewModel)
     }
 }
