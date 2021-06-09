@@ -36,41 +36,49 @@ class LoginFragment: Fragment()  {
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
         viewModel = LoginViewModel(requireActivity().application)
+        init()
 
-        binding.cirLoginButton.setOnClickListener {
-            validationEmail()
-        }
-        binding.goToRegister.setOnClickListener { animationToRegister() }
-        binding.registerNow.setOnClickListener { animationToRegister() }
         return binding.root
     }
+    fun init(){
+        binding.cirLoginButton.setOnClickListener {
+            validateEmail()
+        }
+        binding.goToRegister.setOnClickListener {
+            animationToRegister()
+        }
+        binding.registerNow.setOnClickListener {
+            animationToRegister()
+        }
 
-    private fun validationEmail() {
+    }
+
+    private fun validateEmail() {
         val email: String = binding.editTextEmail.getText().toString()
-        viewModel.validationEmpty(email)
-        viewModel.getLogInResult().observe(viewLifecycleOwner,{
+        viewModel.emailResult(email)
+        observeEmptyEmail(email)
+    }
+    private fun observeEmptyEmail(email :String){
+        viewModel.isEmailEmpty().observe(viewLifecycleOwner,{
             when(it){
-                "empty" ->{
+                false ->{
                     binding.textInputEmail.setError("Field can’t be empty")
                 }
-                "not empty" ->{
+                true ->{
                     viewModel.login(email)
                     binding.textInputEmail.setError(null)
                     binding.textInputEmail.setErrorEnabled(false)
-                    observeData(email)
+                    observeValidation()
                 }
             }
-
-
         })
     }
 
-    private fun observeData(email :String) {
-        viewModel.getLogInState().observe(viewLifecycleOwner,{
+    private fun observeValidation() {
+        viewModel.isValidEmail().observe(viewLifecycleOwner,{
             when(it){
-                "null" ->{ }
-                "false" ->{ binding.textInputEmail.setError("Invalid email address")}
-                "true" ->{
+                false ->{ binding.textInputEmail.setError("Invalid email address")}
+                true ->{
                     binding.textInputEmail.setError(null)
                     binding.textInputEmail.setErrorEnabled(false)
                     validaePassword()
@@ -82,13 +90,13 @@ class LoginFragment: Fragment()  {
 
     private fun validaePassword() {
         val pass = binding.editTextPassword.getText().toString()
-        viewModel.validationPassword(pass)
-        viewModel.getvalidation().observe(viewLifecycleOwner,{
+        viewModel.passwordResult(pass)
+        viewModel.isPassEmpty().observe(viewLifecycleOwner,{
             when(it) {
-                "empty" -> {
+                false -> {
                     binding.textInputPassword.setError("Field can’t be empty")
                 }
-                "not empty" -> {
+                true -> {
                     if (! pass.equals(viewModel.password)) {
                         binding.textInputPassword.setError("Wrong Password")
                     } else {

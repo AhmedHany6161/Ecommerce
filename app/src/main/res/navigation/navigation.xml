@@ -115,7 +115,11 @@
     <fragment
         android:id="@+id/wishListFragment"
         android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
-        android:label="WishListFragment" />
+        android:label="WishListFragment" >
+        <action
+            android:id="@+id/action_wishListFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/shopProducts"
         android:name="com.iti.team.ecommerce.ui.shop_products.ShopProducts"
@@ -158,6 +162,9 @@
         <action
             android:id="@+id/action_searchFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

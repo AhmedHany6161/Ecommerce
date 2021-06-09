@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentSearchBinding
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
 
 class SearchFragment: Fragment() {
 
@@ -46,6 +47,7 @@ class SearchFragment: Fragment() {
         setUpSearchView()
         setUpRecyclerView()
         navigateToDetails()
+        observeToLogin()
     }
     private fun setUpRecyclerView(){
         binding.productRecycler.layoutManager = GridLayoutManager(context,2)
@@ -74,6 +76,14 @@ class SearchFragment: Fragment() {
         (activity as MainActivity).bottomNavigation.isGone = true
     }
 
+    private fun observeToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = SearchFragmentDirections.actionSearchFragmentToLoginFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
 
     private fun navigateToDetails(
     ) {
@@ -90,4 +100,5 @@ class SearchFragment: Fragment() {
             .actionSearchFragmentToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
+
 }

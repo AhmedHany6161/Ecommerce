@@ -1,12 +1,13 @@
 package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -28,7 +29,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
-    private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var praType = ""
 
 
     private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
@@ -40,7 +41,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     val addToCart: LiveData<String> get() = _addToCart
 
 
-
     private var idSet: HashSet<Long> = hashSetOf()
 
 
@@ -48,7 +48,8 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 stateProductType.collect {
-                    if (it != null && dataOfProduct.isEmpty()) {
+                    if (it != null && (dataOfProduct.isEmpty() || praType != it)) {
+                        praType = it
                         val list = getMainDataForCard(it)
                         bindBrands(list)
                         brandFlowData.postValue(dataOfBrand)
@@ -57,18 +58,15 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                 }
             }
             launch {
-               val pref= application.getSharedPreferences("app", Context.MODE_PRIVATE)
-                if(MySharedPreference(pref).getBoolean("logIn")){
-                    isLogin.emit(true)
-                }else{
-                    isLogin.emit(false)
+                modelRepository.getAllId().collect {
+                    idSet = HashSet(it)
                 }
             }
         }
     }
 
-    fun getLogInState():LiveData<Boolean>{
-        return isLogin.asLiveData()
+    fun getLogInState():Boolean{
+        return modelRepository.isLogin()
     }
 
     fun inWishList(id: Long): Boolean {
@@ -137,12 +135,6 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun getProductsFromType(productType: String) {
-        Log.i("getProductsFromType","productType")
-        viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.getAllId().collect {
-                idSet = HashSet(it)
-            }
-        }
         stateProductType.value = productType
     }
 
