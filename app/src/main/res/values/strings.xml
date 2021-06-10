@@ -5,6 +5,14 @@
     <string name="p_name">Product Name</string>
     <!--     ahmed-->
 
+    <string name="please_login_register">please login/register</string>
+    <string name="view_all">View All</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="shipped">Shipped</string>
+    <string name="return_ss">Return</string>
+    <string name="processing">processing</string>
+    <string name="my_orders">My Orders</string>
+
     <!--    ahmed-->
 
     <!--    wesam-->
@@ -52,6 +60,7 @@
     <string name="register_Street_hint">Street</string>
     <string name="setting_of_the_app">Setting of the app</string>
     <string name="shopping_cart">shopping cart</string>
+
 
     <!--    nermeen-->
 </resources>

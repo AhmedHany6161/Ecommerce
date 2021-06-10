@@ -36,10 +36,22 @@ class WishListFragment : Fragment() {
         listForWishList(viewModel, wishListAdapter)
         listeningForNavigate(viewModel)
         listeningForLoginState(viewModel, profile)
+        listingForAddToCart(viewModel)
+        listingForProfileClick(profile)
+        return view
+    }
+
+    private fun listingForAddToCart(viewModel: WishListViewModel) {
         viewModel.addToCart.observe(viewLifecycleOwner, {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
-        return view
+    }
+
+    private fun listingForProfileClick(profile: LottieAnimationView) {
+        profile.setOnClickListener {
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
     private fun listForWishList(
