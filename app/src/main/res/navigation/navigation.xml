@@ -166,6 +166,11 @@
             android:id="@+id/action_searchFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/myOrdersFragment"
+        android:name="com.iti.team.ecommerce.ui.orders.MyOrdersFragment"
+        android:label="my_orders_fragment"
+        tools:layout="@layout/my_orders_fragment" />
 
 
 </navigation>
