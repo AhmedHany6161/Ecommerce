@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isGone
@@ -18,35 +17,55 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.wish.WishListAdapter
-import com.iti.team.ecommerce.ui.wish.WishListFragmentDirections
-import com.iti.team.ecommerce.ui.wish.WishListViewModel
 
 class ProfileFragment : Fragment() {
 
 
-    private lateinit var  email: TextView
+    private lateinit var email: TextView
+    private lateinit var pleaseLogin: TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var showAll: Button
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.profile_fragment, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.profile_wishlist)
+        recyclerView = view.findViewById(R.id.profile_wishlist)
         val profile: LottieAnimationView = view.findViewById(R.id.profile_image)
-        val showAll: Button = view.findViewById(R.id.profile_show_all_wish)
-         email = view.findViewById(R.id.profile_email)
+        showAll = view.findViewById(R.id.profile_show_all_wish)
+        email = view.findViewById(R.id.profile_email)
+        pleaseLogin = view.findViewById(R.id.profile_please_login)
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
-        setupWishListRecyclerView(recyclerView, wishListAdapter)
+        setupWishListRecyclerView(wishListAdapter)
         listForWishList(viewModel, wishListAdapter)
         listeningForNavigate(viewModel)
         listeningForLoginState(viewModel, profile)
         listingForAddCart(viewModel)
+        navigateToWishList()
+        navigateToLogin(viewModel)
+        return view
+    }
+
+    private fun navigateToWishList() {
         showAll.setOnClickListener {
             findNavController().navigate(R.id.wishListFragment)
         }
-        return view
     }
+
+    private fun navigateToLogin(viewModel: ProfileViewModel) {
+        email.setOnClickListener {
+            if (!viewModel.getLogInState()) {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        }
+        pleaseLogin.setOnClickListener {
+            if (!viewModel.getLogInState()) {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        }
+    }
+
 
     private fun listingForAddCart(viewModel: ProfileViewModel) {
         viewModel.addToCart.observe(viewLifecycleOwner, {
@@ -79,9 +98,15 @@ class ProfileFragment : Fragment() {
         profile: LottieAnimationView
     ) {
         if (viewModel.getLogInState()) {
+            recyclerView.visibility = View.VISIBLE
+            showAll.visibility = View.VISIBLE
+            pleaseLogin.visibility = View.GONE
             email.text = "Hi , ${FirebaseAuth.getInstance().currentUser}"
             profile.setAnimation(R.raw.login_profile)
         } else {
+            recyclerView.visibility = View.GONE
+            showAll.visibility = View.GONE
+            pleaseLogin.visibility = View.VISIBLE
             profile.setAnimation(R.raw.error_animation)
         }
     }
@@ -95,9 +120,10 @@ class ProfileFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = false
+        (activity as MainActivity).bottomNavigation.show(3)
+
     }
     private fun setupWishListRecyclerView(
-        recyclerView: RecyclerView,
         adapter: ProfileWishAdapter
     ) {
         val gridLayoutManager = GridLayoutManager(context, 2)

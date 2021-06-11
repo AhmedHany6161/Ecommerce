@@ -254,6 +254,15 @@
                     android:layout_marginHorizontal="20dp"
                     android:text="@string/view_all"
                     android:textColor="#2196F3" />
+                <TextView
+                    android:id="@+id/profile_please_login"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:backgroundTint="#00000000"
+                    android:text="@string/please_login_register"
+                    android:textColor="#2196F3" />
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
