@@ -43,10 +43,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        bottomNavigation.isGone = false
-    }
+
     private fun navigationSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.store))
         bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.widgets))
