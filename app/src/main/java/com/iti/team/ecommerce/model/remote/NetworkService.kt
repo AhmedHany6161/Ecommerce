@@ -1,7 +1,7 @@
 package com.iti.team.ecommerce.model.remote
 
 import com.iti.team.ecommerce.BuildConfig
-import com.iti.team.ecommerce.utils.BASE_URL
+import com.iti.team.ecommerce.utils.Constants
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -15,7 +15,7 @@ object NetworkService {
     private lateinit var retrofit: Retrofit
     fun createRetrofit(): Retrofit {
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(Constants.BASE_URL)
             .client(buildAuthClient())
             .addConverterFactory(
                 MoshiConverterFactory.create(
@@ -33,6 +33,7 @@ object NetworkService {
         httpClient.addInterceptor(provideLoggingInterceptor())
         httpClient.addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
+                .addHeader("authorization","S9JNTDT2HB-JBRGLTGWTH-9ZKWJWWWBK")
                 .addHeader("Content-Type", "application/json")
                 .addHeader("X-Shopify-Access-Token","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")
                 .build()
