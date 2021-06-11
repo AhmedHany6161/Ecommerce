@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +29,7 @@ class WishListFragment : Fragment() {
         val search: SearchView = view.findViewById(R.id.product_search)
         val title: TextView = view.findViewById(R.id.textView)
         val profile: LottieAnimationView = view.findViewById(R.id.shapeableImageView)
+        val back: ImageView = view.findViewById(R.id.product_back)
         title.text = "Wish List"
         val viewModel: WishListViewModel by viewModels()
         val wishListAdapter = WishListAdapter(ArrayList(), viewModel)
@@ -36,10 +38,29 @@ class WishListFragment : Fragment() {
         listForWishList(viewModel, wishListAdapter)
         listeningForNavigate(viewModel)
         listeningForLoginState(viewModel, profile)
+        listingForAddToCart(viewModel)
+        listingForProfileClick(profile)
+        listingToBack(back)
+        return view
+    }
+
+    private fun listingToBack(back: ImageView) {
+        back.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun listingForAddToCart(viewModel: WishListViewModel) {
         viewModel.addToCart.observe(viewLifecycleOwner, {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
-        return view
+    }
+
+    private fun listingForProfileClick(profile: LottieAnimationView) {
+        profile.setOnClickListener {
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.profileFragment)
+        }
     }
 
     private fun listForWishList(
