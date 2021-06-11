@@ -7,11 +7,8 @@ import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.model.data_classes.Product
-import com.iti.team.ecommerce.model.data_classes.SmartCollection
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import com.iti.team.ecommerce.ui.shop_products.ShopProductAdapter
 import com.iti.team.ecommerce.utils.extensions.Event
 import com.iti.team.ecommerce.utils.moshi
 import com.squareup.moshi.JsonAdapter
@@ -56,7 +53,6 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
 
     var categoriesProductAdapter = CategoryProductsAdapter(this)
     private var productTypeSet: HashSet<String> = hashSetOf()
-
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -107,7 +103,6 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
     }
 
-
     private fun sendObjectToDetailsScreen(objectString: String){
         _navigateToDetails.postValue(Event(objectString))
     }
@@ -150,7 +145,6 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
 
     }
 
-
     fun getMainCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             when(val result = modelRepository.getMainCategories()){
@@ -188,6 +182,5 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
             }
         }
     }
-
 
 }

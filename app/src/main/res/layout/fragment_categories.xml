@@ -98,7 +98,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                  android:textColor="@color/gray"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
                     android:clickable="true"
                     android:text="@string/shoes" />
 
@@ -107,6 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:textSize="15sp"
                     android:textColor="@color/gray"
                     android:clickable="true"
                     android:text="@string/accessory" />
@@ -116,6 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:textSize="15sp"
                     android:textColor="@color/gray"
                     android:text="@string/t_shirt" />
             </LinearLayout>

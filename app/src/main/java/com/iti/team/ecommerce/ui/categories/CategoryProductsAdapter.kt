@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.categories
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,11 +56,13 @@ class CategoryProductsAdapter(val viewModel: CategoriesViewModel) :
             when (v?.id) {
                 R.id.add_fav_item -> {
                     if (!viewModel.inWishList(productArray[adapterPosition].productId ?: -1)) {
+                      Log.e("cat","error ${productArray[adapterPosition].image.src}")
                         productArray[adapterPosition].image.src?.let {
                             viewModel.addToWishList(productArray[adapterPosition],
                                 it
                             )
                         }
+
                         binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
                     } else {
                         viewModel.removeFromWishList(productArray[adapterPosition].productId ?: -1)
@@ -72,11 +75,9 @@ class CategoryProductsAdapter(val viewModel: CategoriesViewModel) :
                 }
             }
 
-
         }
 
     }
-
 
     fun loadData(productArray: List<Products>) {
         this.productArray = productArray

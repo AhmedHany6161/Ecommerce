@@ -1,7 +1,6 @@
 package com.iti.team.ecommerce.ui.categories
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentCategoriesBinding
-import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
-import com.iti.team.ecommerce.ui.register.RegisterViewModel
 import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
 
 class CategoriesFragment: Fragment() {
     private lateinit var viewModel: CategoriesViewModel
@@ -24,7 +19,7 @@ class CategoriesFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         viewModel = ViewModelProvider(this).get(CategoriesViewModel::class.java)
         mainCategoriesAdapter= MainCategoriesAdapter(ArrayList(),this.context,viewModel)
         binding = FragmentCategoriesBinding.inflate(inflater, container, false)
@@ -61,7 +56,7 @@ class CategoriesFragment: Fragment() {
         observeToWishList()
         observeToCartList()
         observeToSearch()
-        ObserveToDetails()
+        observeToDetails()
 
     }
     private fun observeToMainCategoriesList(){
@@ -74,7 +69,7 @@ class CategoriesFragment: Fragment() {
         })
     }
 
-    private fun ObserveToDetails() {
+    private fun observeToDetails() {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let {it1->
                 navigate(it1)
@@ -105,7 +100,7 @@ class CategoriesFragment: Fragment() {
         })
     }
     private fun observeToSearch(){
-        viewModel.navigateToSearch.observe(viewLifecycleOwner,{
+        viewModel.navigateToSearch.observe(viewLifecycleOwner,{ it ->
             it.getContentIfNotHandled()?.let {
                 val navigate = ShopFragmentDirections.actionShopFragmentToSearchFragment(it)
                 findNavController().navigate(navigate)
