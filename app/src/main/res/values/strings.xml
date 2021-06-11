@@ -47,6 +47,7 @@
     <string name="register_city_hint">City</string>
     <string name="register_country_hint">Country</string>
     <string name="register_Street_hint">Street</string>
+    <string name="go_to_cart">Go to Cart</string>
 
     <!--    nermeen-->
 </resources>

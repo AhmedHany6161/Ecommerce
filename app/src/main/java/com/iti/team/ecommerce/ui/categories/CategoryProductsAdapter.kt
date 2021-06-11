@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.ui.shop_products
+package com.iti.team.ecommerce.ui.categories
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.ShopProductRowItemBinding
 import com.iti.team.ecommerce.model.data_classes.Products
 
-class ShopProductAdapter(val viewModel: ShopProductsViewModel) :
-    RecyclerView.Adapter<ShopProductAdapter.ViewHolder>() {
+class CategoryProductsAdapter(val viewModel: CategoriesViewModel) :
+    RecyclerView.Adapter<CategoryProductsAdapter.ViewHolder>() {
 
 
     var productArray: List<Products> = ArrayList()
@@ -60,10 +60,8 @@ class ShopProductAdapter(val viewModel: ShopProductsViewModel) :
                                 it
                             )
                         }
-                        print("aaaaaaaaaaaaaaaaaaaaaadd")
                         binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
                     } else {
-                        print("remoooooooooooove")
                         viewModel.removeFromWishList(productArray[adapterPosition].productId ?: -1)
                         binding.addFavItem.setImageResource(R.drawable.ic_favorite)
                     }
