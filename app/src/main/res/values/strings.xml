@@ -47,6 +47,15 @@
     <string name="fb_login_protocol_scheme">fb2968165746788869</string>
     <string name="facebook_application_id">2968165746788869</string>
 
+    <string name="shop_bag">Shopping Bag</string>
+    <string name="dialog_wishList">Are you sure moving the product to wishlist from shopping bag? </string>
+    <string name="yes">YES</string>
+    <string name="no">No</string>
+    <string name="dialog_delete">Are you sure to delete this item? </string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+
 
 
     <!--  norhan-->
