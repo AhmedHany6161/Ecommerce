@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -54,6 +56,7 @@ class LoginFragment: Fragment()  {
     }
 
     private fun validateEmail() {
+
         val email: String = binding.editTextEmail.getText().toString()
         viewModel.emailResult(email)
         observeEmptyEmail(email)
@@ -66,6 +69,8 @@ class LoginFragment: Fragment()  {
                 }
                 true ->{
                     viewModel.login(email)
+
+                    binding.progress.visibility = VISIBLE
                     binding.textInputEmail.setError(null)
                     binding.textInputEmail.setErrorEnabled(false)
                     observeValidation()
@@ -77,7 +82,9 @@ class LoginFragment: Fragment()  {
     private fun observeValidation() {
         viewModel.isValidEmail().observe(viewLifecycleOwner,{
             when(it){
-                false ->{ binding.textInputEmail.setError("Invalid email address")}
+                false ->{ binding.textInputEmail.setError("Invalid email address")
+
+                    binding.progress.visibility = GONE}
                 true ->{
                     binding.textInputEmail.setError(null)
                     binding.textInputEmail.setErrorEnabled(false)
@@ -94,12 +101,15 @@ class LoginFragment: Fragment()  {
         viewModel.isPassEmpty().observe(viewLifecycleOwner,{
             when(it) {
                 false -> {
+                    binding.progress.visibility = GONE
                     binding.textInputPassword.setError("Field can’t be empty")
                 }
                 true -> {
                     if (! pass.equals(viewModel.password)) {
+                        binding.progress.visibility = GONE
                         binding.textInputPassword.setError("Wrong Password")
                     } else {
+
                         binding.textInputPassword.setError(null)
                         binding.textInputPassword.setErrorEnabled(false)
                         navigation()
@@ -119,6 +129,7 @@ class LoginFragment: Fragment()  {
     }
 
     private fun navigation() {
+        binding.progress.visibility = GONE
         findNavController().navigate(R.id.categoriesFragment)
 
     }
