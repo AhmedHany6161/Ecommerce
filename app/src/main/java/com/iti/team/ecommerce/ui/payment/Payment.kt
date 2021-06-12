@@ -4,16 +4,20 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.iti.team.ecommerce.databinding.FragmentCheckoutBinding
+import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
+import com.iti.team.ecommerce.ui.shop_products.ShopProductsArgs
+import com.iti.team.ecommerce.ui.shop_products.ShopProductsViewModel
 import com.iti.team.ecommerce.utils.Json
 import com.iti.team.ecommerce.utils.PaymentsUtil
 import com.iti.team.ecommerce.utils.microsToString
@@ -26,10 +30,15 @@ import kotlin.math.roundToLong
 class Payment: Fragment() {
     private lateinit var binding:FragmentCheckoutBinding
     private lateinit var paymentsClient: PaymentsClient
-    private val shippingCost = (90 * 1000000).toLong()
+    //private val shippingCost = (90 * 1000000).toLong()
 
     private lateinit var garmentList: JSONArray
     private lateinit var selectedGarment: JSONObject
+
+
+    private val viewModel by lazy {
+        PaymentViewModel(requireActivity().application)
+    }
 
     /**
      * Arbitrarily-picked constant integer you define to track a request for payment data activity.
@@ -58,7 +67,28 @@ class Payment: Fragment() {
             requestPayment()
         }
 
+        init()
+
         return binding.root
+    }
+
+    private fun init(){
+        binding.viewModel = viewModel
+
+        observeData()
+    }
+
+    private fun observeData(){
+        observeButtonBackClicked()
+    }
+
+    private fun observeButtonBackClicked(){
+        viewModel.buttonBackClicked.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                Navigation.findNavController(requireActivity(), com.iti.team.ecommerce.R.id.nav_host_fragment)
+                    .popBackStack()
+            }
+        })
     }
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a
@@ -109,9 +139,12 @@ class Payment: Fragment() {
 
         // The price provided to the API should include taxes and shipping.
         // This price is not displayed to the user.
-        val garmentPriceMicros = (selectedGarment.getDouble("price") * 1000000).roundToLong()
-        val price = (garmentPriceMicros + shippingCost).microsToString()
+//        val garmentPriceMicros = (selectedGarment.getDouble("price") * 1000000).roundToLong()
+//        val price = (garmentPriceMicros + shippingCost).microsToString()
+//        Log.i("price",price)
+//        Log.i("price",shippingCost.toString())
 
+        val price = (1.0).toString()
         val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price)
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
@@ -244,14 +277,6 @@ class Payment: Fragment() {
     }
 
     private fun displayGarment(garment:JSONObject) {
-        binding.detailTitle.setText(garment.getString("title"))
-        binding.detailPrice.setText("\$${garment.getString("price")}")
 
-        val escapedHtmlText:String = Html.fromHtml(garment.getString("description")).toString()
-         binding.detailDescription.setText(Html.fromHtml(escapedHtmlText))
-
-        val imageUri = "@drawable/${garment.getString("image")}"
-        val imageResource = resources.getIdentifier(imageUri, null, "packageName")
-        binding.detailImage.setImageResource(imageResource)
     }
 }

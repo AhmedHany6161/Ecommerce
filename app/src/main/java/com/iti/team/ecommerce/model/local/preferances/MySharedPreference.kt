@@ -16,6 +16,14 @@ class MySharedPreference(private val sharedPreference: SharedPreferences) {
 
     //wesam
 
+    fun setLong (key: String,value: Long = 0 ){
+        sharedPreference.edit().putLong(key,value)?.apply()
+    }
+
+    fun getLong(key: String):Long{
+        return sharedPreference.getLong(key,0)
+    }
+
     //wesam
 
     //norhan

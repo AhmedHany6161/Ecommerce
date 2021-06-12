@@ -32,4 +32,7 @@ interface ModelRepo {
 
     fun isLogin():Boolean
     fun setLogin(login:Boolean)
+
+    fun getDiscountId():Long
+    fun setDiscount(id:Long)
 }

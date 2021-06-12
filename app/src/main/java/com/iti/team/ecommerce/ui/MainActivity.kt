@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch{
                 bottomNavigation.isGone = false
                 navController.popBackStack()
-                navController.navigate(R.id.payment)
+                navController.navigate(R.id.shopFragment)
             }
         }
     }
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             when(model?.id){
                 1->{
                     navController.popBackStack()
-                    navController.navigate(R.id.payment)
+                    navController.navigate(R.id.shopFragment)
                 }
                 2->{
                     navController.popBackStack()
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.profileFragment)
+                    navController.navigate(R.id.payment)
 
                 }
                 else->{

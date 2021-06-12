@@ -28,6 +28,15 @@
     <string name="no_search_result">Your search did not match any products.</string>
     <string name="cart">Cart</string>
 
+    <string name="cash">Cash On Delivery </string>
+    <string name="checkout">CheckOut </string>
+    <string name="coupon">Coupon</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="apply">Apply</string>
+    <string name="subTotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="total">Total</string>
+    <string name="buy_with_googlepay_button_content_description">Buy with Google Pay</string>
     <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
     <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
     <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
