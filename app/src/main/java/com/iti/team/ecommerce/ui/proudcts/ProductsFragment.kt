@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -33,6 +34,8 @@ class ProductsFragment : Fragment() {
         val brandRecyclerView: RecyclerView = view.findViewById(R.id.brand_rec)
         val search: SearchView = view.findViewById(R.id.product_search)
         val title: TextView = view.findViewById(R.id.textView)
+        val back: ImageView = view.findViewById(R.id.product_back)
+
         val profile: LottieAnimationView = view.findViewById(R.id.shapeableImageView)
         title.text = arg.productType
         val viewModel: ProductsViewModel by viewModels()
@@ -45,29 +48,44 @@ class ProductsFragment : Fragment() {
         listeningForBrand(viewModel, brandAdapter)
         viewModel.getProductsFromType(arg.productType)
         listeningForLoginState(viewModel, profile)
-        profile.setOnClickListener {
-
-        }
-        viewModel.addToCart.observe(viewLifecycleOwner,{
-            Toast.makeText(context,it,Toast.LENGTH_LONG).show()
-        })
+        navigateToProfile(profile)
+        listingToBack(back)
+        listingToAddCart(viewModel)
         listeningForNavigate(viewModel)
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
         return view
     }
 
+    private fun navigateToProfile(profile: LottieAnimationView) {
+        profile.setOnClickListener {
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.profileFragment)
+        }
+    }
+
+    private fun listingToBack(back: ImageView) {
+        back.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun listingToAddCart(viewModel: ProductsViewModel) {
+        viewModel.addToCart.observe(viewLifecycleOwner, {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        })
+    }
+
     private fun listeningForLoginState(
         viewModel: ProductsViewModel,
         profile: LottieAnimationView
     ) {
-        viewModel.getLogInState().observe(viewLifecycleOwner, {
-            if (it) {
-                profile.setAnimation(R.raw.login_profile)
-            } else {
-                profile.setAnimation(R.raw.error_animation)
-            }
-        })
+
+        if (viewModel.getLogInState()) {
+            profile.setAnimation(R.raw.login_profile)
+        } else {
+            profile.setAnimation(R.raw.error_animation)
+        }
     }
 
     override fun onResume() {
@@ -101,7 +119,7 @@ class ProductsFragment : Fragment() {
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
            it.getContentIfNotHandled()?.let {it1->
-              navigate(it1)
+               it1.second?.let { it2 -> navigate(it1.first, it2) }
            }
         })
     }
@@ -141,8 +159,9 @@ class ProductsFragment : Fragment() {
         })
     }
 
-    private fun navigate(productObject: String){
-        val action = ProductsFragmentDirections.actionProductsToProductDetailsFragment(productObject)
+    private fun navigate(productObject: String,inWish:Boolean){
+        val action = ProductsFragmentDirections
+            .actionProductsToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
 }

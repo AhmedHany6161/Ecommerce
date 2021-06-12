@@ -18,7 +18,8 @@ class OfflineDatabase private constructor(): OfflineDB {
                 context,
                 AppDatabase::class.java, "store.db"
             ).build().productDao()
-            return OfflineDatabase()
+            INSTANCE = OfflineDatabase()
+            return INSTANCE!!
         }
 
     }

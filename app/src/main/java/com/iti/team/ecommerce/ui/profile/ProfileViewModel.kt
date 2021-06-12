@@ -1,11 +1,8 @@
-package com.iti.team.ecommerce.ui.wish
+package com.iti.team.ecommerce.ui.profile
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
@@ -18,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class WishListViewModel(application: Application) : AndroidViewModel(application) {
+class ProfileViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
         ModelRepository(OfflineDatabase.getInstance(application), application)
     private var dataOfProduct: List<Product> = mutableListOf()
@@ -34,18 +31,9 @@ class WishListViewModel(application: Application) : AndroidViewModel(application
     init {
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.getAllWishListProducts().collect {
-                dataOfProduct = it
+                dataOfProduct = it.subList(0, 4.coerceAtMost(it.size))
                 productFlowData.postValue(dataOfProduct)
             }
-        }
-    }
-
-
-    fun search(name: String) {
-        if (name.isNotEmpty()) {
-            productFlowData.value = (dataOfProduct.filter { checkIsAccepted(it, name) })
-        } else {
-            productFlowData.value = dataOfProduct
         }
     }
 
@@ -57,15 +45,6 @@ class WishListViewModel(application: Application) : AndroidViewModel(application
 
     }
 
-    private fun checkIsAccepted(
-        it: Product,
-        name: String
-    ) =
-        (it.name.lowercase().contains(name.lowercase()))
-
-    fun getWishLis(): LiveData<List<Product>> {
-        return productFlowData
-    }
 
     fun navigateToDetails(product: Product) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -106,5 +85,8 @@ class WishListViewModel(application: Application) : AndroidViewModel(application
 
     private fun sendObjectToDetailsScreen(objectString: String) {
         _navigateToDetails.postValue(Event(Pair(objectString, true)))
+    }
+    fun getWishLis(): LiveData<List<Product>> {
+        return productFlowData
     }
 }

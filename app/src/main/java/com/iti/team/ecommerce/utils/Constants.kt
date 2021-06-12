@@ -4,9 +4,6 @@ import com.squareup.moshi.Moshi
 
 
 
-
-
-
 import com.google.android.gms.wallet.WalletConstants
 object Constants {
     val moshi = Moshi.Builder().build()
@@ -104,3 +101,4 @@ object Constants {
         "publicKey" to DIRECT_TOKENIZATION_PUBLIC_KEY
     )
 }
+

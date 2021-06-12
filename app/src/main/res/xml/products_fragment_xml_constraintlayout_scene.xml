@@ -25,9 +25,9 @@
             android:id="@+id/shapeableImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="25dp"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintStart_toStartOf="@id/product_back"
             android:layout_marginTop="10dp" />
         <Constraint
             android:id="@+id/product_search"
@@ -67,6 +67,14 @@
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp" />
+        <Constraint
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="22dp"
+            android:id="@+id/product_back" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -74,9 +82,9 @@
             android:id="@+id/shapeableImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="25dp"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintStart_toStartOf="@id/product_back"
             android:layout_marginTop="10dp" />
         <Constraint
             android:id="@+id/stop_animation"

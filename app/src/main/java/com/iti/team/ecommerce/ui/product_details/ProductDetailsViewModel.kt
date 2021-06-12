@@ -1,24 +1,28 @@
 package com.iti.team.ecommerce.ui.product_details
 
+import android.app.Application
+import android.graphics.Color
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Images
+import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductDetailsViewModel: ViewModel() {
-    private val  modelRepository: ModelRepo = ModelRepository(null)
+class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
+     val  modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
+    private var  inWishL: Boolean? = false
+    private var  product:Products? = null
+    var sizeAdapter = SizeAdapter()
     private var _descriptionText = MutableLiveData<String>()
     private var _taxable = MutableLiveData<String>()
     private var _quantity = MutableLiveData<String>()
@@ -29,6 +33,10 @@ class ProductDetailsViewModel: ViewModel() {
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
 
     private var _fragmentVisibility = MutableLiveData<Int>()
+    private var _inWish = MutableLiveData<Event<Boolean>>()
+    private var _favoriteIconColor = MutableLiveData<Int>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
+    private var _addToCart = MutableLiveData<Event<Boolean>>()
 
     val descriptionText:LiveData<String>
     get() = _descriptionText
@@ -57,6 +65,17 @@ class ProductDetailsViewModel: ViewModel() {
     val fragmentVisibility:LiveData<Int>
         get() = _fragmentVisibility
 
+    val inWish:LiveData<Event<Boolean>>
+        get() = _inWish
+
+    val favoriteIconColor:LiveData<Int>
+        get() = _favoriteIconColor
+
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
+
+    val addToCart: LiveData<Event<Boolean>>
+        get() = _addToCart
 
     init {
         _fragmentVisibility.postValue(View.GONE)
@@ -67,8 +86,10 @@ class ProductDetailsViewModel: ViewModel() {
     }
 
     private fun convertStringToObject(productObject: String){
+
         val productAdapter = Constants.moshi.adapter(Products::class.java)
-        val product:Products? = productAdapter.fromJson(productObject)
+        product = productAdapter.fromJson(productObject)
+
         updateProduct(product)
     }
 
@@ -82,7 +103,7 @@ class ProductDetailsViewModel: ViewModel() {
             it.variants[0]?.price?.let { it1 -> _price.value = "EGP $it1" }
             it.variants[0]?.quantity?.let { it1 -> _quantity.value = it1.toString() }
             it.variants[0]?.taxable?.let { it1 -> _taxable.value = it1.toString() }
-
+            it.options[0]?.values?.let { it1 -> sizeAdapter.loadData(it1) }
         }
 
     }
@@ -119,9 +140,83 @@ class ProductDetailsViewModel: ViewModel() {
             _fragmentVisibility.postValue(View.VISIBLE)
         }
     }
+
+    fun favoriteIconClicked(){
+        if(modelRepository.isLogin()) {
+            if (inWishL == true) {
+                _favoriteIconColor.postValue(Color.GRAY)
+                product?.productId?.let {
+                    removeFromWishList(it)
+                    inWishL = false
+                }
+            } else {
+                _favoriteIconColor.postValue(Color.RED)
+                product?.image?.src?.let {
+                    product?.let { it1 -> addToWishList(it1, it) }
+                    inWishL = true
+                }
+
+            }
+        }else{
+            _navigateToLogin.postValue(Event(true))
+        }
+    }
     fun layoutClicked(){
         if (_fragmentVisibility.value == View.VISIBLE){
             _fragmentVisibility.postValue(View.GONE)
+        }
+    }
+
+    fun inWish(inWishL: Boolean) {
+        this.inWishL = inWishL
+        _inWish.postValue(Event(true))
+        if(inWishL){
+            _favoriteIconColor.postValue(Color.RED)
+        }
+    }
+
+    fun addToWishList(products: Products, image: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToWishList(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
+    }
+
+    fun removeFromWishList(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.removeFromWishList(id)
+        }
+
+    }
+
+    fun addToCart(){
+        if(modelRepository.isLogin()){
+            viewModelScope.launch(Dispatchers.IO) {
+                product?.image?.src?.let {
+                    Product(
+                        product?.productId ?: 0,
+                        product?.title ?: "",
+                        it,
+                        product?.vendor ?: "",
+                        (product?.variants?.get(0)?.price ?: "")
+                    )
+                }?.let {
+                    modelRepository.addToCart(
+                        it
+                    )
+                }
+                _addToCart.postValue(Event(true))
+            }
+
+        }else{
+            _navigateToLogin.postValue(Event(true))
         }
     }
 }

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentSearchBinding
 import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsViewModel
 
 class SearchFragment: Fragment() {
 
@@ -26,6 +24,11 @@ class SearchFragment: Fragment() {
         SearchViewModel(requireActivity().application)
     }
     private val arg:SearchFragmentArgs by navArgs()
+
+    private val inputMethodManager by lazy{
+         requireActivity()
+        .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +42,12 @@ class SearchFragment: Fragment() {
 
     private fun init(){
         binding.viewModel = viewModel
+        binding.searchView.requestFocus()
+        //inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.RESULT_UNCHANGED_HIDDEN)
         setUpSearchView()
         setUpRecyclerView()
         navigateToDetails()
+        observeToLogin()
     }
     private fun setUpRecyclerView(){
         binding.productRecycler.layoutManager = GridLayoutManager(context,2)
@@ -53,9 +59,7 @@ class SearchFragment: Fragment() {
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let { Log.i("setUpSearchView", it) }
-                val inputMethodManager = requireActivity()
-                    .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, 0)
+                inputMethodManager.hideSoftInputFromWindow(binding.root.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
                 query?.let { viewModel.getData(it, arg.listProductType) }
                 return true
             }
@@ -72,19 +76,29 @@ class SearchFragment: Fragment() {
         (activity as MainActivity).bottomNavigation.isGone = true
     }
 
+    private fun observeToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = SearchFragmentDirections.actionSearchFragmentToLoginFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
 
     private fun navigateToDetails(
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let {it1->
-                navigate(it1)
+                it1.second?.let { it2 -> navigate(it1.first, it2) }
             }
         })
     }
 
 
-    private fun navigate(productObject: String){
-        val action = SearchFragmentDirections.actionSearchFragmentToProductDetailsFragment(productObject)
+    private fun navigate(productObject: String,inWish:Boolean){
+        val action = SearchFragmentDirections
+            .actionSearchFragmentToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
+
 }

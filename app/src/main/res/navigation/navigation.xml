@@ -76,6 +76,13 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_shoppingPageFragment"
             app:destination="@id/shoppingPageFragment" />
+        <argument
+            android:name="inWish"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/shopFragment"
@@ -100,12 +107,19 @@
         <action
             android:id="@+id/action_shopFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/wishListFragment"
         android:name="com.iti.team.ecommerce.ui.wish.WishListFragment"
-        android:label="WishListFragment" />
+        android:label="WishListFragment" >
+        <action
+            android:id="@+id/action_wishListFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/shopProducts"
         android:name="com.iti.team.ecommerce.ui.shop_products.ShopProducts"
@@ -119,6 +133,9 @@
         <argument
             android:name="imageUrl"
             app:argType="string" />
+        <action
+            android:id="@+id/action_shopProducts_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/moreMenu"
@@ -144,6 +161,18 @@
             app:argType="string" />
         <action
             android:id="@+id/action_searchFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.iti.team.ecommerce.ui.profile.ProfileFragment"
+        android:label="profile_fragment"
+        tools:layout="@layout/profile_fragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment

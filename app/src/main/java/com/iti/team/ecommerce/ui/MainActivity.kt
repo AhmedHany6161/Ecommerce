@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         splashSetup(navController,bottomNavigation)
-        navigationSetup(navController,bottomNavigation)
+        navigationSetup(navController)
     }
     private fun splashSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
         bottomNavigation.isGone = true
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         bottomNavigation.isGone = false
     }
-    private fun navigationSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
+    private fun navigationSetup(navController: NavController){
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.store))
         bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.widgets))
         bottomNavigation.add(MeowBottomNavigation.Model(3, R.drawable.person))
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.loginFragment)
+                    navController.navigate(R.id.profileFragment)
 
                 }
                 else->{

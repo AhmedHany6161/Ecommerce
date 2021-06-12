@@ -53,7 +53,10 @@ class Payment: Fragment() {
         paymentsClient = PaymentsUtil.createPaymentsClient(requireActivity())
         possiblyShowGooglePayButton()
 
-        binding.googlePayButton.layout.setOnClickListener {  requestPayment()  }
+        binding.googlePayButton.layout.setOnClickListener {
+            Log.i("googlePayButton","clicked")
+            requestPayment()
+        }
 
         return binding.root
     }
@@ -74,6 +77,7 @@ class Payment: Fragment() {
         task.addOnCompleteListener { completedTask ->
             try {
                 completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
+                Log.i("googlePayButton","addOnCompleteListener")
             } catch (exception: ApiException) {
                 // Process error
                 Log.w("isReadyToPay failed", exception)
@@ -121,6 +125,7 @@ class Payment: Fragment() {
         if (request != null) {
             AutoResolveHelper.resolveTask(
                 paymentsClient.loadPaymentData(request), requireActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE)
+            googlePayButton.isClickable = true
         }
     }
 
@@ -134,7 +139,7 @@ class Payment: Fragment() {
      * @see [Getting a result
      * from an Activity](https://developer.android.com/training/basics/intents/result)
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             // value passed in AutoResolveHelper
             LOAD_PAYMENT_DATA_REQUEST_CODE -> {
@@ -142,6 +147,7 @@ class Payment: Fragment() {
                     Activity.RESULT_OK ->{
                         data?.let { intent ->
                             PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
+                            Log.i("googlePayButton","RESULT_OK")
                         }
                         Log.i("onActivityResult","success")
                     }
@@ -149,18 +155,22 @@ class Payment: Fragment() {
                     Activity.RESULT_CANCELED -> {
                         // Nothing to do here normally - the user simply cancelled without selecting a
                         // payment method.
+                        Log.i("googlePayButton","RESULT_CANCELED")
                     }
 
                     AutoResolveHelper.RESULT_ERROR -> {
                         AutoResolveHelper.getStatusFromIntent(data)?.let {
                             handleError(it.statusCode)
                         }
+                        Log.i("googlePayButton","RESULT_ERROR")
                     }
                 }
                 // Re-enables the Google Pay payment button.
                 googlePayButton.isClickable = true
             }
+
         }
+        googlePayButton.isClickable = true
     }
     /**
      * PaymentData response object contains the payment information, as well as any additional

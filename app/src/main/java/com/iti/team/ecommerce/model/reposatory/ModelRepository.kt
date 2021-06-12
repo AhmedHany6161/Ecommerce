@@ -1,19 +1,29 @@
 package com.iti.team.ecommerce.model.reposatory
 
 
+import android.content.Context
 import android.util.Log
 import com.iti.team.ecommerce.model.data_classes.*
+import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
+import com.iti.team.ecommerce.model.local.preferances.Preference
+import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
 import com.iti.team.ecommerce.model.local.room.OfflineDB
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.utils.PREF_FILE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 
 
-class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRepo {
+class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): ModelRepo , OfflineRepo {
     private val apiDataSource: ApiInterface = ApiDataSource()
+    private val preference =
+        MySharedPreference(context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE))
+
+    private val sharedPreference:Preference = PreferenceDataSource(preference)
+
     override suspend fun getMainCategories():Result<MainCategories?>{
 
         var result:Result<MainCategories?> = Result.Loading
@@ -276,6 +286,14 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
 
         }
         return result
+    }
+
+    override fun isLogin(): Boolean {
+        return sharedPreference.isLogin()
+    }
+
+    override fun setLogin(login: Boolean) {
+        sharedPreference.setLogin(login)
     }
 
 

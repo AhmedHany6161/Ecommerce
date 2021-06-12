@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 class MySharedPreference(private val sharedPreference: SharedPreferences) {
 
     // ahmed
-    fun setBoolean (key: String,value: Boolean ){
+    fun setBoolean (key: String,value: Boolean = false ){
         sharedPreference.edit().putBoolean(key,value)?.apply()
     }
 

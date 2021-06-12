@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShopProductsViewModel(application: Application) : AndroidViewModel(application) {
-    private val  modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+     val  modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application),application)
 
 
     var shopProductAdapter = ShopProductAdapter(this)
@@ -27,12 +27,13 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
 
     private var _loading = MutableLiveData<Int>()
-    private var _navigateToDetails = MutableLiveData<Event<String>>()
+    private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+    private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
 
     private var idSet: HashSet<Long> = hashSetOf()
 
-    val navigateToDetails:LiveData<Event<String>>
+    val navigateToDetails:LiveData<Event<Pair<String,Boolean?>>>
         get() = _navigateToDetails
 
 
@@ -45,8 +46,10 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
     val buttonBackClicked:LiveData<Event<Boolean>>
         get() = _buttonBackClicked
 
+    val navigateToLogin: LiveData<Event<Boolean>>
+        get() = _navigateToLogin
 
-    init {
+   private fun readWishList(){
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 modelRepository.getAllId().collect {
@@ -60,6 +63,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
         }
 
         fun getProducts(collectionId: Long) {
+            readWishList()
             viewModelScope.launch(Dispatchers.IO) {
                 when (val result = modelRepository.getProducts(collectionId)) {
                     is Result.Success -> {
@@ -92,13 +96,15 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun convertObjectToString(productObject: Products){
+        val inWish = productObject.productId?.let { inWishList(it) }
         val adapterCurrent: JsonAdapter<Products?> = Constants.moshi.adapter(Products::class.java)
-        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject),inWish)
+
     }
 
 
-    private fun sendObjectToDetailsScreen(objectString: String){
-        _navigateToDetails.postValue(Event(objectString))
+    private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
+        _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
     }
 
     fun inWishList(id: Long): Boolean {
@@ -128,5 +134,8 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     fun backButtonClicked(){
         _buttonBackClicked.postValue(Event(true))
+    }
+    fun navToLogin(){
+        _navigateToLogin.postValue(Event(true))
     }
 }

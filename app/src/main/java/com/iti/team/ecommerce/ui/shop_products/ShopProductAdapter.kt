@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.ShopProductRowItemBinding
 import com.iti.team.ecommerce.model.data_classes.Products
+import com.iti.team.ecommerce.utils.extensions.Event
 
 class ShopProductAdapter(val viewModel: ShopProductsViewModel) :
     RecyclerView.Adapter<ShopProductAdapter.ViewHolder>() {
@@ -52,24 +53,36 @@ class ShopProductAdapter(val viewModel: ShopProductsViewModel) :
         }
 
         override fun onClick(v: View?) {
-            when (v?.id) {
-                R.id.add_fav_item -> {
-                    if (!viewModel.inWishList(productArray[adapterPosition].productId ?: -1)) {
-                        productArray[adapterPosition].image.src?.let {
-                            viewModel.addToWishList(productArray[adapterPosition],
-                                it
-                            )
+
+                when (v?.id) {
+                    R.id.add_fav_item -> {
+                        if(viewModel.modelRepository.isLogin()) {
+                            if (!viewModel.inWishList(
+                                    productArray[adapterPosition].productId ?: -1
+                                )
+                            ) {
+                                productArray[adapterPosition].image.src?.let {
+                                    viewModel.addToWishList(
+                                        productArray[adapterPosition],
+                                        it
+                                    )
+                                }
+                                binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
+                            } else {
+                                viewModel.removeFromWishList(
+                                    productArray[adapterPosition].productId ?: -1
+                                )
+                                binding.addFavItem.setImageResource(R.drawable.ic_favorite)
+                            }
+                        }else{
+                            viewModel.navToLogin()
                         }
-                        binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
-                    } else {
-                        viewModel.removeFromWishList(productArray[adapterPosition].productId ?: -1)
-                        binding.addFavItem.setImageResource(R.drawable.ic_favorite)
+
+                    }
+                    R.id.card -> {
+                        viewModel.navigateToDetails(productArray[adapterPosition])
                     }
 
-                }
-                R.id.card -> {
-                    viewModel.navigateToDetails(productArray[adapterPosition])
-                }
             }
 
 

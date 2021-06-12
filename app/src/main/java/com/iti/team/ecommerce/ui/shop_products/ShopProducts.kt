@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
 class ShopProducts: Fragment() {
 
@@ -48,7 +49,15 @@ class ShopProducts: Fragment() {
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let {it1->
-                navigate(it1)
+                it1.second?.let { it2 -> navigate(it1.first, it2) }
+            }
+        })
+    }
+    private fun observeToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ShopProductsDirections.actionShopProductsToLoginFragment()
+                findNavController().navigate(navigate)
             }
         })
     }
@@ -56,14 +65,15 @@ class ShopProducts: Fragment() {
         binding.shopProductRecycler.layoutManager = GridLayoutManager(context,2)
     }
 
-    private fun navigate(productObject: String){
-        val action = ShopProductsDirections.actionShopProductsToProductDetailsFragment(productObject)
+    private fun navigate(productObject: String,inWish:Boolean){
+        val action = ShopProductsDirections.actionShopProductsToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
     }
 
     private fun observeData(){
       Log.i("observeData","observeData")
         observeButtonBackClicked()
+        observeToLogin()
     }
     private fun observeButtonBackClicked(){
         viewModel.buttonBackClicked.observe(viewLifecycleOwner,{

@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.ui.wish
+package com.iti.team.ecommerce.ui.profile
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +9,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Product
+import com.iti.team.ecommerce.ui.wish.WishListViewModel
 
-class WishListAdapter(
+class ProfileWishAdapter(
     private var dataSet: List<Product>,
-    private val viewModel: WishListViewModel
+    private val viewModel: ProfileViewModel
 ) :
 
-    RecyclerView.Adapter<WishListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<ProfileWishAdapter.ViewHolder>() {
     fun setData(list: List<Product>) {
         dataSet = list
     }
-
-    class ViewHolder(val view: View, private val viewModel: WishListViewModel) :
+    class ViewHolder(val view: View, private val viewModel: ProfileViewModel) :
         RecyclerView.ViewHolder(view) {
         private val name: TextView = view.findViewById(R.id.product_name)
         private val price: TextView = view.findViewById(R.id.product_price)
@@ -49,6 +49,7 @@ class WishListAdapter(
             }
         }
     }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.product_holder, viewGroup, false)

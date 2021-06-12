@@ -5,6 +5,14 @@
     <string name="p_name">Product Name</string>
     <!--     ahmed-->
 
+    <string name="please_login_register">please login/register</string>
+    <string name="view_all">View All</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="shipped">Shipped</string>
+    <string name="return_ss">Return</string>
+    <string name="processing">processing</string>
+    <string name="my_orders">My Orders</string>
+
     <!--    ahmed-->
 
     <!--    wesam-->
@@ -19,6 +27,7 @@
     <string name="wishlist">Wishlist</string>
     <string name="no_search_result">Your search did not match any products.</string>
     <string name="cart">Cart</string>
+
     <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
     <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
     <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
@@ -154,6 +163,9 @@
     <string name="customer_billing_email">billing email</string>
     <string name="customer_billing_name">billing email</string>
     <string name="transaction_title">Transaction title</string>
+    <string name="size">Size</string>
+    <string name="add_to_cart">Add to Cart</string>
+
     <!--    wesam-->
 
     <!--    norhan-->
@@ -183,6 +195,9 @@
     <string name="register_city_hint">City</string>
     <string name="register_country_hint">Country</string>
     <string name="register_Street_hint">Street</string>
+    <string name="setting_of_the_app">Setting of the app</string>
+    <string name="shopping_cart">shopping cart</string>
+
 
     <!--    nermeen-->
 </resources>
