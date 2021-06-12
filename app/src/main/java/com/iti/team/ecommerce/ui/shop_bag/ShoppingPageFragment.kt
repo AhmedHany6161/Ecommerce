@@ -4,22 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.databinding.FragmentShopBagBinding
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.wish.WishListAdapter
-import com.iti.team.ecommerce.ui.wish.WishListViewModel
 
 class ShoppingPageFragment: Fragment() {
     override fun onCreateView(
@@ -29,18 +23,52 @@ class ShoppingPageFragment: Fragment() {
         val view = inflater.inflate(R.layout.fragment_shop_bag, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.shop_bag_recycler)
         val title: TextView = view.findViewById(R.id.textView)
-        var total_price :TextView = view.findViewById(R.id.price)
+        val total_price :TextView = view.findViewById(R.id.price)
         title.text = "Shopping Bag"
+        val cheak_Btn : Button = view.findViewById(R.id.cheakout_btn)
+        val favorite_image :ImageView = view.findViewById(R.id.favorite_image)
         val viewModel: ShoppingPageViewModel by viewModels()
         val shoppingPageAdapter = ShoppingPageAdapter(ArrayList(), viewModel,context)
         setupShopListRecyclerView(recyclerView, shoppingPageAdapter)
         observeButtonBackClicked(viewModel)
         listForShopList(viewModel, shoppingPageAdapter)
+        ObserveData(viewModel, view)
         viewModel.total_price().observe(this,{
             total_price.text = "EGP ${viewModel.total}"
         })
+        cheak_Btn.setOnClickListener {
+            if(viewModel.total ==0.0){
+                val action = ShoppingPageFragmentDirections.actionFromShopBagToShopFragment()
+                findNavController().navigate(action)
+            }else{
+                //navigate to order
+            }
+        }
+        favorite_image.setOnClickListener {
+            val action = ShoppingPageFragmentDirections.actionFromShopBagToWishlist()
+            findNavController().navigate(action)
+        }
 
         return view
+    }
+
+    private fun ObserveData(viewModel: ShoppingPageViewModel ,view: View){
+        val empty :ImageView = view.findViewById(R.id.emptystatus_img)
+        val empty_txt :TextView =view.findViewById(R.id.txt_empty)
+        val cheak_Btn : Button = view.findViewById(R.id.cheakout_btn)
+        viewModel.getCardList().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                empty.visibility = View.VISIBLE
+                empty_txt.visibility = View.VISIBLE
+                cheak_Btn.text="SHOP NOW"
+                // Toast.makeText(this, "no data: ", Toast.LENGTH_LONG).show()
+            } else {
+                empty.visibility = View.INVISIBLE
+                empty_txt.visibility = View.INVISIBLE
+                cheak_Btn.text="CHECKOUT"
+            }
+        }
+
     }
 
     private fun listForShopList(
@@ -76,6 +104,8 @@ class ShoppingPageFragment: Fragment() {
 
         })
     }
+
+
 
 
 }

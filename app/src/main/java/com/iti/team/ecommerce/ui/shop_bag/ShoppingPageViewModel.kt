@@ -1,6 +1,5 @@
 package com.iti.team.ecommerce.ui.shop_bag
 
-import android.app.AlertDialog
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -86,7 +85,6 @@ class ShoppingPageViewModel (application: Application) : AndroidViewModel(applic
                 total=0.0
                 for (item in products) {
                     total += (item.count)*(item.price).toDouble()
-                    println("sssssssssssssssssssssssssssssssssssssssssssss")
                     println(total.toString())
 
                 }
