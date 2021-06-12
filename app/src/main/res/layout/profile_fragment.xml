@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
-                android:contentDescription="@string/shopping_cart"
+                android:contentDescription="@string/shop_cart"
                 android:padding="10dp"
                 android:src="@drawable/ic__shopping_cart"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -191,7 +191,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/return_ss"
+                android:text="@string/returns"
                 app:layout_constraintEnd_toEndOf="@+id/profile_return"
                 app:layout_constraintStart_toStartOf="@+id/profile_return"
                 app:layout_constraintTop_toBottomOf="@+id/profile_return" />
