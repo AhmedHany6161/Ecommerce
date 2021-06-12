@@ -74,6 +74,21 @@ class OfflineDatabase private constructor(): OfflineDB {
         }
     }
 
+    override suspend fun removeFromCartbycount(product: Product) {
+        if(product.count > 0){
+            product.count -= 1
+            db.update(product)
+        }else{
+            if (product.inWish) {
+                product.inCart = false
+                product.count = 0
+                db.update(product)
+            } else {
+                db.remove(product.id)
+            }
+        }
+    }
+
     override suspend fun getById(id: Long): Product? = db.getById(id)
 
 
