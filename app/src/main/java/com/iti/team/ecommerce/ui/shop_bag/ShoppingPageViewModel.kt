@@ -27,8 +27,7 @@ class ShoppingPageViewModel (application: Application) : AndroidViewModel(applic
     var total = 0.0
     private val _addToWish = MutableLiveData<String>()
     val addToWish: LiveData<String> get() = _addToWish
-    private val isValid = MutableLiveData<Boolean>()
-    fun isValid(): LiveData<Boolean> = isValid
+
 
     private val mutableTotalPrice = MutableLiveData<Double>()
     fun total_price(): LiveData<Double> = mutableTotalPrice
