@@ -133,4 +133,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun getWishLis(): LiveData<List<Product>> {
         return productFlowData
     }
+    fun getEmail(): String {
+        return modelRepository.getEmail()
+    }
 }

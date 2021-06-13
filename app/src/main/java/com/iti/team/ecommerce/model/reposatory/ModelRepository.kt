@@ -312,6 +312,14 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
         return sharedPreference.getAddress()
     }
 
+    override fun setEmail(email: String) {
+        sharedPreference.setEmail(email)
+    }
+
+    override fun getEmail(): String {
+        return sharedPreference.getEmail()
+    }
+
 
     override fun getAllWishListProducts(): Flow<List<Product>> =
         offlineDB?.getWishList() ?: flow { emit(listOf<Product>()) }

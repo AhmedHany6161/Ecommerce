@@ -38,4 +38,7 @@ interface ModelRepo {
 
     fun setAddress(address:String)
     fun getAddress():String
+
+    fun setEmail(email:String)
+    fun getEmail():String
 }

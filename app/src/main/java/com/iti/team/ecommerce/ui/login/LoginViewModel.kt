@@ -64,6 +64,7 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
                             isValid.value = true
                             Log.i("login:", "valid email")
                             Log.i("login:", password)
+                            modelRepository.setLogin(true)
                         }
                     }
                 }
@@ -81,8 +82,11 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
     }
     val authenticationState = FirebaseUserLiveData().map { user ->
         if (user != null) {
+            modelRepository.setLogin(true)
+            modelRepository.setEmail(user.email?:"unknown")
             AuthenticationState.AUTHENTICATED
         } else {
+            modelRepository.setLogin(false)
             AuthenticationState.UNAUTHENTICATED
         }
     }

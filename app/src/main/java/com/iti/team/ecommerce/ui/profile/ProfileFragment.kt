@@ -150,7 +150,7 @@ class ProfileFragment : Fragment() {
             recyclerView.visibility = View.VISIBLE
             showAll.visibility = View.VISIBLE
             pleaseLogin.visibility = View.GONE
-            email.text = "Hi , ${FirebaseAuth.getInstance().currentUser}"
+            email.text = "Hi , ${viewModel.getEmail()}"
             profile.setAnimation(R.raw.login_profile)
         } else {
             recyclerView.visibility = View.GONE

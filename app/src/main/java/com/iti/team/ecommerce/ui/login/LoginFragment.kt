@@ -178,10 +178,9 @@ class LoginFragment: Fragment()  {
     }
 
     private fun observeAuthenticationState() {
-        val action = LoginFragmentDirections.actionLoginFragmentToCateogre()
         viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
-                LoginViewModel.AuthenticationState.AUTHENTICATED -> findNavController().navigate(action)
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> findNavController().popBackStack()
 
                 else -> {
                     binding.googleBtn.setOnClickListener { launchSignInGoogle() }

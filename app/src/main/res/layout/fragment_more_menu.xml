@@ -64,7 +64,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cart"/>
+                android:src="@drawable/ic__shopping_cart"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
