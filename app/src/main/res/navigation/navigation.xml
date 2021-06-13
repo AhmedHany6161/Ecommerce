@@ -31,7 +31,20 @@
         android:id="@+id/categoriesFragment"
         android:name="com.iti.team.ecommerce.ui.categories.CategoriesFragment"
         android:label="CategoriesFragment"
-        tools:layout="@layout/fragment_categories"/>
+        tools:layout="@layout/fragment_categories">
+        <action
+            android:id="@+id/action_shopProducts_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_shoppingPageFragment"
+            app:destination="@id/shoppingPageFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_wishListFragment"
+            app:destination="@id/wishListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.iti.team.ecommerce.ui.login.LoginFragment"
