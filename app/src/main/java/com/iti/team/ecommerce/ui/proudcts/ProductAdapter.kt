@@ -41,7 +41,9 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private va
             price.text = "EGP ${item.first.variants[0]?.price}"
             brand.text = item.first.vendor
             Glide.with(view).load(item.second).into(image)
-
+            addCart.setOnClickListener {
+                viewModel.addToCart(item.first, item.second)
+            }
 
             layout.setOnClickListener {
                 viewModel.navigateToDetails(item.first)

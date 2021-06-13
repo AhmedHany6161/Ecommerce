@@ -1,13 +1,13 @@
 package com.iti.team.ecommerce.ui.proudcts
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -22,19 +22,24 @@ import kotlinx.coroutines.launch
 
 class ProductsViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application))
+        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
     private val filteredSet: MutableSet<String> = HashSet()
     private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
-    private val isLogin: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private var praType = ""
 
-    private var _navigateToDetails = MutableLiveData<Event<String>>()
 
-    val navigateToDetails:LiveData<Event<String>>
+    private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
+
+    val navigateToDetails:LiveData<Event<Pair<String,Boolean?>>>
     get() = _navigateToDetails
+
+    private val _addToCart = MutableLiveData<String>()
+    val addToCart: LiveData<String> get() = _addToCart
+
 
     private var idSet: HashSet<Long> = hashSetOf()
 
@@ -43,7 +48,8 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 stateProductType.collect {
-                    if (it != null && dataOfProduct.isEmpty()) {
+                    if (it != null && (dataOfProduct.isEmpty() || praType != it)) {
+                        praType = it
                         val list = getMainDataForCard(it)
                         bindBrands(list)
                         brandFlowData.postValue(dataOfBrand)
@@ -56,19 +62,11 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                     idSet = HashSet(it)
                 }
             }
-            launch {
-               val pref= application.getSharedPreferences("app", Context.MODE_PRIVATE)
-                if(MySharedPreference(pref).getBoolean("logIn")){
-                    isLogin.emit(true)
-                }else{
-                    isLogin.emit(false)
-                }
-            }
         }
     }
 
-    fun getLogInState():LiveData<Boolean>{
-        return isLogin.asLiveData()
+    fun getLogInState():Boolean{
+        return modelRepository.isLogin()
     }
 
     fun inWishList(id: Long): Boolean {
@@ -179,20 +177,39 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-     fun inFilteredList(name : String):Boolean{
-        return filteredSet.contains(name)
-     }
 
-    fun navigateToDetails(product: Products){
-            convertObjectToString(product)
+    fun inFilteredList(name: String): Boolean {
+        return filteredSet.contains(name)
+    }
+
+    fun navigateToDetails(product: Products) {
+        convertObjectToString(product)
+    }
+
+    fun addToCart(products: Products, image: String) {
+        _addToCart.value = "product successfully added to cart"
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.addToCart(
+                Product(
+                    products.productId ?: 0,
+                    products.title ?: "",
+                    image,
+                    products.vendor ?: "",
+                    (products.variants[0]?.price ?: "")
+                )
+            )
+        }
     }
 
     private fun convertObjectToString(productObject: Products){
+        val inWish = productObject.productId?.let { inWishList(it) }
         val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
-         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))
+        sendObjectToDetailsScreen(adapterCurrent.toJson(productObject),inWish)
     }
 
-    private fun sendObjectToDetailsScreen(objectString: String){
-        _navigateToDetails.postValue(Event(objectString))
+
+    private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
+        _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
+
     }
 }

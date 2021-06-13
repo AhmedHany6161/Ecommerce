@@ -2,12 +2,13 @@ package com.iti.team.ecommerce.ui.product_details
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentProductDetailsBinding
@@ -20,7 +21,10 @@ import com.smarteist.autoimageslider.SliderAnimations
 class ProductDetailsFragment: Fragment() {
 
     private lateinit var binding: FragmentProductDetailsBinding
-    private lateinit var viewModel: ProductDetailsViewModel
+
+    private val viewModel by lazy {
+        ProductDetailsViewModel(requireActivity().application)
+    }
 
     private lateinit var sliderAdapter: SliderAdapter
 
@@ -28,13 +32,13 @@ class ProductDetailsFragment: Fragment() {
     private lateinit var manager:FragmentManager
     private lateinit var transaction: FragmentTransaction
 
+
     private val args : ProductDetailsFragmentArgs by navArgs()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProductDetailsBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(ProductDetailsViewModel::class.java)
 
 
         init()
@@ -43,7 +47,7 @@ class ProductDetailsFragment: Fragment() {
 
     private fun init(){
         manager = parentFragmentManager
-        moreFragment = MoreMenu()
+        moreFragment = MoreMenu(viewModel)
         transaction = manager.beginTransaction()
         transaction.add(R.id.more_fragment,moreFragment,"MORE_FRAGMENT")
         transaction.commit()
@@ -52,6 +56,7 @@ class ProductDetailsFragment: Fragment() {
         binding.imageSlider.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION)
         binding.imageSlider.startAutoCycle()
         viewModel.setProduct( args.productObject)
+        viewModel.inWish(args.inWish)
 
         observeData()
         setMenu()
@@ -63,8 +68,19 @@ class ProductDetailsFragment: Fragment() {
     private fun observeData(){
         observeImageSlider()
         observeButtonBackClicked()
+        //observeInWish()
+        observeToLogin()
+        observeAddToCart()
+
     }
 
+//    fun observeInWish(){
+//        viewModel.inWish.observe(viewLifecycleOwner,{
+//            it.getContentIfNotHandled()?.let {
+//                binding.favorite.setColorFilter(Color.RED,android.graphics.PorterDuff.Mode.MULTIPLY)
+//            }
+//        })
+//    }
     private fun  observeImageSlider(){
         viewModel.imageProduct.observe(viewLifecycleOwner,{
             sliderAdapter = SliderAdapter(it)
@@ -81,6 +97,25 @@ class ProductDetailsFragment: Fragment() {
         })
     }
 
+    private fun observeToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val navigate = ProductDetailsFragmentDirections
+                    .actionProductDetailsFragmentToLoginFragment()
+                findNavController().navigate(navigate)
+            }
+        })
+    }
+
+    private fun observeAddToCart(){
+        viewModel.addToCart.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(context,"item added",Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
     private fun setMenu(){
 
     }
@@ -88,11 +123,6 @@ class ProductDetailsFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = true
-    }
-
-
-    companion object {
-
     }
 
 }

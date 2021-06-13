@@ -1,12 +1,18 @@
 package com.iti.team.ecommerce.ui.categories
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.model.data_classes.Product
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
@@ -21,9 +27,13 @@ import kotlin.collections.HashSet
 
 class CategoriesViewModel(application: Application): AndroidViewModel(application) {
 
-    private val  modelRepository:ModelRepository = ModelRepository(null)
+    private val _application:Application = application
+    private val  modelRepository:ModelRepository = ModelRepository(
+        OfflineDatabase.getInstance(application),
+        application.applicationContext
+    )
 
-    private  var mainCategories:MutableLiveData<List<MainCollections>> =MutableLiveData()
+    private  var _mainCategories:MutableLiveData<List<MainCollections>> =MutableLiveData()
 
 
     private var _navigateToWish = MutableLiveData<Event<Boolean>>()
@@ -33,8 +43,8 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
     private var _loading = MutableLiveData<Int>()
     private var _navigateToDetails = MutableLiveData<Event<String>>()
     private var idSet: HashSet<Long> = hashSetOf()
-    val _mainCategories: LiveData<List<MainCollections>>
-        get() = mainCategories
+    val mainCategories: LiveData<List<MainCollections>>
+        get() = _mainCategories
 
     val navigateToDetails:LiveData<Event<String>>
         get() = _navigateToDetails
@@ -150,7 +160,7 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
             when(val result = modelRepository.getMainCategories()){
                 is Result.Success->{
                     Log.i("getCategories:", "${result.data}")
-                    mainCategories.postValue(result.data?.collections ?: listOf())
+                    _mainCategories.postValue(result.data?.collections ?: listOf())
                 }
                 is Result.Error ->{Log.e("getCategories:", "${result.exception.message}")}
                 is Result.Loading ->{Log.i("getCategories","Loading")}
@@ -174,6 +184,7 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
                 }
                 is Result.Error -> {
                     Log.e("getProductsFromType:", "${result.exception.message}")
+                    _loading.postValue(View.GONE)
                 }
                 is Result.Loading -> {
                     _loading.postValue(View.VISIBLE)
@@ -181,6 +192,30 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
                 }
             }
         }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isOnline(): Boolean {
+        val connectivityManager =
+            _application.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 }

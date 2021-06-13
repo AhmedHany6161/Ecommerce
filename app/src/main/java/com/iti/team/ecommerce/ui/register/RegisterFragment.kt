@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
+import com.iti.team.ecommerce.ui.login.LoginFragment
+import com.iti.team.ecommerce.ui.login.LoginFragmentDirections
 import com.iti.team.ecommerce.ui.main.MainViewModel
 
 class RegisterFragment: Fragment() {
@@ -25,8 +28,10 @@ class RegisterFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = RegisterViewModel()
+        viewModel = RegisterViewModel(requireActivity().application)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        observeSuccessRigister()
+        observeShowError()
         return binding.root
     }
 
@@ -35,12 +40,39 @@ class RegisterFragment: Fragment() {
         binding.loginTxt.setOnClickListener(View.OnClickListener {
             navigateToLogin()
         })
-        binding.backToLogin.setOnClickListener(View.OnClickListener {
-            navigateToLogin()
-        })
+//        binding.backToLogin.setOnClickListener(View.OnClickListener {
+//            navigateToLogin()
+//        })
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
+        binding.backToLogin.setOnClickListener {
+            navigate()
+        }
+    }
+    private fun observeSuccessRigister(){
+        viewModel.successRegister.observe(viewLifecycleOwner,{
+            it?.let {
+                Toast.makeText(context, "successfully registered ", Toast.LENGTH_LONG).show()
+                navigate()
+            }
+        })
+    }
+    private fun observeShowError(){
+        viewModel.setError.observe(viewLifecycleOwner,{
+            it?.let {
+                Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+    private fun navigate() {
+//        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id.registerFragment,LoginFragment())
+//            .addToBackStack(null)
+//            .commit()
+        val action = RegisterFragmentDirections.actionFromRegisterToLoginFragment()
+        findNavController().navigate(action)
     }
 
     private fun navigateToLogin() {
@@ -56,12 +88,6 @@ class RegisterFragment: Fragment() {
             && validateConfirmPass()&& validatePhoneNo() && validateEmail() ) {
             val customerModel= createCustomer()
             viewModel.createCustomer(customerModel)
-            Toast.makeText(context, "registerd", Toast.LENGTH_LONG).show()
-
-        }
-        else{
-            Toast.makeText(context, "not registerd", Toast.LENGTH_LONG).show()
-
         }
     }
     private fun validateFirstName(): Boolean {
@@ -106,8 +132,8 @@ class RegisterFragment: Fragment() {
         val passwordVal = "^" +  //"(?=.*[0-9])" +         //at least 1 digit
                 //"(?=.*[a-z])" +         //at least 1 lower case letter
                 //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                "(?=.*[a-zA-Z])" +  //any letter
-                "(?=.*[@#$%^&+=])" +  //at least 1 special character
+             //   "(?=.*[a-zA-Z])" +  //any letter
+              //  "(?=.*[@#$%^&+=])" +  //at least 1 special character
                 "(?=\\S+$)" +  //no white spaces
                 ".{4,}"  //at least 4 characters
 //                "$"

@@ -52,15 +52,15 @@ class CategoriesFragment: Fragment() {
         }
     }
     private fun observeData(){
-        observeToMainCategoriesList()
+        observeMainCategoriesList()
         observeToWishList()
         observeToCartList()
         observeToSearch()
         observeToDetails()
-
+        observeLoading()
     }
-    private fun observeToMainCategoriesList(){
-        viewModel._mainCategories.observe(viewLifecycleOwner,{
+    private fun observeMainCategoriesList(){
+        viewModel.mainCategories.observe(viewLifecycleOwner,{
             it?.let {
                 mainCategoriesAdapter.updateFavorite(it)
                 //  viewModel.getData(it[0].collectionsImage)
@@ -106,6 +106,9 @@ class CategoriesFragment: Fragment() {
                 findNavController().navigate(navigate)
             }
         })
+    }
+    private fun observeLoading(){
+
     }
     companion object {
 

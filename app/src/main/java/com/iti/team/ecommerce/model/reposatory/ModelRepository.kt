@@ -1,20 +1,29 @@
 package com.iti.team.ecommerce.model.reposatory
 
 
+import android.content.Context
 import android.util.Log
 import com.iti.team.ecommerce.model.data_classes.*
+import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
+import com.iti.team.ecommerce.model.local.preferances.Preference
+import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
 import com.iti.team.ecommerce.model.local.room.OfflineDB
 import com.iti.team.ecommerce.model.remote.ApiDataSource
 import com.iti.team.ecommerce.model.remote.ApiInterface
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.utils.PREF_FILE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 import java.io.IOException
 
 
-class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRepo {
+class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): ModelRepo , OfflineRepo {
     private val apiDataSource: ApiInterface = ApiDataSource()
+    private val preference =
+        MySharedPreference(context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE))
+
+    private val sharedPreference:Preference = PreferenceDataSource(preference)
+
     override suspend fun getMainCategories():Result<MainCategories?>{
 
         var result:Result<MainCategories?> = Result.Loading
@@ -208,6 +217,26 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
             }else{
                 Log.i("ModelRepository","error ${response.code()}")
             }
+        } catch (e: IOException) {
+            result = Result.Error(e)
+            Log.e("ModelRepository", "IOException ${e.message}")
+            Log.e("ModelRepository", "IOException ${e.localizedMessage}")
+
+        }
+        return result
+    }
+
+    override suspend fun getProductsFromVendor(vendor: String): Result<ProductsModel?> {
+        var result:Result<ProductsModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getProductsFromVendor(vendor)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+            }
         }catch (e: IOException){
             result = Result.Error(e)
             Log.e("ModelRepository","IOException ${e.message}")
@@ -217,22 +246,93 @@ class ModelRepository(private val offlineDB: OfflineDB?): ModelRepo , OfflineRep
         return result
     }
 
+    override suspend fun addOrder(order: AddOrderModel): Result<GettingOrderModel?> {
+        var result:Result<GettingOrderModel?> = Result.Loading
 
-    override fun getAllWishListProducts(): Flow<List<Product>> {
-        return offlineDB?.getAllProducts() ?: flow { emit(listOf<Product>()) }
+        try {
+            val response = apiDataSource.addOrder(order)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
     }
 
-    override fun getAllId(): Flow<List<Long>> {
-        return offlineDB?.getAllId() ?: flow { emit(listOf<Long>()) }
+    override suspend fun getOrders(email: String): Result<OrdersModels?> {
+        var result:Result<OrdersModels?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getOrders(email)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
     }
+
+    override fun isLogin(): Boolean {
+        return sharedPreference.isLogin()
+    }
+
+    override fun setLogin(login: Boolean) {
+        sharedPreference.setLogin(login)
+    }
+
+
+    override fun getAllWishListProducts(): Flow<List<Product>> =
+        offlineDB?.getWishList() ?: flow { emit(listOf<Product>()) }
+
+    override fun getCartProducts(): Flow<List<Product>> =
+        offlineDB?.getCart() ?: flow { emit(listOf<Product>()) }
+
+    override fun getAllId(): Flow<List<Long>> =
+        offlineDB?.getAllId() ?: flow { emit(listOf<Long>()) }
+
 
     override suspend fun addToWishList(product: Product) {
         offlineDB?.addToWishList(product)
     }
 
     override suspend fun removeFromWishList(id: Long) {
-        offlineDB?.removeFromWishList(id)
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromWishList(product)
+        }
 
+    }
+
+    override suspend fun addToCart(product: Product) {
+        val conProduct = offlineDB?.getById(product.id)
+        if (conProduct == null) {
+            offlineDB?.addToCart(product)
+        } else {
+            offlineDB?.addToCart(conProduct)
+        }
+    }
+
+    override suspend fun removeFromCart(id: Long) {
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromCart(product)
+        }
     }
 
     override suspend fun reset() {

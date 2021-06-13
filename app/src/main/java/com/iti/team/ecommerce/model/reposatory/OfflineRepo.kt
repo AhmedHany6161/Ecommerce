@@ -7,11 +7,17 @@ interface OfflineRepo {
 
     fun getAllWishListProducts(): Flow<List<Product>>
 
+    fun getCartProducts(): Flow<List<Product>>
+
     fun getAllId(): Flow<List<Long>>
 
     suspend fun addToWishList(product: Product)
 
     suspend fun removeFromWishList(id: Long)
+
+    suspend fun addToCart(product: Product)
+
+    suspend fun removeFromCart(id: Long)
 
     suspend fun reset()
 }

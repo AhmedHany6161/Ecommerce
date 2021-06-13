@@ -6,17 +6,26 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductsDAO {
-    @Query("SELECT * FROM products")
-    fun getAllProducts(): Flow<List<Product>>
+    @Query("SELECT * FROM products where inWish = 1")
+    fun getWishList(): Flow<List<Product>>
 
-    @Query("SELECT id FROM products")
-    fun getAllIds(): Flow<List<Long>>
+    @Query("SELECT id FROM products where inWish = 1")
+    fun getAllWishListIds(): Flow<List<Long>>
+
+    @Query("SELECT * FROM products where inCart = 1")
+    fun getCart(): Flow<List<Product>>
+
+    @Query("SELECT * FROM products where id = :id")
+    suspend fun getById(id: Long): Product?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToWishList(product: Product)
+    suspend fun add(product: Product)
+
+    @Update
+    suspend fun update(product: Product)
 
     @Query("DELETE FROM products where id = :id")
-    suspend fun removeFromWishList(id:Long)
+    suspend fun remove(id: Long)
 
     @Query("DELETE FROM products")
     suspend fun reset()

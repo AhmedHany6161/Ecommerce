@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.iti.team.ecommerce.ui.categories.CategoriesViewModel" />
+
+    </data>
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryTextColor"
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:layout_gravity="center">
+
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -148,6 +158,12 @@
                             android:maxLines="1"
                             android:inputType="textPassword"/>
                     </com.google.android.material.textfield.TextInputLayout>
+<!--                    <ProgressBar-->
+<!--                        mutableVisibility="@{viewModel.loading}"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center_horizontal"/>-->
+
                     <Button
                         android:id="@+id/cirRegisterButton"
                         android:layout_height="wrap_content"
@@ -197,3 +213,4 @@
         android:layout_marginBottom="30dp"
         android:adjustViewBounds="false"/>
 </RelativeLayout>
+</layout>
