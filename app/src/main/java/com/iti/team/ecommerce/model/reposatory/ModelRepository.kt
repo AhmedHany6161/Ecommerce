@@ -342,6 +342,12 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
             offlineDB?.removeFromCart(product)
         }
     }
+    override suspend fun removeFromCartbycount(id: Long) {
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromCartbycount(product)
+        }
+    }
 
     override suspend fun reset() {
         offlineDB?.reset()
