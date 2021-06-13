@@ -55,13 +55,17 @@ class ProfileFragment : Fragment() {
         viewModel.checkOrders()
         swipToRefresh(refresh, viewModel)
         listingForOrderChanges(viewModel, paid, unpaid, refund, pending, refresh)
-        navigateToOrders(showAllOrders)
+        navigateToOrders(showAllOrders, viewModel)
         return view
     }
 
-    private fun navigateToOrders(showAllOrders: TextView) {
+    private fun navigateToOrders(showAllOrders: TextView, viewModel: ProfileViewModel) {
         showAllOrders.setOnClickListener {
-            findNavController().navigate(R.id.myOrdersFragment)
+            if (viewModel.getLogInState()) {
+                findNavController().navigate(R.id.myOrdersFragment)
+            } else {
+                findNavController().navigate(R.id.loginFragment)
+            }
         }
     }
 
