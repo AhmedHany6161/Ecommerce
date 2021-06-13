@@ -158,6 +158,9 @@
         <action
             android:id="@+id/action_from_shopBag_to_shopFragment"
             app:destination="@id/shopFragment" />
+        <action
+            android:id="@+id/action_shoppingPageFragment_to_payment"
+            app:destination="@id/payment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -185,7 +188,14 @@
     <fragment
         android:id="@+id/payment"
         android:name="com.iti.team.ecommerce.ui.payment.Payment"
-        android:label="Payment" />
+        android:label="Payment" >
+        <argument
+            android:name="totalPrice"
+            app:argType="string" />
+        <argument
+            android:name="orderListString"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/payTabFragment"
         android:name="com.iti.team.ecommerce.ui.payment.PayTabFragment"

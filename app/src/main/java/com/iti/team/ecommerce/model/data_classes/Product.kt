@@ -2,8 +2,10 @@ package com.iti.team.ecommerce.model.data_classes
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.JsonClass
 
 @Entity(tableName = "products")
+@JsonClass(generateAdapter = true)
 data class Product(
     @PrimaryKey(autoGenerate = true)
     val id: Long,

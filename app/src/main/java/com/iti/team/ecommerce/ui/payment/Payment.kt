@@ -31,6 +31,7 @@ class Payment: Fragment() {
     private lateinit var binding:FragmentCheckoutBinding
     private lateinit var paymentsClient: PaymentsClient
     //private val shippingCost = (90 * 1000000).toLong()
+    private val args:PaymentArgs by navArgs()
 
     private lateinit var garmentList: JSONArray
     private lateinit var selectedGarment: JSONObject
@@ -56,6 +57,7 @@ class Payment: Fragment() {
         // Set up the mock information for our item in the UI.
         selectedGarment = fetchRandomGarment()
         displayGarment(selectedGarment)
+        Log.i("args",args.totalPrice)
 
         // Initialize a Google Pay API client for an environment suitable for testing.
         // It's recommended to create the PaymentsClient object inside of the onCreate method.

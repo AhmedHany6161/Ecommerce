@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.shop_bag
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,8 +23,15 @@ class ShoppingPageViewModel (application: Application) : AndroidViewModel(applic
     private var dataOfProduct: List<Product> = mutableListOf()
     private val productFlowData: MutableLiveData<List<Product>> by lazy { MutableLiveData() }
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+
+    private var _buttonCheckoutClicked = MutableLiveData<Event<Boolean>>()
+
     val buttonBackClicked:LiveData<Event<Boolean>>
     get() = _buttonBackClicked
+
+    val buttonCheckoutClicked:LiveData<Event<Boolean>>
+        get() = _buttonCheckoutClicked
+
     var total = 0.0
     private val _addToWish = MutableLiveData<String>()
     val addToWish: LiveData<String> get() = _addToWish
@@ -97,6 +105,11 @@ class ShoppingPageViewModel (application: Application) : AndroidViewModel(applic
         }
 
         return mutableTotalPrice
+    }
+
+    fun buttonCheckoutClicked(){
+        Log.i("ShoppingViewModel","buttonCheckoutClicked")
+        _buttonCheckoutClicked.postValue(Event(true))
     }
 }
 
