@@ -35,4 +35,7 @@ interface ModelRepo {
 
     fun getDiscountId():Long
     fun setDiscount(id:Long)
+
+    fun setAddress(address:String)
+    fun getAddress():String
 }

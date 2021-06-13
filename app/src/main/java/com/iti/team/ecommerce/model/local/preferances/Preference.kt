@@ -5,4 +5,7 @@ interface Preference {
     fun  setLogin(login:Boolean)
     fun setDiscountId(id:Long)
     fun getDiscountId():Long
+
+    fun setAddress(address:String)
+    fun getAddress():String
 }

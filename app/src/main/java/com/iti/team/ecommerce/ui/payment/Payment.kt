@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.iti.team.ecommerce.databinding.FragmentCheckoutBinding
+import com.iti.team.ecommerce.ui.shop.DiscountDialog
 import com.iti.team.ecommerce.utils.PaymentsUtil
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import org.json.JSONException
@@ -71,6 +72,7 @@ class Payment: Fragment() {
 
     private fun observeData(){
         observeButtonBackClicked()
+        observeOpenDialog()
     }
 
     private fun observeButtonBackClicked(){
@@ -255,4 +257,11 @@ class Payment: Fragment() {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 
+    fun observeOpenDialog(){
+        viewModel.openDialog.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let { it1 ->
+                it1.show(this.childFragmentManager, "AddDialog")
+            }
+        })
+    }
 }

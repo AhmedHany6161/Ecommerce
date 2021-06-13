@@ -29,6 +29,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var orderWithDiscount = false
 
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+    private var _openDialog = MutableLiveData<Event<AddressDialog>>()
     private var _discountVisibility = MutableLiveData<Int>()
     private var _loadingVisibility = MutableLiveData<Int>()
     private var _applyVisibility = MutableLiveData<Int>()
@@ -40,6 +41,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
+
+    val openDialog: LiveData<Event<AddressDialog>>
+        get() = _openDialog
 
     val discountVisibility: LiveData<Int>
         get() = _discountVisibility
@@ -167,8 +171,13 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     }
 
     fun cashOnDeliveryClicked(){
-        Log.i("PaymentViewModel","cashOnDeliveryClicked")
-        addOrder("authorized")
+        if (modelRepository.getAddress() != ""){
+            Log.i("PaymentViewModel","cashOnDeliveryClicked")
+            addOrder("authorized")
+        }else{
+            val dialog = AddressDialog.newInstance(orderWithDiscount,productList,"authorized")
+            _openDialog.postValue(Event(dialog))
+        }
     }
 
     fun getOrdersData(totalPrice:String,ordersListString:String){
