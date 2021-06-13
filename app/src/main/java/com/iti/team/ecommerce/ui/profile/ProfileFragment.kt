@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.R
@@ -33,6 +34,13 @@ class ProfileFragment : Fragment() {
         recyclerView = view.findViewById(R.id.profile_wishlist)
         val profile: LottieAnimationView = view.findViewById(R.id.profile_image)
         showAll = view.findViewById(R.id.profile_show_all_wish)
+        val refresh: SwipeRefreshLayout = view.findViewById(R.id.profile_swipe_refresh)
+        val unpaid: TextView = view.findViewById(R.id.profile_unpaid)
+        val paid: TextView = view.findViewById(R.id.profile_paid)
+        val refund: TextView = view.findViewById(R.id.profile_refund)
+        val pending: TextView = view.findViewById(R.id.profile_pending)
+        val showAllOrders: TextView = view.findViewById(R.id.profile_show_all_orders)
+
         email = view.findViewById(R.id.profile_email)
         pleaseLogin = view.findViewById(R.id.profile_please_login)
         val viewModel: ProfileViewModel by viewModels()
@@ -44,7 +52,48 @@ class ProfileFragment : Fragment() {
         listingForAddCart(viewModel)
         navigateToWishList()
         navigateToLogin(viewModel)
+        viewModel.checkOrders()
+        swipToRefresh(refresh, viewModel)
+        listingForOrderChanges(viewModel, paid, unpaid, refund, pending, refresh)
+        navigateToOrders(showAllOrders, viewModel)
         return view
+    }
+
+    private fun navigateToOrders(showAllOrders: TextView, viewModel: ProfileViewModel) {
+        showAllOrders.setOnClickListener {
+            if (viewModel.getLogInState()) {
+                findNavController().navigate(R.id.myOrdersFragment)
+            } else {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        }
+    }
+
+    private fun swipToRefresh(
+        refresh: SwipeRefreshLayout,
+        viewModel: ProfileViewModel
+    ) {
+        refresh.setOnRefreshListener {
+            viewModel.checkOrders()
+        }
+    }
+
+    private fun listingForOrderChanges(
+        viewModel: ProfileViewModel,
+        paid: TextView,
+        unpaid: TextView,
+        refund: TextView,
+        pending: TextView,
+        refresh: SwipeRefreshLayout
+    ) {
+        viewModel.orders.observe(viewLifecycleOwner, {
+            val tokens = it.split(",")
+            paid.text = tokens[0]
+            unpaid.text = tokens[1]
+            refund.text = tokens[2]
+            pending.text = tokens[3]
+            refresh.isRefreshing = false
+        })
     }
 
     private fun navigateToWishList() {

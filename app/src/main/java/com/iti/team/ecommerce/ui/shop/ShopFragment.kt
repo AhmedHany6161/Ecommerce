@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,9 +36,7 @@ class ShopFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (args.backFromDetails){
             (activity as MainActivity).bottomNavigation.isGone = false
-        }
     }
     private fun init(){
         binding.viewModel = viewModel
@@ -134,6 +131,7 @@ class ShopFragment : Fragment() {
     private fun navigate(productType: String = ""){
         val action = ShopFragmentDirections.actionShopFragmentToProducts(productType)
         findNavController().navigate(action)
+        
     }
 
     private fun observeNavigateToShopProduct(){

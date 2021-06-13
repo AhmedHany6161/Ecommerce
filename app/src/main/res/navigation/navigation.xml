@@ -190,6 +190,11 @@
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
+        android:id="@+id/myOrdersFragment"
+        android:name="com.iti.team.ecommerce.ui.orders.MyOrdersFragment"
+        android:label="my_orders_fragment"
+        tools:layout="@layout/my_orders_fragment" />
+    <fragment
         android:id="@+id/profileFragment"
         android:name="com.iti.team.ecommerce.ui.profile.ProfileFragment"
         android:label="profile_fragment"

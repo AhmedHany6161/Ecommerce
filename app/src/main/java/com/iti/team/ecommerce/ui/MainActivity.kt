@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         splashSetup(navController,bottomNavigation)
-        navigationSetup(navController)
+        navigationSetup(navController,bottomNavigation)
     }
     private fun splashSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
         bottomNavigation.isGone = true
@@ -38,11 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        bottomNavigation.isGone = false
-    }
-    private fun navigationSetup(navController: NavController){
+
+    private fun navigationSetup(navController: NavController, bottomNavigation: MeowBottomNavigation){
         bottomNavigation.add(MeowBottomNavigation.Model(1, R.drawable.store))
         bottomNavigation.add(MeowBottomNavigation.Model(2, R.drawable.widgets))
         bottomNavigation.add(MeowBottomNavigation.Model(3, R.drawable.person))
