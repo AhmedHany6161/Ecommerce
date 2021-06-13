@@ -21,9 +21,10 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private var dataOfProduct: List<Product> = mutableListOf()
     private val productFlowData: MutableLiveData<List<Product>> by lazy { MutableLiveData() }
     private var _navigateToDetails = MutableLiveData<Event<Pair<String, Boolean?>>>()
-
+    private val _mutableOrder: MutableLiveData<String> = MutableLiveData()
     val navigateToDetails: LiveData<Event<Pair<String, Boolean?>>>
         get() = _navigateToDetails
+    val orders: MutableLiveData<String> get() = _mutableOrder
 
     private val _addToCart = MutableLiveData<String>()
     val addToCart: LiveData<String> get() = _addToCart
@@ -83,9 +84,52 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         return modelRepository.isLogin()
     }
 
+    fun checkOrders() {
+        if (modelRepository.isLogin()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                when (val result = modelRepository.getOrders("fayzaahmed978@gmail.com")) {
+                    is Result.Success -> {
+                        var unPaid = 0
+                        var paid = 0
+                        var refund = 0
+                        var pending = 0
+
+                        result.data?.order?.forEach {
+                            when (it?.financialStatus) {
+                                "paid" -> {
+                                    paid++;
+                                }
+                                "unpaid" -> {
+                                    unPaid++;
+                                }
+                                "refunded" -> {
+                                    refund++;
+                                }
+                                "pending" -> {
+                                    pending++;
+                                }
+                            }
+                        }
+                        _mutableOrder.postValue("$paid,$unPaid,$refund,$pending")
+
+                    }
+                    is Result.Error -> {
+                        Log.e("getProductsFromType:", "${result.exception.message}")
+                    }
+                    is Result.Loading -> {
+                        Log.i("getProductsFromType", "Loading")
+                    }
+                }
+            }
+        }else{
+            orders.postValue("0,0,0,0")
+        }
+    }
+
     private fun sendObjectToDetailsScreen(objectString: String) {
         _navigateToDetails.postValue(Event(Pair(objectString, true)))
     }
+
     fun getWishLis(): LiveData<List<Product>> {
         return productFlowData
     }
