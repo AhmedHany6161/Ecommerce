@@ -15,26 +15,15 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.iti.team.ecommerce.databinding.FragmentCheckoutBinding
-import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsArgs
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsViewModel
-import com.iti.team.ecommerce.utils.Json
 import com.iti.team.ecommerce.utils.PaymentsUtil
-import com.iti.team.ecommerce.utils.microsToString
 import kotlinx.android.synthetic.main.fragment_checkout.*
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import kotlin.math.roundToLong
 
 class Payment: Fragment() {
     private lateinit var binding:FragmentCheckoutBinding
     private lateinit var paymentsClient: PaymentsClient
-    //private val shippingCost = (90 * 1000000).toLong()
     private val args:PaymentArgs by navArgs()
-
-    private lateinit var garmentList: JSONArray
-    private lateinit var selectedGarment: JSONObject
 
 
     private val viewModel by lazy {
@@ -51,12 +40,11 @@ class Payment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentCheckoutBinding.inflate(inflater)
         // Set up the mock information for our item in the UI.
-        selectedGarment = fetchRandomGarment()
-        displayGarment(selectedGarment)
+
         Log.i("args",args.totalPrice)
 
         // Initialize a Google Pay API client for an environment suitable for testing.
@@ -66,7 +54,7 @@ class Payment: Fragment() {
 
         binding.googlePayButton.layout.setOnClickListener {
             Log.i("googlePayButton","clicked")
-            requestPayment()
+            requestPayment(viewModel.getPrice())
         }
 
         init()
@@ -76,6 +64,7 @@ class Payment: Fragment() {
 
     private fun init(){
         binding.viewModel = viewModel
+        viewModel.getOrdersData(args.totalPrice,args.orderListString)
 
         observeData()
     }
@@ -130,23 +119,19 @@ class Payment: Fragment() {
             Toast.makeText(
                 context,
                 "Unfortunately, Google Pay is not available on this device",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun requestPayment() {
+    private fun requestPayment(price:String) {
 
         // Disables the button to prevent multiple clicks.
         googlePayButton.isClickable = false
 
         // The price provided to the API should include taxes and shipping.
         // This price is not displayed to the user.
-//        val garmentPriceMicros = (selectedGarment.getDouble("price") * 1000000).roundToLong()
-//        val price = (garmentPriceMicros + shippingCost).microsToString()
-//        Log.i("price",price)
-//        Log.i("price",shippingCost.toString())
 
-        val price = (1.0).toString()
+
         val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(price)
         if (paymentDataRequestJson == null) {
             Log.e("RequestPayment", "Can't fetch payment data request")
@@ -183,6 +168,7 @@ class Payment: Fragment() {
                         data?.let { intent ->
                             PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
                             Log.i("googlePayButton","RESULT_OK")
+                            viewModel.addOrder("paid")
                         }
                         Log.i("onActivityResult","success")
                     }
@@ -269,16 +255,4 @@ class Payment: Fragment() {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 
-    private fun fetchRandomGarment() : JSONObject {
-        if (!::garmentList.isInitialized) {
-            garmentList = Json.readFromResources(requireActivity(), com.iti.team.ecommerce.R.raw.row)
-        }
-
-        val randomIndex:Int = Math.round(Math.random() * (garmentList.length() - 1)).toInt()
-        return garmentList.getJSONObject(randomIndex)
-    }
-
-    private fun displayGarment(garment:JSONObject) {
-
-    }
 }

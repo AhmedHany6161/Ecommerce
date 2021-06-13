@@ -205,7 +205,8 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
                         product?.title ?: "",
                         it,
                         product?.vendor ?: "",
-                        (product?.variants?.get(0)?.price ?: "")
+                        (product?.variants?.get(0)?.price ?: ""),
+                        variant_id = product?.variants?.get(0)?.id ?:0
                     )
                 }?.let {
                     modelRepository.addToCart(

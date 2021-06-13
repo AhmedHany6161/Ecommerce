@@ -2,25 +2,31 @@ package com.iti.team.ecommerce.ui.payment
 
 import android.app.Application
 import android.graphics.Color
-import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.utils.Constants
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Types
 
 class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     val  modelRepository: ModelRepository =
         ModelRepository(null,application)
+
+    private var subTotalPrice: String? = ""
+    private var productList:List<Product> = ArrayList()
+    private var totalPrice: Double? = 0.0
+    private var orderWithDiscount = false
 
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
     private var _discountVisibility = MutableLiveData<Int>()
@@ -28,6 +34,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var _applyVisibility = MutableLiveData<Int>()
     private var _couponText = MutableLiveData<String>()
     private var _couponTextColor = MutableLiveData<Int>()
+    private var _subTotalText = MutableLiveData<String>()
+    private var _discountText = MutableLiveData<String>()
+    private var _totalText = MutableLiveData<String>()
 
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
@@ -47,10 +56,18 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     val couponTextColor: LiveData<Int>
         get() = _couponTextColor
 
+    val subTotalText: LiveData<String>
+        get() = _subTotalText
+    val discountText: LiveData<String>
+        get() = _discountText
+    val totalText: LiveData<String>
+        get() = _totalText
+
     init {
         _discountVisibility.postValue(View.GONE)
         _loadingVisibility.postValue(View.GONE)
         _couponTextColor.postValue(Color.BLACK)
+       // calDiscount()
     }
 
     fun getDiscount(discountId: Long){
@@ -61,6 +78,8 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
                     _discountVisibility.postValue(View.VISIBLE)
                     _loadingVisibility.postValue(View.GONE)
                     _applyVisibility.postValue(View.VISIBLE)
+                    calDiscount()
+                    orderWithDiscount = true
                 }
 
                 is Result.Error ->{
@@ -75,18 +94,39 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     }
 
-    fun addOrder() {
-        val lineItems = listOf(LineItems(39853312639174, 1))
+    fun addOrder(financialStatus:String) {
+        val addOrderModel:AddOrderModel
+        if (orderWithDiscount){
+            val lineItems:MutableList<LineItems> = mutableListOf()
+            for (i in productList){
+               val item = LineItems(i.variant_id, i.count.toLong())
+                lineItems.add(item)
+            }
+            val discountCodes = listOf(DiscountCodes("SUMMERSALE10OFF", "10.0"))
+            val order = SendedOrder(
+                email = "email@email.com",
+                lineItems = lineItems,
+                financialStatus = financialStatus,
+                discountCodes = discountCodes
+            )
 
-        val discountCodes = listOf(DiscountCodes("FAKE30", "10.0"))
-        val order = SendedOrder(
-            email = "tttt@tes.com",
-            lineItems = lineItems,
-            financialStatus = "paid",
-            discountCodes = discountCodes
-        )
+            addOrderModel = AddOrderModel(order)
+        }else{
 
-        val addOrderModel = AddOrderModel(order)
+            val lineItems:MutableList<LineItems> = mutableListOf()
+            for (i in productList){
+                val item = LineItems(i.variant_id, i.count.toLong())
+                lineItems.add(item)
+            }
+            val order = SendedOrder(
+                email = "email@email.com",
+                lineItems = lineItems,
+                financialStatus = financialStatus
+            )
+
+            addOrderModel = AddOrderModel(order)
+        }
+
 
        viewModelScope.launch(Dispatchers.IO) {
            when (val result = modelRepository.addOrder(order = addOrderModel)) {
@@ -127,8 +167,34 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     }
 
     fun cashOnDeliveryClicked(){
-
         Log.i("PaymentViewModel","cashOnDeliveryClicked")
+        addOrder("authorized")
     }
+
+    fun getOrdersData(totalPrice:String,ordersListString:String){
+        Log.i("getOrdersData","${convertStringToList(ordersListString)}")
+        convertStringToList(ordersListString)
+        _subTotalText.postValue("EGP $totalPrice")
+        _totalText.postValue("EGP $totalPrice")
+        subTotalPrice = totalPrice
+
+    }
+
+    private fun convertStringToList(productObject:String):List<Product>{
+        val productListType = Types.newParameterizedType(List::class.java, Product::class.java)
+        val adapterProductList: JsonAdapter<List<Product>> = Constants.moshi.adapter(productListType)
+        productList = adapterProductList.fromJson(productObject)?: listOf()
+        return productList
+    }
+
+    private fun calDiscount(){
+        val discount = (subTotalPrice?.toDouble()?.div(100.0f))?.times(10)
+        Log.i("getOrdersData","$discount")
+         totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
+        _discountText.postValue("EGP $discount")
+        _totalText.postValue("EGP $totalPrice")
+    }
+
+     fun getPrice():String = totalPrice.toString()
 
 }

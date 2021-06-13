@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.shop_bag
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,9 +70,9 @@ class ShoppingPageFragment: Fragment() {
                 binding.emptystatusImg.visibility = View.VISIBLE
                 binding.txtEmpty.visibility = View.VISIBLE
                 binding.cheakoutBtn.text="SHOP NOW"
-                 it?.let {  productList = it }
                 // Toast.makeText(this, "no data: ", Toast.LENGTH_LONG).show()
             } else {
+                it?.let {  productList = it }
                 binding.emptystatusImg.visibility = View.INVISIBLE
                 binding.txtEmpty.visibility = View.INVISIBLE
                 binding.cheakoutBtn.text="CHECKOUT"

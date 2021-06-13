@@ -142,7 +142,8 @@
                         android:text="@string/apply"
                         android:textSize="16sp"
                         android:textColor="@color/gray_black"
-                        app:layout_constraintEnd_toEndOf="@+id/view"/>
+                        app:layout_constraintEnd_toEndOf="@+id/view"
+                        mutableText="@{viewModel.subTotalText}"/>
                     <TextView
                         android:id="@+id/discount_text"
                         android:layout_width="wrap_content"
@@ -163,7 +164,8 @@
                         android:textSize="16sp"
                         android:textColor="@color/green"
                         app:layout_constraintEnd_toEndOf="@+id/view"
-                        mutableVisibility="@{viewModel.discountVisibility}"/>
+                        mutableVisibility="@{viewModel.discountVisibility}"
+                        mutableText="@{viewModel.discountText}"/>
 
                     <TextView
                         android:id="@+id/total_text"
@@ -183,7 +185,8 @@
                         android:text="@string/apply"
                         android:textSize="16sp"
                         android:textColor="@color/gray_black"
-                        app:layout_constraintEnd_toEndOf="@+id/view"/>
+                        app:layout_constraintEnd_toEndOf="@+id/view"
+                        mutableText="@{viewModel.totalText}"/>
 
 
                     <androidx.appcompat.widget.AppCompatButton
