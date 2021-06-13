@@ -1,9 +1,6 @@
 package com.iti.team.ecommerce.ui
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.navigation.NavController
@@ -14,8 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigation: MeowBottomNavigation
@@ -61,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.profileFragment)
+                    navController.navigate(R.id.registerFragment)
 
                 }
                 else->{

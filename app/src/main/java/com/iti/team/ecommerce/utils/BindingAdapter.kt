@@ -156,11 +156,12 @@ fun setMutableText(view: SearchView, @Nullable text: LiveData<String>?) {
 /**
  * Set [AppCompatEditText] text.
  */
-@BindingAdapter("mutableText", "mutableTextId", requireAll = false)
+@BindingAdapter("mutableText", "mutableTextId", "textColor",requireAll = false)
 fun setMutableText(
     view: AppCompatEditText,
     @Nullable text: LiveData<String>?,
-    @Nullable textId: LiveData<Int>?
+    @Nullable textId: LiveData<Int>?,
+    @Nullable color: LiveData<Int>?,
 ) {
     val parentActivity: AppCompatActivity? = view.getParentActivity()
 
@@ -171,6 +172,12 @@ fun setMutableText(
             textId.observe(
                 parentActivity,
                 Observer { value -> value?.let { view.setText(value) } })
+        }
+
+        color?.let {
+            color.observe(
+                parentActivity,
+                Observer { value -> value?.let { view.setTextColor(value) } })
         }
     }
 }

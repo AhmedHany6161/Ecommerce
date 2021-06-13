@@ -30,6 +30,8 @@ class RegisterFragment: Fragment() {
     ): View? {
         viewModel = RegisterViewModel(requireActivity().application)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        observeSuccessRigister()
+        observeShowError()
         return binding.root
     }
 
@@ -38,9 +40,9 @@ class RegisterFragment: Fragment() {
         binding.loginTxt.setOnClickListener(View.OnClickListener {
             navigateToLogin()
         })
-        binding.backToLogin.setOnClickListener(View.OnClickListener {
-            navigateToLogin()
-        })
+//        binding.backToLogin.setOnClickListener(View.OnClickListener {
+//            navigateToLogin()
+//        })
         binding.cirRegisterButton.setOnClickListener(View.OnClickListener {
             registerUser()
         })
@@ -48,7 +50,22 @@ class RegisterFragment: Fragment() {
             navigate()
         }
     }
-
+    private fun observeSuccessRigister(){
+        viewModel.successRegister.observe(viewLifecycleOwner,{
+            it?.let {
+                Toast.makeText(context, "successfully registered ", Toast.LENGTH_LONG).show()
+                navigate()
+            }
+        })
+    }
+    private fun observeShowError(){
+        viewModel.setError.observe(viewLifecycleOwner,{
+            it?.let {
+                Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
     private fun navigate() {
 //        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
 //        fragmentTransaction.replace(R.id.registerFragment,LoginFragment())
@@ -71,12 +88,6 @@ class RegisterFragment: Fragment() {
             && validateConfirmPass()&& validatePhoneNo() && validateEmail() ) {
             val customerModel= createCustomer()
             viewModel.createCustomer(customerModel)
-            Toast.makeText(context, "registerd", Toast.LENGTH_LONG).show()
-
-        }
-        else{
-            Toast.makeText(context, "not registerd", Toast.LENGTH_LONG).show()
-
         }
     }
     private fun validateFirstName(): Boolean {
@@ -121,8 +132,8 @@ class RegisterFragment: Fragment() {
         val passwordVal = "^" +  //"(?=.*[0-9])" +         //at least 1 digit
                 //"(?=.*[a-z])" +         //at least 1 lower case letter
                 //"(?=.*[A-Z])" +         //at least 1 upper case letter
-                "(?=.*[a-zA-Z])" +  //any letter
-                "(?=.*[@#$%^&+=])" +  //at least 1 special character
+             //   "(?=.*[a-zA-Z])" +  //any letter
+              //  "(?=.*[@#$%^&+=])" +  //at least 1 special character
                 "(?=\\S+$)" +  //no white spaces
                 ".{4,}"  //at least 4 characters
 //                "$"

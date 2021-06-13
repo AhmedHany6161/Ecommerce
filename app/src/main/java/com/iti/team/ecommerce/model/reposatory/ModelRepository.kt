@@ -296,6 +296,22 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
         sharedPreference.setLogin(login)
     }
 
+    override fun getDiscountId(): Long {
+       return sharedPreference.getDiscountId()
+    }
+
+    override fun setDiscount(id: Long) {
+        sharedPreference.setDiscountId(id)
+    }
+
+    override fun setAddress(address: String) {
+        sharedPreference.setAddress(address)
+    }
+
+    override fun getAddress(): String {
+        return sharedPreference.getAddress()
+    }
+
 
     override fun getAllWishListProducts(): Flow<List<Product>> =
         offlineDB?.getWishList() ?: flow { emit(listOf<Product>()) }
