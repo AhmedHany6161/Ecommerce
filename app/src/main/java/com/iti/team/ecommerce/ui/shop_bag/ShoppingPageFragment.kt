@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.shop_bag
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,62 +13,96 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.TypeConverter
 import com.iti.team.ecommerce.R
+import com.iti.team.ecommerce.databinding.FragmentShopBagBinding
+import com.iti.team.ecommerce.model.data_classes.Product
+import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.utils.Constants
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Types
+import kotlinx.android.synthetic.main.fragment_shop_bag.view.*
 
 class ShoppingPageFragment: Fragment() {
+
+    private lateinit var binding:FragmentShopBagBinding
+    val viewModel: ShoppingPageViewModel by viewModels()
+    private  var productList:List<Product> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_shop_bag, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.shop_bag_recycler)
-        val title: TextView = view.findViewById(R.id.textView)
-        val total_price :TextView = view.findViewById(R.id.price)
-        title.text = "Shopping Bag"
-        val cheak_Btn : Button = view.findViewById(R.id.cheakout_btn)
-        val favorite_image :ImageView = view.findViewById(R.id.favorite_image)
-        val viewModel: ShoppingPageViewModel by viewModels()
+        binding = FragmentShopBagBinding.inflate(inflater)
+        binding.textView.text = "Shopping Bag"
+
+        binding.viewModel = viewModel
         val shoppingPageAdapter = ShoppingPageAdapter(ArrayList(), viewModel,context)
-        setupShopListRecyclerView(recyclerView, shoppingPageAdapter)
+        setupShopListRecyclerView(shoppingPageAdapter)
         observeButtonBackClicked(viewModel)
         listForShopList(viewModel, shoppingPageAdapter)
-        ObserveData(viewModel, view)
-        viewModel.total_price().observe(this,{
-            total_price.text = "EGP ${viewModel.total}"
+        ObserveData(viewModel)
+        viewModel.total_price().observe(viewLifecycleOwner,{
+            binding.price.text = "EGP ${viewModel.total}"
         })
-        cheak_Btn.setOnClickListener {
+        binding.cheakoutBtn.setOnClickListener {
             if(viewModel.total ==0.0){
                 val action = ShoppingPageFragmentDirections.actionFromShopBagToShopFragment()
                 findNavController().navigate(action)
             }else{
-                //navigate to order
+                val action = ShoppingPageFragmentDirections.
+                actionShoppingPageFragmentToPayment(viewModel.total.toString(),"")
+                findNavController().navigate(action)
             }
         }
-        favorite_image.setOnClickListener {
+        binding.favoriteImage.setOnClickListener {
             val action = ShoppingPageFragmentDirections.actionFromShopBagToWishlist()
             findNavController().navigate(action)
         }
 
-        return view
+        return binding.root
     }
 
-    private fun ObserveData(viewModel: ShoppingPageViewModel ,view: View){
-        val empty :ImageView = view.findViewById(R.id.emptystatus_img)
-        val empty_txt :TextView =view.findViewById(R.id.txt_empty)
-        val cheak_Btn : Button = view.findViewById(R.id.cheakout_btn)
+    private fun ObserveData(viewModel: ShoppingPageViewModel){
         viewModel.getCardList().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
-                empty.visibility = View.VISIBLE
-                empty_txt.visibility = View.VISIBLE
-                cheak_Btn.text="SHOP NOW"
+                binding.emptystatusImg.visibility = View.VISIBLE
+                binding.txtEmpty.visibility = View.VISIBLE
+                binding.cheakoutBtn.text="SHOP NOW"
                 // Toast.makeText(this, "no data: ", Toast.LENGTH_LONG).show()
             } else {
-                empty.visibility = View.INVISIBLE
-                empty_txt.visibility = View.INVISIBLE
-                cheak_Btn.text="CHECKOUT"
+                it?.let {  productList = it }
+                binding.emptystatusImg.visibility = View.INVISIBLE
+                binding.txtEmpty.visibility = View.INVISIBLE
+                binding.cheakoutBtn.text="CHECKOUT"
             }
         }
+        observeCheckoutButton()
+
+    }
+
+    private fun observeCheckoutButton(){
+        viewModel.buttonCheckoutClicked.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                if(viewModel.total ==0.0){
+                    val action = ShoppingPageFragmentDirections.actionFromShopBagToShopFragment()
+                    findNavController().navigate(action)
+                }else{
+                    val action = ShoppingPageFragmentDirections.
+                    actionShoppingPageFragmentToPayment(viewModel.total.toString(),convertObjectToString(productList))
+                    findNavController().navigate(action)
+                }
+
+            }
+        })
+
+    }
+
+    private fun convertObjectToString(productObject: List<Product>):String{
+         val productListType = Types.newParameterizedType(List::class.java, Product::class.java)
+         val adapterProductList: JsonAdapter<List<Product>> = Constants.moshi.adapter(productListType)
+        return adapterProductList.toJson(productObject)
 
     }
 
@@ -88,13 +123,12 @@ class ShoppingPageFragment: Fragment() {
     }
 
     private fun setupShopListRecyclerView(
-        recyclerView: RecyclerView,
         adapter: ShoppingPageAdapter
     ) {
         val gridLayoutManager = GridLayoutManager(context, 1)
         gridLayoutManager.orientation = GridLayoutManager.VERTICAL
-        recyclerView.layoutManager = gridLayoutManager
-        recyclerView.adapter = adapter
+        binding.shopBagRecycler.layoutManager = gridLayoutManager
+        binding.shopBagRecycler.adapter = adapter
     }
 
     private fun observeButtonBackClicked(viewModel: ShoppingPageViewModel){

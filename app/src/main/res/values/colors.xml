@@ -18,6 +18,9 @@
     <color name="dark_white">#f5f5f5</color>
     <color name="transparent">#11000000</color>
     <color name="red">#ff5252</color>
+    <color name="green">#00FF33</color>
+    <color name="black_gray">#181818</color>
+    <color name="gray_black">#282828</color>
 
     <!--    wesam-->
 

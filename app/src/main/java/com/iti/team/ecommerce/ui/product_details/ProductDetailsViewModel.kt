@@ -11,8 +11,8 @@ import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
-import com.iti.team.ecommerce.utils.moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -86,8 +86,10 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun convertStringToObject(productObject: String){
-        val productAdapter = moshi.adapter(Products::class.java)
+
+        val productAdapter = Constants.moshi.adapter(Products::class.java)
         product = productAdapter.fromJson(productObject)
+
         updateProduct(product)
     }
 
@@ -203,7 +205,8 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
                         product?.title ?: "",
                         it,
                         product?.vendor ?: "",
-                        (product?.variants?.get(0)?.price ?: "")
+                        (product?.variants?.get(0)?.price ?: ""),
+                        variant_id = product?.variants?.get(0)?.id ?:0
                     )
                 }?.let {
                     modelRepository.addToCart(
