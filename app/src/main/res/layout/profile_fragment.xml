@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/setting_of_the_app"
+                android:clickable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintEnd_toStartOf="@+id/profile_shop_cart"

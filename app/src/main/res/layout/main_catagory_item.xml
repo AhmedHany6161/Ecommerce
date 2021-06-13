@@ -14,7 +14,7 @@
             android:textSize="15sp"
             android:layout_margin="8dp"
             android:text="cairo"
-            android:textColor="@color/gray"
+            android:textColor="@color/register_bk_color"
             />
 
 
