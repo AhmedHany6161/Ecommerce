@@ -219,8 +219,9 @@
     <string name="register_Street_hint">Street</string>
     <string name="setting_of_the_app">Setting of the app</string>
     <string name="shopping_cart">shopping cart</string>
-
     <string name="go_to_cart">Go to Cart</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
 
     <!--    nermeen-->
 </resources>

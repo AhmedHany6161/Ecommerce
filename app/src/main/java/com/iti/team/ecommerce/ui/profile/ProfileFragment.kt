@@ -1,12 +1,16 @@
 package com.iti.team.ecommerce.ui.profile
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,15 +21,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.R
+import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
+import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
 import com.iti.team.ecommerce.ui.MainActivity
 
-class ProfileFragment : Fragment() {
+
+class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
 
 
     private lateinit var email: TextView
     private lateinit var pleaseLogin: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var showAll: Button
+    private lateinit var profile_setting: ImageView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +51,11 @@ class ProfileFragment : Fragment() {
 
         email = view.findViewById(R.id.profile_email)
         pleaseLogin = view.findViewById(R.id.profile_please_login)
+        profile_setting = view.findViewById(R.id.profile_setting)
+        profile_setting.setOnClickListener({
+            showPopup(it)
+        })
+
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
         setupWishListRecyclerView(wishListAdapter)
@@ -58,6 +71,18 @@ class ProfileFragment : Fragment() {
         navigateToOrders(showAllOrders, viewModel)
         return view
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+           R.id.edit_profile_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT)
+                    .show()
+                navigateToEditProfile()
+            }
+            R.id.logout_item -> logout()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun navigateToOrders(showAllOrders: TextView, viewModel: ProfileViewModel) {
         showAllOrders.setOnClickListener {
@@ -181,6 +206,40 @@ class ProfileFragment : Fragment() {
         recyclerView.adapter = adapter
     }
 
+    private fun showPopup(view: View) {
+        val popup = context?.let { PopupMenu(it, view) }
+        if (popup != null) {
+            popup.inflate(R.menu.setting_menu)
+            popup.show()
+            popup.setOnMenuItemClickListener(this)
 
+        }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.getItemId()) {
+            R.id.edit_profile_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
+                navigateToEditProfile()
+                return true
+            }
+            R.id.logout_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
+                logout()
+                return true
+            }
+            else->{
+                return false
+            }
+        }
+    }
+
+    private fun logout() {
+
+    }
+
+    private fun navigateToEditProfile() {
+   //     findNavController().navigate(R.id.loginFragment)
+    }
 
 }

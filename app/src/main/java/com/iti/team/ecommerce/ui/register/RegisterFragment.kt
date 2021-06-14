@@ -60,6 +60,7 @@ class RegisterFragment: Fragment() {
     }
     private fun observeShowError(){
         viewModel.setError.observe(viewLifecycleOwner,{
+            Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
             it?.let {
                 Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
