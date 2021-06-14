@@ -97,7 +97,6 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
 //        productTypeSet.add("t-shirts")
 //        productTypeSet.add("shoes")
 //        productTypeSet.add("accessories")
-       modelRepository.setLogin(true)
     }
 
     private fun createDiscount(discount:Discount){
@@ -105,6 +104,7 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
             when(val result = modelRepository.createDiscount(discount)){
                 is Result.Success->{
                     Log.i("createDiscount:", "${result.data}")
+                    result.data?.discount?.id?.let { modelRepository.setDiscount(it) }
                     _copyIcon.postValue(View.VISIBLE)
                     showHideItems(View.GONE)
                     _dialogImage.postValue(R.drawable.ic_gift_box)
@@ -132,20 +132,6 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
 
     }
 
-    fun getDiscount(discountId: Long){
-
-        viewModelScope.launch(Dispatchers.IO)  {
-            when(val result = modelRepository.getDiscount(discountId)){
-                is Result.Success->{
-                    Log.i("getDiscount:", "${result.data?.discount?.title}")}
-                is Result.Error ->{
-                    Log.e("getDiscount:", "${result.exception.message}")}
-                is Result.Loading ->{
-                    Log.i("getDiscount","Loading")}
-            }
-        }
-
-    }
 
     fun smartCollection(){
 

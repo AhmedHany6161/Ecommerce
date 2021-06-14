@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+        name="viewModel"
+        type="com.iti.team.ecommerce.ui.shop_bag.ShoppingPageViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_arrow_back"
+            android:backgroundTint="@color/gray"
+            android:onClick="@{()->viewModel.backButtonClicked()}" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textColor="#CC8F8F8F"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/favorite_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight= "16dp"
+            android:src="@drawable/ic_favorite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/emptystatus_img"
+            android:layout_width="155dp"
+            android:layout_height="131dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="112dp"
+            android:foregroundGravity="center_vertical"
+            android:padding="20dp"
+            android:src="@drawable/ic_shopping"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/txt_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your bag is empty"
+            android:textSize="@dimen/headerTextSize"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/emptystatus_img"
+            app:layout_constraintStart_toStartOf="@+id/emptystatus_img"
+            app:layout_constraintTop_toBottomOf="@+id/emptystatus_img" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shop_bag_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/gray1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:listitem="@layout/shop_bag_item" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/checkout_card"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:cardCornerRadius="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shop_bag_recycler" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/checkout_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="544dp"
+                    android:layout_marginEnd="5dp"
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:text="Price"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/total"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:text="Total: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/cheakout_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/checkout"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/price"
+                    android:onClick="@{()->viewModel.buttonCheckoutClicked()}"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

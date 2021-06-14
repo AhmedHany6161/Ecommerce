@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_swipe_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F1F1F1"
-    tools:context=".ui.profile.ProfileFragment">
+    android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:elevation="100dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:background="#F1F1F1"
         tools:context=".ui.profile.ProfileFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="100dp"
+            app:cardCornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".ui.profile.ProfileFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="10dp"
-                android:contentDescription="@string/shopping_cart"
+                android:contentDescription="@string/shop_cart"
                 android:padding="10dp"
                 android:src="@drawable/ic__shopping_cart"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,13 +108,13 @@
 
 
             <TextView
-                android:id="@+id/profile_processing"
+                android:id="@+id/profile_pending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="30dp"
                 android:text="0"
-                app:layout_constraintStart_toEndOf="@+id/profile_return"
+                app:layout_constraintStart_toEndOf="@+id/profile_refund"
                 app:layout_constraintTop_toBottomOf="@+id/profile_MyOrder" />
 
             <TextView
@@ -135,7 +139,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profile_MyOrder" />
 
             <TextView
-                android:id="@+id/profile_shipped"
+                android:id="@+id/profile_paid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
@@ -145,13 +149,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/profile_MyOrder" />
 
             <TextView
-                android:id="@+id/profile_return"
+                android:id="@+id/profile_refund"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="30dp"
                 android:text="0"
-                app:layout_constraintStart_toEndOf="@+id/profile_shipped"
+                app:layout_constraintStart_toEndOf="@+id/profile_paid"
                 app:layout_constraintTop_toBottomOf="@+id/profile_MyOrder" />
 
             <TextView
@@ -182,30 +186,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/shipped"
-                app:layout_constraintEnd_toEndOf="@+id/profile_shipped"
-                app:layout_constraintStart_toStartOf="@+id/profile_shipped"
-                app:layout_constraintTop_toBottomOf="@+id/profile_shipped" />
+                android:text="@string/paid"
+                app:layout_constraintEnd_toEndOf="@+id/profile_paid"
+                app:layout_constraintStart_toStartOf="@+id/profile_paid"
+                app:layout_constraintTop_toBottomOf="@+id/profile_paid" />
 
             <TextView
                 android:id="@+id/profile_return_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/return_ss"
-                app:layout_constraintEnd_toEndOf="@+id/profile_return"
-                app:layout_constraintStart_toStartOf="@+id/profile_return"
-                app:layout_constraintTop_toBottomOf="@+id/profile_return" />
+                android:text="@string/refunded"
+                app:layout_constraintEnd_toEndOf="@+id/profile_refund"
+                app:layout_constraintStart_toStartOf="@+id/profile_refund"
+                app:layout_constraintTop_toBottomOf="@+id/profile_refund" />
 
             <TextView
                 android:id="@+id/profile_processing_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/processing"
-                app:layout_constraintEnd_toEndOf="@+id/profile_processing"
-                app:layout_constraintStart_toStartOf="@+id/profile_processing"
-                app:layout_constraintTop_toBottomOf="@+id/profile_processing" />
+                android:text="@string/pending"
+                app:layout_constraintEnd_toEndOf="@+id/profile_pending"
+                app:layout_constraintStart_toStartOf="@+id/profile_pending"
+                app:layout_constraintTop_toBottomOf="@+id/profile_pending" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -267,4 +271,5 @@
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

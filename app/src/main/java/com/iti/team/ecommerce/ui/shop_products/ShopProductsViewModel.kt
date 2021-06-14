@@ -9,8 +9,8 @@ import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
-import com.iti.team.ecommerce.utils.moshi
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -97,8 +97,9 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     private fun convertObjectToString(productObject: Products){
         val inWish = productObject.productId?.let { inWishList(it) }
-        val adapterCurrent: JsonAdapter<Products?> = moshi.adapter(Products::class.java)
+        val adapterCurrent: JsonAdapter<Products?> = Constants.moshi.adapter(Products::class.java)
         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject),inWish)
+
     }
 
 

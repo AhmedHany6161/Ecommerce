@@ -18,6 +18,9 @@
     <color name="dark_white">#f5f5f5</color>
     <color name="transparent">#11000000</color>
     <color name="red">#ff5252</color>
+    <color name="green">#00FF33</color>
+    <color name="black_gray">#181818</color>
+    <color name="gray_black">#282828</color>
 
     <!--    wesam-->
 
@@ -25,6 +28,7 @@
     <color name="darkTextColor">#020000</color>
     <color name="primaryTextColor">#11CFC5</color>
     <color name="whiteTextColor">#fff</color>
+    <color name="gray1">#CCE8E8E8</color>
     <!--  norhan-->
 
     <!--   nermeen-->

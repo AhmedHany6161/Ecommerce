@@ -296,6 +296,30 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
         sharedPreference.setLogin(login)
     }
 
+    override fun getDiscountId(): Long {
+       return sharedPreference.getDiscountId()
+    }
+
+    override fun setDiscount(id: Long) {
+        sharedPreference.setDiscountId(id)
+    }
+
+    override fun setAddress(address: String) {
+        sharedPreference.setAddress(address)
+    }
+
+    override fun getAddress(): String {
+        return sharedPreference.getAddress()
+    }
+
+    override fun setEmail(email: String) {
+        sharedPreference.setEmail(email)
+    }
+
+    override fun getEmail(): String {
+        return sharedPreference.getEmail()
+    }
+
 
     override fun getAllWishListProducts(): Flow<List<Product>> =
         offlineDB?.getWishList() ?: flow { emit(listOf<Product>()) }
@@ -332,6 +356,12 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
         val product = offlineDB?.getById(id)
         if (product != null) {
             offlineDB?.removeFromCart(product)
+        }
+    }
+    override suspend fun removeFromCartbycount(id: Long) {
+        val product = offlineDB?.getById(id)
+        if (product != null) {
+            offlineDB?.removeFromCartbycount(product)
         }
     }
 
