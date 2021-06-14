@@ -87,7 +87,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun checkOrders() {
         if (modelRepository.isLogin()) {
             viewModelScope.launch(Dispatchers.IO) {
-                when (val result = modelRepository.getOrders("fayzaahmed978@gmail.com")) {
+                when (val result = modelRepository.getOrders(modelRepository.getEmail())) {
                     is Result.Success -> {
                         var unPaid = 0
                         var paid = 0

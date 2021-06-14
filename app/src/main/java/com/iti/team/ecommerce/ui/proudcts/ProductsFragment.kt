@@ -23,7 +23,9 @@ import com.iti.team.ecommerce.ui.MainActivity
 
 class ProductsFragment : Fragment() {
 
-    private val arg:ProductsFragmentArgs by navArgs()
+    private val arg: ProductsFragmentArgs by navArgs()
+    private val viewModel: ProductsViewModel by viewModels()
+    private lateinit var profile: LottieAnimationView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,29 +37,31 @@ class ProductsFragment : Fragment() {
         val search: SearchView = view.findViewById(R.id.product_search)
         val title: TextView = view.findViewById(R.id.textView)
         val back: ImageView = view.findViewById(R.id.product_back)
-
-        val profile: LottieAnimationView = view.findViewById(R.id.shapeableImageView)
+        profile = view.findViewById(R.id.shapeableImageView)
         title.text = arg.productType
-        val viewModel: ProductsViewModel by viewModels()
-        val productAdapter = ProductAdapter(ArrayList(), viewModel)
-        val brandAdapter = BrandAdapter(ArrayList(), viewModel)
+        val productAdapter = ProductAdapter(ArrayList(),viewModel)
+        val brandAdapter = BrandAdapter(ArrayList(),viewModel)
         setupProductRecyclerView(productRecyclerView, productAdapter)
         setupBrandRecyclerView(brandRecyclerView, brandAdapter)
-        listeningForProducts(viewModel, productAdapter)
-        setupSearch(search, viewModel)
-        listeningForBrand(viewModel, brandAdapter)
+        listeningForProducts( productAdapter)
+        setupSearch(search)
+        listeningForBrand(brandAdapter)
         viewModel.getProductsFromType(arg.productType)
-        listeningForLoginState(viewModel, profile)
-        navigateToProfile(profile)
+        navigateToProfile()
         listingToBack(back)
-        listingToAddCart(viewModel)
-        listeningForNavigate(viewModel)
+        listingToAddCart()
+        listeningForNavigate()
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
+        viewModel.navigateToLogin.observe(viewLifecycleOwner, {
+            if (it) {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        })
         return view
     }
 
-    private fun navigateToProfile(profile: LottieAnimationView) {
+    private fun navigateToProfile() {
         profile.setOnClickListener {
             findNavController().popBackStack()
             findNavController().navigate(R.id.profileFragment)
@@ -70,16 +74,13 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun listingToAddCart(viewModel: ProductsViewModel) {
+    private fun listingToAddCart() {
         viewModel.addToCart.observe(viewLifecycleOwner, {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
     }
 
-    private fun listeningForLoginState(
-        viewModel: ProductsViewModel,
-        profile: LottieAnimationView
-    ) {
+    private fun listeningForLoginState() {
 
         if (viewModel.getLogInState()) {
             profile.setAnimation(R.raw.login_profile)
@@ -91,11 +92,11 @@ class ProductsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = true
+        listeningForLoginState()
     }
 
 
     private fun listeningForBrand(
-        viewModel: ProductsViewModel,
         brandAdapter: BrandAdapter
     ) {
         viewModel.getBrandData().observe(viewLifecycleOwner, {
@@ -105,7 +106,6 @@ class ProductsFragment : Fragment() {
     }
 
     private fun listeningForProducts(
-        viewModel: ProductsViewModel,
         adapter: ProductAdapter
     ) {
         viewModel.getProductsData().observe(viewLifecycleOwner, {
@@ -115,7 +115,6 @@ class ProductsFragment : Fragment() {
     }
 
     private fun listeningForNavigate(
-        viewModel: ProductsViewModel
     ) {
         viewModel.navigateToDetails.observe(viewLifecycleOwner, {
            it.getContentIfNotHandled()?.let {it1->
@@ -145,7 +144,6 @@ class ProductsFragment : Fragment() {
 
     private fun setupSearch(
         search: SearchView,
-        viewModel: ProductsViewModel
     ) {
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

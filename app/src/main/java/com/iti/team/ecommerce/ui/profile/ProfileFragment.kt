@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isGone
@@ -15,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
-import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
@@ -26,37 +26,51 @@ class ProfileFragment : Fragment() {
     private lateinit var pleaseLogin: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var showAll: Button
+    private lateinit var showAllOrders: TextView
+    private lateinit var profile: LottieAnimationView
+    private lateinit var cart: ImageView
+    private val viewModel: ProfileViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.profile_fragment, container, false)
         recyclerView = view.findViewById(R.id.profile_wishlist)
-        val profile: LottieAnimationView = view.findViewById(R.id.profile_image)
+        profile = view.findViewById(R.id.profile_image)
         showAll = view.findViewById(R.id.profile_show_all_wish)
         val refresh: SwipeRefreshLayout = view.findViewById(R.id.profile_swipe_refresh)
         val unpaid: TextView = view.findViewById(R.id.profile_unpaid)
         val paid: TextView = view.findViewById(R.id.profile_paid)
         val refund: TextView = view.findViewById(R.id.profile_refund)
         val pending: TextView = view.findViewById(R.id.profile_pending)
-        val showAllOrders: TextView = view.findViewById(R.id.profile_show_all_orders)
-
+        showAllOrders = view.findViewById(R.id.profile_show_all_orders)
         email = view.findViewById(R.id.profile_email)
+        cart = view.findViewById(R.id.profile_shop_cart)
         pleaseLogin = view.findViewById(R.id.profile_please_login)
-        val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
         setupWishListRecyclerView(wishListAdapter)
-        listForWishList(viewModel, wishListAdapter)
+        listForWishList(wishListAdapter)
         listeningForNavigate(viewModel)
-        listeningForLoginState(viewModel, profile)
-        listingForAddCart(viewModel)
+        listingForAddCart()
         navigateToWishList()
-        navigateToLogin(viewModel)
+        navigateToLogin()
         viewModel.checkOrders()
         swipToRefresh(refresh, viewModel)
-        listingForOrderChanges(viewModel, paid, unpaid, refund, pending, refresh)
+        listingForOrderChanges(paid, unpaid, refund, pending, refresh)
         navigateToOrders(showAllOrders, viewModel)
+        navigateToCart()
         return view
+    }
+
+    private fun navigateToCart() {
+        cart.setOnClickListener {
+            if (viewModel.getLogInState()) {
+                findNavController().navigate(R.id.shoppingPageFragment)
+            } else {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        }
     }
 
     private fun navigateToOrders(showAllOrders: TextView, viewModel: ProfileViewModel) {
@@ -79,7 +93,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun listingForOrderChanges(
-        viewModel: ProfileViewModel,
         paid: TextView,
         unpaid: TextView,
         refund: TextView,
@@ -102,7 +115,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun navigateToLogin(viewModel: ProfileViewModel) {
+    private fun navigateToLogin() {
         email.setOnClickListener {
             if (!viewModel.getLogInState()) {
                 findNavController().navigate(R.id.loginFragment)
@@ -116,14 +129,13 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun listingForAddCart(viewModel: ProfileViewModel) {
+    private fun listingForAddCart() {
         viewModel.addToCart.observe(viewLifecycleOwner, {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
     }
 
     private fun listForWishList(
-        viewModel: ProfileViewModel,
         wishListAdapter: ProfileWishAdapter
     ) {
         viewModel.getWishLis().observe(viewLifecycleOwner, {
@@ -143,8 +155,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun listeningForLoginState(
-        viewModel: ProfileViewModel,
-        profile: LottieAnimationView
     ) {
         if (viewModel.getLogInState()) {
             recyclerView.visibility = View.VISIBLE
@@ -152,11 +162,14 @@ class ProfileFragment : Fragment() {
             pleaseLogin.visibility = View.GONE
             email.text = "Hi , ${viewModel.getEmail()}"
             profile.setAnimation(R.raw.login_profile)
+            showAllOrders.visibility = View.VISIBLE
         } else {
             recyclerView.visibility = View.GONE
             showAll.visibility = View.GONE
             pleaseLogin.visibility = View.VISIBLE
             profile.setAnimation(R.raw.error_animation)
+
+            showAllOrders.visibility = View.GONE
         }
     }
 
@@ -170,6 +183,7 @@ class ProfileFragment : Fragment() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = false
         (activity as MainActivity).bottomNavigation.show(3)
+        listeningForLoginState()
 
     }
     private fun setupWishListRecyclerView(
