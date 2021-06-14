@@ -55,6 +55,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         profile_setting.setOnClickListener({
             showPopup(it)
         })
+
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
         setupWishListRecyclerView(wishListAdapter)
@@ -70,6 +71,18 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         navigateToOrders(showAllOrders, viewModel)
         return view
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+           R.id.edit_profile_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT)
+                    .show()
+                navigateToEditProfile()
+            }
+            R.id.logout_item -> logout()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun navigateToOrders(showAllOrders: TextView, viewModel: ProfileViewModel) {
         showAllOrders.setOnClickListener {
