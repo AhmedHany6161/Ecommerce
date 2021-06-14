@@ -56,9 +56,9 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         cart = view.findViewById(R.id.profile_shop_cart)
         pleaseLogin = view.findViewById(R.id.profile_please_login)
         profile_setting = view.findViewById(R.id.profile_setting)
-        profile_setting.setOnClickListener({
+        profile_setting.setOnClickListener {
             showPopup(it)
-        })
+        }
 
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
@@ -233,12 +233,10 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.getItemId()) {
             R.id.edit_profile_item -> {
-                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
                 navigateToEditProfile()
                 return true
             }
             R.id.logout_item -> {
-                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
                 logout()
                 return true
             }
@@ -249,7 +247,9 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
     }
 
     private fun logout() {
-
+        viewModel.logout()
+        findNavController().popBackStack()
+        findNavController().navigate(R.id.profileFragment)
     }
 
     private fun navigateToEditProfile() {

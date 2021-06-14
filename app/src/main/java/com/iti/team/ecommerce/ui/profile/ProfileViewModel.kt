@@ -133,7 +133,16 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun getWishLis(): LiveData<List<Product>> {
         return productFlowData
     }
+
     fun getEmail(): String {
         return modelRepository.getEmail()
+    }
+
+    fun logout() {
+        modelRepository.setLogin(false)
+        modelRepository.setEmail("")
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.reset()
+        }
     }
 }
