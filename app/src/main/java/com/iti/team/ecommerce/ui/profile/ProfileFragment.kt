@@ -25,7 +25,7 @@ import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
 import com.iti.team.ecommerce.ui.MainActivity
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
 
 
     private lateinit var email: TextView
@@ -71,14 +71,6 @@ class ProfileFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun logout() {
-    // val pref = PreferenceDataSource(MySharedPreference())
-
-    }
-
-    private fun navigateToEditProfile() {
-        findNavController().navigate(R.id.loginFragment)
-    }
 
     private fun navigateToWishList() {
         showAll.setOnClickListener {
@@ -170,7 +162,35 @@ class ProfileFragment : Fragment() {
         if (popup != null) {
             popup.inflate(R.menu.setting_menu)
             popup.show()
+            popup.setOnMenuItemClickListener(this)
+
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.getItemId()) {
+            R.id.edit_profile_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
+                navigateToEditProfile()
+                return true
+            }
+            R.id.logout_item -> {
+                Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT).show()
+                logout()
+                return true
+            }
+            else->{
+                return false
+            }
+        }
+    }
+
+    private fun logout() {
+
+    }
+
+    private fun navigateToEditProfile() {
+   //     findNavController().navigate(R.id.loginFragment)
     }
 
 }
