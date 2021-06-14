@@ -99,7 +99,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                                 "paid" -> {
                                     paid++;
                                 }
-                                "unpaid" -> {
+                                "voided" -> {
                                     unPaid++;
                                 }
                                 "refunded" -> {

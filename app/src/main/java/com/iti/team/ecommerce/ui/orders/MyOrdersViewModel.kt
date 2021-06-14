@@ -36,9 +36,13 @@ class MyOrdersViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun filterByStatus(status: String) {
+        var state = status
+        if (state == "unpaid"){
+            state = "voided"
+        }
         if (status != "all") {
             orders.postValue(data.filter {
-                it?.financialStatus == status
+                it?.financialStatus == state
             })
         } else {
             orders.postValue(data)
