@@ -22,7 +22,12 @@ class MyOrderAdapter(private var dataSet: List<Order?> ) :
         fun bind(item: Order?) {
             createdAt.text = item?.createdAt
             price.text = "Price : EGP ${item?.finalPrice}"
-            status.text = item?.financialStatus
+            status.text = if (item?.financialStatus == "voided") {
+                "unpaid"
+            } else {
+                item?.financialStatus
+            }
+
         }
     }
 

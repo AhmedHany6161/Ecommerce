@@ -20,7 +20,7 @@ class MyOrdersViewModel(application: Application) : AndroidViewModel(application
     private lateinit var data: List<Order?>
     fun getOrders() {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = modelRepository.getOrders("fayzaahmed978@gmail.com")) {
+            when (val result = modelRepository.getOrders(modelRepository.getEmail())) {
                 is Result.Success -> {
                     data = result.data?.order ?: listOf()
                     orders.postValue(data)
@@ -36,9 +36,13 @@ class MyOrdersViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun filterByStatus(status: String) {
+        var state = status
+        if (state == "unpaid"){
+            state = "voided"
+        }
         if (status != "all") {
             orders.postValue(data.filter {
-                it?.financialStatus == status
+                it?.financialStatus == state
             })
         } else {
             orders.postValue(data)

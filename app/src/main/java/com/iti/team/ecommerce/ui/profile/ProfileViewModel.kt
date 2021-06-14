@@ -87,7 +87,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun checkOrders() {
         if (modelRepository.isLogin()) {
             viewModelScope.launch(Dispatchers.IO) {
-                when (val result = modelRepository.getOrders("fayzaahmed978@gmail.com")) {
+                when (val result = modelRepository.getOrders(modelRepository.getEmail())) {
                     is Result.Success -> {
                         var unPaid = 0
                         var paid = 0
@@ -99,7 +99,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                                 "paid" -> {
                                     paid++;
                                 }
-                                "unpaid" -> {
+                                "voided" -> {
                                     unPaid++;
                                 }
                                 "refunded" -> {
@@ -133,7 +133,16 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun getWishLis(): LiveData<List<Product>> {
         return productFlowData
     }
+
     fun getEmail(): String {
         return modelRepository.getEmail()
+    }
+
+    fun logout() {
+        modelRepository.setLogin(false)
+        modelRepository.setEmail("")
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.reset()
+        }
     }
 }
