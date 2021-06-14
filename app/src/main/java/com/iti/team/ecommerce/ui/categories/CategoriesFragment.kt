@@ -62,6 +62,7 @@ class CategoriesFragment: Fragment() {
         observeToSearch()
         observeToDetails()
         observeLoading()
+        observeNavToLogin()
     }
     private fun observeMainCategoriesList(){
         viewModel.mainCategories.observe(viewLifecycleOwner,{
@@ -113,6 +114,13 @@ class CategoriesFragment: Fragment() {
     }
     private fun observeLoading(){
 
+    }
+    private fun observeNavToLogin(){
+        viewModel.navigateToLogin.observe(viewLifecycleOwner, { it ->
+            if(it) {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        })
     }
     companion object {
 
