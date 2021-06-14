@@ -136,4 +136,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun getEmail(): String {
         return modelRepository.getEmail()
     }
+    fun logout() {
+        if(modelRepository.isLogin())
+          modelRepository.setLogin(false)
+    }
 }
