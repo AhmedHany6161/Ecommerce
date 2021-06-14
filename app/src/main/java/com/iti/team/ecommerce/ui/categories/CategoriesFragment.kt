@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentCategoriesBinding
 import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
@@ -43,6 +44,9 @@ class CategoriesFragment: Fragment() {
         binding.productsRecycle.layoutManager = GridLayoutManager(context,2)
         binding.accessoryTxt.setOnClickListener{
            viewModel.getProductFromType("ACCESSORIES")
+//            binding.accessoryTxt.setTextColor(getResources().getColor(R.color.register_bk_color))
+//            binding.tShirtTxt.setTextColor(getResources().getColor(R.color.gray))
+//            binding.shoesTxt.setTextColor(getResources().getColor(R.color.gray))
         }
         binding.shoesTxt.setOnClickListener{
             viewModel.getProductFromType("SHOES")

@@ -3,7 +3,9 @@ package com.iti.team.ecommerce.ui.categories
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.MainCatagoryItemBinding
 import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.model.data_classes.SmartCollection
@@ -33,6 +35,7 @@ class MainCategoriesAdapter
         holder.binding.mainCatagoryTitleTxt.setOnClickListener {
             mainCatagoriesList[position].collectionsId?.let { it1 ->
                 mainCatagoriesViewModel.getProductsById(it1)
+                //holder.binding.mainCatagoryTitleTxt.setTextColor(ContextCompat.getColor(context!!,R.color.register_bk_color))
             }
             true
         }
