@@ -45,5 +45,35 @@ class PreferenceDataSource(private val sharedPreference: MySharedPreference):Pre
         return sharedPreference.getString(ADDRESS_KEY)
     }
 
+    override fun setFirstName(f_name: String) {
+        sharedPreference.setString(UserName_KEY, f_name)
+    }
 
+    override fun getFirstName(): String {
+        return sharedPreference.getString(UserName_KEY)
+    }
+
+    override fun setLastName(l_name: String) {
+        sharedPreference.setString(LAST_KEY, l_name)
+    }
+
+    override fun getLastName(): String {
+        return sharedPreference.getString(LAST_KEY)
+    }
+
+    override fun setPhoneNum(phone: String) {
+        sharedPreference.setString(PHONE_KEY, phone)
+    }
+
+    override fun getPhoneNum(): String {
+        return sharedPreference.getString(PHONE_KEY)
+    }
+
+    override fun setCustomerID(customer_id: Long) {
+        sharedPreference.setLong(CUSTOMER_ID, customer_id)
+    }
+
+    override fun getCustomerID(): Long {
+        return sharedPreference.getLong(CUSTOMER_ID)
+    }
 }

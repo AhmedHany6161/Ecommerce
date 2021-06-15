@@ -195,7 +195,7 @@
     <string name="facebook_application_id">2968165746788869</string>
 
     <string name="shop_bag">Shopping Bag</string>
-    <string name="dialog_wishList">Are you sure moving the product to wishlist from shopping bag? </string>
+    <string name="dialog_wishList">Are you sure adding the product to wishlist ? </string>
     <string name="yes">YES</string>
     <string name="no">No</string>
     <string name="dialog_delete">Are you sure to delete this item? </string>
@@ -222,6 +222,12 @@
     <string name="go_to_cart">Go to Cart</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Logout</string>
-
+    <string name="setting">Setting</string>
+    <string name="addressBook">Address Book</string>
+    <string name="country">Country</string>
+    <string name="egypt">Egypt</string>
+    <string name="egp">EGP</string>
+    <string name="aboutUs">About Us</string>
+    <string name="rating">Rating/feedback</string>
     <!--    nermeen-->
 </resources>

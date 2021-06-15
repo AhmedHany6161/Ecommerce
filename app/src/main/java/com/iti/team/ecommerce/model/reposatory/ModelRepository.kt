@@ -189,9 +189,9 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
 
     override suspend fun updateCustomer(
         customerId: Long,
-        customer: CustomerModel
-    ): Result<CustomerModel?> {
-        var result:Result<CustomerModel?> = Result.Loading
+        customer: EditCustomerModel
+    ): Result<EditCustomerModel?> {
+        var result:Result<EditCustomerModel?> = Result.Loading
 
         try {
             val response = apiDataSource.updateCustomer(customerId,customer)
@@ -199,6 +199,7 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
                 result = Result.Success(response.body())
                 Log.i("ModelRepository","Result $result")
             }else{
+                result = Result.Error(Exception(response.errorBody()?.string()))
                 Log.i("ModelRepository","error ${response.code()}")
             }
         }catch (e: IOException){
@@ -482,5 +483,37 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
 
     override suspend fun reset() {
         offlineDB?.reset()
+    }
+
+    override fun setFirstName(f_name: String) {
+        sharedPreference.setFirstName(f_name)
+    }
+
+    override fun getFirstName(): String {
+        return sharedPreference.getFirstName()
+    }
+
+    override fun setLastName(l_name: String) {
+        sharedPreference.setLastName(l_name)
+    }
+
+    override fun getLastName(): String {
+        return sharedPreference.getLastName()
+    }
+
+    override fun setPhoneNum(phone: String) {
+        sharedPreference.setPhoneNum(phone)
+    }
+
+    override fun getPhoneNum(): String {
+        return sharedPreference.getPhoneNum()
+    }
+
+    override fun setCustomerID(customer_id: Long) {
+        sharedPreference.setCustomerID(customer_id)
+    }
+
+    override fun getCustomerID(): Long {
+        return sharedPreference.getCustomerID()
     }
 }

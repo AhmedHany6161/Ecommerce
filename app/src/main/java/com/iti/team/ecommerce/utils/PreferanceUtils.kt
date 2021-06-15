@@ -10,3 +10,6 @@ const val EMAIL_KEY = "EMAIL"
 
 const val UserName_KEY = "UserName"
 
+const val LAST_KEY = "LAST"
+const val PHONE_KEY = "PHONE"
+const val CUSTOMER_ID = "CUSTOMER_ID"

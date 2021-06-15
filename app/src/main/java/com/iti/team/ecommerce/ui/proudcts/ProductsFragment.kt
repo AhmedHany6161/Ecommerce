@@ -53,12 +53,16 @@ class ProductsFragment : Fragment() {
         listeningForNavigate()
 //        val container = view.findViewById(R.id.shimmer_view_container) as ShimmerFrameLayout
 //        container.startShimmer()
+        navigateToLogin()
+        return view
+    }
+
+    private fun navigateToLogin() {
         viewModel.navigateToLogin.observe(viewLifecycleOwner, {
             if (it) {
                 findNavController().navigate(R.id.loginFragment)
             }
         })
-        return view
     }
 
     private fun navigateToProfile() {

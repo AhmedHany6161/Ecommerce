@@ -48,8 +48,8 @@ class ApiDataSource: ApiInterface {
 
     override suspend fun updateCustomer(
         customerId: Long,
-        customer: CustomerModel
-    ): Response<CustomerModel> {
+        customer: EditCustomerModel
+    ): Response<EditCustomerModel> {
         return  _apiService.updateCustomer(customerId,customer)
     }
 

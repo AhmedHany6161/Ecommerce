@@ -20,7 +20,7 @@ interface ModelRepo {
 
     suspend fun smartCollection(): Result<SmartCollectionModel?>
 
-    suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Result<CustomerModel?>
+    suspend fun updateCustomer(customerId: Long,customer: EditCustomerModel): Result<EditCustomerModel?>
 
     suspend fun login(email: String): Result<CustomerLoginModel?>
 
@@ -51,4 +51,13 @@ interface ModelRepo {
 
     fun setUserName(userName:String)
     fun getUserName():String
+
+    fun setFirstName(f_name:String)
+    fun getFirstName():String
+    fun setLastName(l_name:String)
+    fun getLastName():String
+    fun setPhoneNum(phone:String)
+    fun getPhoneNum():String
+    fun setCustomerID(customer_id:Long)
+    fun getCustomerID():Long
 }
