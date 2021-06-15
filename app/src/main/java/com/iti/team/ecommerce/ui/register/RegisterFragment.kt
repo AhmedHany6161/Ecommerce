@@ -16,7 +16,7 @@ class RegisterFragment : Fragment() {
 
     private lateinit var viewModel: RegisterViewModel
     private lateinit var binding: FragmentRegisterBinding
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,9 +70,6 @@ class RegisterFragment : Fragment() {
     }
 
 
-    companion object {
-
-    }
 
     private fun registerUser() {
         if (validateFirstName() && validateLastName() && validatePassword()
@@ -84,26 +81,26 @@ class RegisterFragment : Fragment() {
     }
 
     private fun validateFirstName(): Boolean {
-        val firstName = binding.editTextFirstName.getText().toString()
-        if (firstName.isEmpty()) {
-            binding.textInputFirstName.setError("Field cannot be empty")
-            return false
+        val firstName = binding.editTextFirstName.text.toString()
+        return if (firstName.isEmpty()) {
+            binding.textInputFirstName.error = "Field cannot be empty"
+            false
         } else {
-            binding.textInputFirstName.setError(null)
-            binding.textInputFirstName.setErrorEnabled(false)
-            return true
+            binding.textInputFirstName.error = null
+            binding.textInputFirstName.isErrorEnabled = false
+            true
         }
     }
 
     private fun validateLastName(): Boolean {
         val lastName = binding.editTextLastName.text.toString()
-        if (lastName.isEmpty()) {
-            binding.textInputLastName.setError("Field cannot be empty")
-            return false
+        return if (lastName.isEmpty()) {
+            binding.textInputLastName.error = "Field cannot be empty"
+            false
         } else {
-            binding.textInputLastName.setError(null)
-            binding.textInputLastName.setErrorEnabled(false)
-            return true
+            binding.textInputLastName.error = null
+            binding.textInputLastName.isErrorEnabled = false
+            true
         }
     }
 
@@ -111,20 +108,20 @@ class RegisterFragment : Fragment() {
         val email = binding.editTextEmail.text.toString()
         val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
         return if (email.isEmpty()) {
-            binding.textInputEmail.setError("Field cannot be empty")
+            binding.textInputEmail.error = "Field cannot be empty"
             false
         } else if (!email.matches(emailPattern)) {
-            binding.textInputEmail.setError("Invalid email address")
+            binding.textInputEmail.error = "Invalid email address"
             false
         } else {
             binding.textInputEmail.error = null
-            binding.textInputEmail.setErrorEnabled(false)
+            binding.textInputEmail.isErrorEnabled = false
             true
         }
     }
 
     private fun validatePassword(): Boolean {
-        val pass = binding.editTextPassword.getText().toString()
+        val pass = binding.editTextPassword.text.toString()
         val passwordVal = "^" +  //"(?=.*[0-9])" +         //at least 1 digit
                 //"(?=.*[a-z])" +         //at least 1 lower case letter
                 //"(?=.*[A-Z])" +         //at least 1 upper case letter
@@ -134,14 +131,14 @@ class RegisterFragment : Fragment() {
                 ".{4,}"  //at least 4 characters
 //                "$"
         return if (pass.isEmpty()) {
-            binding.textInputPassword.setError("Field cannot be empty")
+            binding.textInputPassword.error = "Field cannot be empty"
             false
         } else if (!pass.matches(passwordVal.toRegex())) {
-            binding.textInputPassword.setError("Password is too weak")
+            binding.textInputPassword.error = "Password is too weak"
             false
         } else {
-            binding.textInputPassword.setError(null)
-            binding.textInputPassword.setErrorEnabled(false)
+            binding.textInputPassword.error = null
+            binding.textInputPassword.isErrorEnabled = false
             true
         }
     }
@@ -149,11 +146,11 @@ class RegisterFragment : Fragment() {
     private fun validatePhoneNum(): Boolean {
         val phone = binding.editTextMobile.text.toString()
         return if (phone.isEmpty()) {
-            binding.textInputMobile.setError("Field cannot be empty")
+            binding.textInputMobile.error = "Field cannot be empty"
             false
         } else {
-            binding.textInputMobile.setError(null)
-            binding.textInputMobile.setErrorEnabled(false)
+            binding.textInputMobile.error = null
+            binding.textInputMobile.isErrorEnabled = false
             true
         }
     }
@@ -161,14 +158,14 @@ class RegisterFragment : Fragment() {
     private fun validateConfirmPass(): Boolean {
         val confirmPass = binding.editTextConfirmPassword.text.toString()
         return if (confirmPass.isEmpty()) {
-            binding.textInputConfirmPassword.setError("Field cannot be empty")
+            binding.textInputConfirmPassword.error = "Field cannot be empty"
             false
         } else if (!confirmPass.equals(binding.editTextPassword.text.toString())) {
-            binding.textInputConfirmPassword.setError("Password not matching  ")
+            binding.textInputConfirmPassword.error = "Password not matching  "
             false
         } else {
-            binding.textInputConfirmPassword.setError(null)
-            binding.textInputConfirmPassword.setErrorEnabled(false)
+            binding.textInputConfirmPassword.error = null
+            binding.textInputConfirmPassword.isErrorEnabled = false
             true
         }
 
@@ -177,18 +174,18 @@ class RegisterFragment : Fragment() {
     private fun createCustomer(): CustomerModel {
         val customer = Customer(
             null,
-            binding.editTextEmail.getText().toString(),
-            binding.editTextMobile.getText().toString(),
-            binding.editTextFirstName.getText().toString(),
-            binding.editTextLastName.getText().toString(),
+            binding.editTextEmail.text.toString(),
+            binding.editTextMobile.text.toString(),
+            binding.editTextFirstName.text.toString(),
+            binding.editTextLastName.text.toString(),
             0,
             null,
             "EGP",
-            binding.editTextPassword.getText().toString(),
+            binding.editTextPassword.text.toString(),
             null,
             null,
-            binding.editTextPassword.getText().toString(),
-            binding.editTextConfirmPassword.getText().toString()
+            binding.editTextPassword.text.toString(),
+            binding.editTextConfirmPassword.text.toString()
         )
         return CustomerModel(customer, null)
 
