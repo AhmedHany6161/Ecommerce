@@ -222,6 +222,12 @@
     <string name="go_to_cart">Go to Cart</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="logout">Logout</string>
-
+    <string name="setting">Setting</string>
+    <string name="addressBook">Address Book</string>
+    <string name="country">Country</string>
+    <string name="egypt">Egypt</string>
+    <string name="egp">EGP</string>
+    <string name="aboutUs">About Us</string>
+    <string name="rating">Rating/feedback</string>
     <!--    nermeen-->
 </resources>

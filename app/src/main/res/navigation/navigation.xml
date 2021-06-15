@@ -246,6 +246,10 @@
         android:id="@+id/editProfileFragment"
         android:name="com.iti.team.ecommerce.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.iti.team.ecommerce.ui.setting.SettingFragment"
+        android:label="SettingFragment" />
 
 
 </navigation>
