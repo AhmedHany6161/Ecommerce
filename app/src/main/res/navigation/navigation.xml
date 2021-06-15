@@ -218,6 +218,10 @@
         android:id="@+id/payTabFragment"
         android:name="com.iti.team.ecommerce.ui.payment.PayTabFragment"
         android:label="PayTabFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.iti.team.ecommerce.ui.setting.SettingFragment"
+        android:label="SettingFragment" />
 
 
 </navigation>

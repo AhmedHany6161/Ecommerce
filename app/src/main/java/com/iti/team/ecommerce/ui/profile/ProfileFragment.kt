@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
                     .show()
                 navigateToEditProfile()
             }
-            R.id.logout_item -> logout()
+       //     R.id.logout_item -> logout()
         }
         return super.onOptionsItemSelected(item)
     }

@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 3->{
                     navController.popBackStack()
-                    navController.navigate(R.id.profileFragment)
+                    navController.navigate(R.id.settingFragment)
 
                 }
                 else->{
