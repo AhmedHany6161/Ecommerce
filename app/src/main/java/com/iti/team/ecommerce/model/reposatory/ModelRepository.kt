@@ -15,6 +15,7 @@ import com.iti.team.ecommerce.utils.PREF_FILE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
+import java.lang.Exception
 
 
 class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): ModelRepo , OfflineRepo {
@@ -133,6 +134,9 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
 
             if (response.isSuccessful){
                 result = Result.Success(response.body())
+            }else{
+                result = Result.Error(Exception(response.errorBody()?.string()))
+
             }
 
         }catch (e: IOException){
@@ -318,6 +322,14 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
 
     override fun getEmail(): String {
         return sharedPreference.getEmail()
+    }
+
+    override fun setUserName(userName: String) {
+        sharedPreference.setUserName(userName)
+    }
+
+    override fun getUserName(): String {
+        return sharedPreference.getUserName()
     }
 
 

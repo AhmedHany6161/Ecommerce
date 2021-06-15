@@ -185,7 +185,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
             recyclerView.visibility = View.VISIBLE
             showAll.visibility = View.VISIBLE
             pleaseLogin.visibility = View.GONE
-            email.text = "Hi , ${viewModel.getEmail()}"
+            email.text = "Hi , ${viewModel.getUserName()}"
             profile.setAnimation(R.raw.login_profile)
             showAllOrders.visibility = View.VISIBLE
         } else {

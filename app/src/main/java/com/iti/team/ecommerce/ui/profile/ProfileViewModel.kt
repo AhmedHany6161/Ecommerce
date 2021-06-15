@@ -3,6 +3,7 @@ package com.iti.team.ecommerce.ui.profile
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
@@ -134,14 +135,15 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         return productFlowData
     }
 
-    fun getEmail(): String {
-        return modelRepository.getEmail()
+    fun getUserName(): String {
+        return modelRepository.getUserName()
     }
 
 
     fun logout() {
         modelRepository.setLogin(false)
         modelRepository.setEmail("")
+        FirebaseAuth.getInstance().signOut()
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.reset()
         }

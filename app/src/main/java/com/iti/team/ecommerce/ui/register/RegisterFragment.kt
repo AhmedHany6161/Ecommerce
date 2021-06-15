@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
@@ -52,10 +53,11 @@ class RegisterFragment : Fragment() {
 
     private fun observeShowError() {
         viewModel.setError.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
             it?.let {
-                Toast.makeText(context, "error:", Toast.LENGTH_LONG).show()
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+               Snackbar.make(requireView(), it, Snackbar.LENGTH_INDEFINITE)
+                   .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+                   .setAction("Ok") {
+                   }.show()
             }
         })
     }

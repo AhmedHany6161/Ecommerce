@@ -11,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,7 +24,7 @@ import com.iti.team.ecommerce.databinding.FragmentLoginBinding
 
 class LoginFragment: Fragment()  {
 
-    private lateinit var viewModel: LoginViewModel
+    private  val viewModel: LoginViewModel by viewModels()
     private lateinit var binding : FragmentLoginBinding
 
     private companion object {
@@ -37,9 +38,7 @@ class LoginFragment: Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
-        viewModel = LoginViewModel(requireActivity().application)
         init()
-
         return binding.root
     }
     fun init(){

@@ -1,17 +1,19 @@
 package com.iti.team.ecommerce.ui.register
 
 import android.app.Application
-import android.opengl.Visibility
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -41,9 +43,20 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
                 }
                 is Result.Error -> {
                     Log.e("createCustomer:", "${result.exception.message}")
-                    _setError.postValue(result.exception.message.toString())
-                    _loading.postValue(View.GONE)
+                    val jsonParser = JsonParser.parseString(result.exception.message) as JsonObject
+                    val error = jsonParser.getAsJsonObject("errors")
+                    var jsonArray:JsonArray? = error.getAsJsonArray("email")
 
+                    val sb = StringBuilder()
+                    if(jsonArray != null){
+                        sb.append("email : ").append(jsonArray[0].asString).append("\n")
+                    }
+                     jsonArray = error.getAsJsonArray("phone")
+                    if(jsonArray !=null){
+                        sb.append("phone : ").append(jsonArray[0].asString).append("\n")
+                    }
+                    _setError.postValue(sb.toString())
+                    _loading.postValue(View.GONE)
                 }
                 is Result.Loading -> {
                     Log.i("createCustomer", "Loading")
