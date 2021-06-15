@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
@@ -68,12 +69,21 @@ class Payment: Fragment() {
         viewModel.getOrdersData(args.totalPrice,args.orderListString)
 
         observeData()
+        //editTextListener()
+        //viewModel.getCouponText(binding.couponEditText.text.toString())
     }
 
     private fun observeData(){
         observeButtonBackClicked()
         observeOpenDialog()
+        observeCouponText()
+        applyButtonClicked()
     }
+//    private fun editTextListener(){
+//        binding.couponEditText.addTextChangedListener {
+//            viewModel.getCouponText(binding.couponEditText.text.toString())
+//        }
+//    }
 
     private fun observeButtonBackClicked(){
         viewModel.buttonBackClicked.observe(viewLifecycleOwner,{
@@ -83,6 +93,17 @@ class Payment: Fragment() {
             }
         })
     }
+    private fun applyButtonClicked(){
+        binding.apply.setOnClickListener {
+            viewModel.applyButtonClicked(binding.couponEditText.text.toString())
+        }
+    }
+    private fun observeCouponText(){
+        viewModel.couponText.observe(viewLifecycleOwner,{
+            //viewModel.getCouponText(binding.couponEditText.text.toString())
+        })
+    }
+
     /**
      * Determine the viewer's ability to pay with a payment method supported by your app and display a
      * Google Pay payment button.

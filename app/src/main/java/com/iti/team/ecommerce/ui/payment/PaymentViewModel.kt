@@ -39,6 +39,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var _discountText = MutableLiveData<String>()
     private var _totalText = MutableLiveData<String>()
 
+    private var _errorText = MutableLiveData<String>()
+    private var _errorVisibility = MutableLiveData<Int>()
+
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
 
@@ -67,10 +70,18 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     val totalText: LiveData<String>
         get() = _totalText
 
+    val errorText: LiveData<String>
+        get() = _errorText
+
+    val errorVisibility: LiveData<Int>
+        get() = _errorVisibility
+
     init {
         _discountVisibility.postValue(View.GONE)
         _loadingVisibility.postValue(View.GONE)
-        _couponTextColor.postValue(Color.BLACK)
+        _errorVisibility.postValue(View.GONE)
+        //_couponTextColor.postValue(Color.GRAY)
+        //_couponText.postValue("")
        // calDiscount()
     }
 
@@ -152,24 +163,32 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         _buttonBackClicked.postValue(Event(true))
     }
 
-    fun applyButtonClicked(){
+    fun applyButtonClicked(text:String?){
+        _errorVisibility.postValue(View.GONE)
+        _couponTextColor.postValue(Color.BLACK)
         val id = modelRepository.getDiscountId()
-        if(!couponText.value.isNullOrBlank() &&
-            _couponText.value.equals("coupon must not be empty") ){
-            if(id > 0){
+        if(!text.isNullOrBlank()){
+            if(id > 0 && text == "SUMMERSALE10OFF"){
+                Log.i("applyButtonClicked","get data")
                 _loadingVisibility.postValue(View.VISIBLE)
                 _applyVisibility.postValue(View.GONE)
                 getDiscount(id)
             }else{
-                _couponText.postValue("not valid code")
-                _couponTextColor.postValue(Color.RED)
+                Log.i("applyButtonClicked","not valid")
+                _errorText.postValue("not valid code")
+                _errorVisibility.postValue(View.VISIBLE)
             }
         }else{
-            _couponTextColor.postValue(Color.RED)
-            _couponText.postValue("coupon must not be empty")
+            _errorText.postValue("coupon must not be empty")
+            _errorVisibility.postValue(View.VISIBLE)
+
         }
     }
 
+    fun getCouponText(text:String){
+        Log.i("PaymentViewModel","getCouponText")
+        _couponText.postValue(text)
+    }
     fun cashOnDeliveryClicked(){
         if (modelRepository.getAddress() != ""){
             Log.i("PaymentViewModel","cashOnDeliveryClicked")
