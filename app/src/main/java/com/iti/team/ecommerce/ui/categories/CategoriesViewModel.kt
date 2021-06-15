@@ -8,12 +8,13 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.*
-import androidx.navigation.fragment.findNavController
-import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.data_classes.Products
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.model.data_classes.Product
+import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -43,17 +44,19 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
     private var _loading = MutableLiveData<Int>()
     private var _navigateToDetails = MutableLiveData<Event<String>>()
     private var _navigateToLogin = MutableLiveData<Boolean>()
+    private var _cartCount = MutableLiveData<Int>()
     private var idSet: HashSet<Long> = hashSetOf()
     val mainCategories: LiveData<List<MainCollections>>
         get() = _mainCategories
-
-    val navigateToDetails:LiveData<Event<String>>
+    val cartCount: LiveData<Int>
+        get() = _cartCount
+    val navigateToDetails: LiveData<Event<String>>
         get() = _navigateToDetails
 
-    val navigateToLogin:LiveData<Boolean>
+    val navigateToLogin: LiveData<Boolean>
         get() = _navigateToLogin
 
-    val loading : LiveData<Int>
+    val loading: LiveData<Int>
         get() = _loading
 
     val navigateToWish: LiveData<Event<Boolean>>
@@ -73,6 +76,11 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
             launch {
                 modelRepository.getAllId().collect {
                     idSet = HashSet(it)
+                }
+            }
+            launch {
+                modelRepository.getCartProducts().collect {
+                    _cartCount.postValue(it.size)
                 }
             }
         }

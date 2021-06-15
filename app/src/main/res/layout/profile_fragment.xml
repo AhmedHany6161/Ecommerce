@@ -35,10 +35,10 @@
                 android:id="@+id/profile_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="10dp"
                 android:contentDescription="@string/setting_of_the_app"
                 android:clickable="true"
-                android:padding="10dp"
                 android:src="@drawable/ic_settings"
                 app:layout_constraintEnd_toStartOf="@+id/profile_shop_cart"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -59,10 +59,10 @@
                 android:id="@+id/profile_shop_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="26dp"
                 android:layout_marginEnd="10dp"
+
                 android:contentDescription="@string/shop_cart"
-                android:padding="10dp"
                 android:src="@drawable/ic__shopping_cart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -80,6 +80,20 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+                <TextView
+                    android:id="@+id/shop_cart_badge"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@drawable/badge"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toTopOf="@id/profile_shop_cart"
+                    app:layout_constraintBottom_toTopOf="@+id/profile_shop_cart"
+                    app:layout_constraintEnd_toEndOf="@+id/profile_shop_cart"
+                    />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -271,5 +285,6 @@
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

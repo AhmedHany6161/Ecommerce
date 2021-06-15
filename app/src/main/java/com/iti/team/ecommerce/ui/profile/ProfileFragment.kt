@@ -1,6 +1,5 @@
 package com.iti.team.ecommerce.ui.profile
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -19,13 +18,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
-import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
 import com.iti.team.ecommerce.ui.MainActivity
 
 
-class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
+class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
 
     private lateinit var email: TextView
@@ -35,6 +33,8 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
     private lateinit var showAllOrders: TextView
     private lateinit var profile: LottieAnimationView
     private lateinit var cart: ImageView
+    private lateinit var cartCount: TextView
+
     private val viewModel: ProfileViewModel by viewModels()
 
     private lateinit var profile_setting: ImageView
@@ -46,6 +46,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         recyclerView = view.findViewById(R.id.profile_wishlist)
         profile = view.findViewById(R.id.profile_image)
         showAll = view.findViewById(R.id.profile_show_all_wish)
+        cartCount = view.findViewById(R.id.shop_cart_badge)
         val refresh: SwipeRefreshLayout = view.findViewById(R.id.profile_swipe_refresh)
         val unpaid: TextView = view.findViewById(R.id.profile_unpaid)
         val paid: TextView = view.findViewById(R.id.profile_paid)
@@ -59,7 +60,6 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         profile_setting.setOnClickListener {
             showPopup(it)
         }
-
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
         setupWishListRecyclerView(wishListAdapter)
@@ -73,11 +73,13 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         listingForOrderChanges(paid, unpaid, refund, pending, refresh)
         navigateToOrders(showAllOrders, viewModel)
         navigateToCart()
+        observeCartCount()
+        observeForRemoveFav()
         return view
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
-           R.id.edit_profile_item -> {
+            R.id.edit_profile_item -> {
                 Toast.makeText(context, "ItemSelected = $item", Toast.LENGTH_SHORT)
                     .show()
                 navigateToEditProfile()
@@ -87,6 +89,26 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         return super.onOptionsItemSelected(item)
     }
 
+    private fun observeForRemoveFav() {
+        viewModel.remove.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { it1 ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remove")
+                    .setMessage("Are you sure to remove from wish list ?")
+                    .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                        dialog.cancel()
+                    }
+                    .setNegativeButton(resources.getString(R.string.yes)) { dialog, which ->
+
+                        viewModel.removeFromWishList(it1)
+                        dialog.cancel()
+
+                    }.show()
+
+            }
+
+        })
+    }
 
     private fun navigateToCart() {
         cart.setOnClickListener {
@@ -179,6 +201,18 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         })
     }
 
+    private fun observeCartCount() {
+        viewModel.cartCount.observe(viewLifecycleOwner, {
+            if (it == 0) {
+                cartCount.visibility = View.GONE
+            } else {
+                cartCount.text = "$it"
+                cartCount.visibility = View.VISIBLE
+            }
+
+        })
+    }
+
     private fun listeningForLoginState(
     ) {
         if (viewModel.getLogInState()) {
@@ -231,7 +265,6 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
-        val viewModel: ProfileViewModel by viewModels()
         when (item?.getItemId()) {
             R.id.edit_profile_item -> {
                 navigateToEditProfile()

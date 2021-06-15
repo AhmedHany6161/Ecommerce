@@ -23,18 +23,30 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private val productFlowData: MutableLiveData<List<Product>> by lazy { MutableLiveData() }
     private var _navigateToDetails = MutableLiveData<Event<Pair<String, Boolean?>>>()
     private val _mutableOrder: MutableLiveData<String> = MutableLiveData()
+    private var _cartCount = MutableLiveData<Int>()
+    private var _remove = MutableLiveData<Event<Long>>()
+    val remove: LiveData<Event<Long>>
+        get() = _remove
     val navigateToDetails: LiveData<Event<Pair<String, Boolean?>>>
         get() = _navigateToDetails
     val orders: MutableLiveData<String> get() = _mutableOrder
 
     private val _addToCart = MutableLiveData<String>()
     val addToCart: LiveData<String> get() = _addToCart
-
+    val cartCount: LiveData<Int>
+        get() = _cartCount
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.getAllWishListProducts().collect {
-                dataOfProduct = it.subList(0, 4.coerceAtMost(it.size))
-                productFlowData.postValue(dataOfProduct)
+            launch {
+                modelRepository.getAllWishListProducts().collect {
+                    dataOfProduct = it.subList(0, 4.coerceAtMost(it.size))
+                    productFlowData.postValue(dataOfProduct)
+                }
+            }
+            launch {
+                modelRepository.getCartProducts().collect {
+                    _cartCount.postValue(it.size)
+                }
             }
         }
     }
@@ -75,7 +87,9 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             modelRepository.addToCart(product)
         }
     }
-
+    fun askForRemove(id: Long) {
+        _remove.value = Event(id)
+    }
     private fun convertObjectToString(productObject: Products) {
         val adapterCurrent: JsonAdapter<Products?> = Constants.moshi.adapter(Products::class.java)
         sendObjectToDetailsScreen(adapterCurrent.toJson(productObject))

@@ -42,23 +42,26 @@ class WishListFragment : Fragment() {
         listingForAddToCart(viewModel)
         listingForProfileClick(profile)
         listingToBack(back)
-        viewModel.remove.observe(viewLifecycleOwner,{
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Remove")
-                .setMessage("Are you sure to remove from wish list ?")
-                .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
-                    dialog.cancel()
-                }
-                .setNegativeButton(resources.getString(R.string.yes)) { dialog, which ->
-                    it.getContentIfNotHandled().let {
-                        viewModel.removeFromWishList(it?:0)
+        observeForRemoveFav(viewModel)
+        return view
+    }
+
+    private fun observeForRemoveFav(viewModel: WishListViewModel) {
+        viewModel.remove.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { it1 ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remove")
+                    .setMessage("Are you sure to remove from wish list ?")
+                    .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
                         dialog.cancel()
                     }
-                }
+                    .setNegativeButton(resources.getString(R.string.yes)) { dialog, which ->
+                        viewModel.removeFromWishList(it1)
+                        dialog.cancel()
 
-                .show()
+                    }.show()
+            }
         })
-        return view
     }
 
     private fun listingToBack(back: ImageView) {

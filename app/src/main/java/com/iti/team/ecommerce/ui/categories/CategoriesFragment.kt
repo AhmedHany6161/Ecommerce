@@ -36,7 +36,7 @@ class CategoriesFragment: Fragment() {
         viewModel.getMainCategories()
         setUpUI()
         observeData()
-
+        observeCartCount()
     }
     private fun setUpUI() {
         binding.mainCatagoryRecycle.apply {
@@ -116,6 +116,17 @@ class CategoriesFragment: Fragment() {
     }
     private fun observeLoading(){
 
+    }
+    private fun observeCartCount() {
+        viewModel.cartCount.observe(viewLifecycleOwner, {
+            if(it==0){
+                binding.shopCartBadge.visibility = View.GONE
+            }else{
+                binding.shopCartBadge.text = "$it"
+                binding.shopCartBadge.visibility = View.VISIBLE
+            }
+
+        })
     }
     private fun observeNavToLogin(){
         viewModel.navigateToLogin.observe(viewLifecycleOwner, { it ->
