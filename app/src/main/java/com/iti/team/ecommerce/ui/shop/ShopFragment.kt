@@ -45,7 +45,19 @@ class ShopFragment : Fragment() {
         setUpRecyclerView()
         itemsClicked()
         observeData()
+        observeCartCount()
+    }
 
+    private fun observeCartCount() {
+        viewModel.cartCount.observe(viewLifecycleOwner, {
+            if(it==0){
+                binding.shopCartBadge.visibility = View.GONE
+            }else{
+                binding.shopCartBadge.text = "$it"
+                binding.shopCartBadge.visibility = View.VISIBLE
+            }
+
+        })
     }
 
     private fun setUpRecyclerView(){
