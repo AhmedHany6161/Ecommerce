@@ -31,6 +31,8 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
     private var praType = ""
 
+    private val _navigateToLogin:MutableLiveData<Boolean> = MutableLiveData()
+     val navigateToLogin:LiveData<Boolean> get() = _navigateToLogin
 
     private var _navigateToDetails = MutableLiveData<Event<Pair<String,Boolean?>>>()
 
@@ -65,10 +67,16 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun getLogInState():Boolean{
+    fun getLogInState(): Boolean {
         return modelRepository.isLogin()
     }
 
+    fun isLogin(): Boolean = modelRepository.isLogin()
+
+     fun navigateToLogin(){
+       _navigateToLogin.value = true
+       _navigateToLogin.value = false
+     }
     fun inWishList(id: Long): Boolean {
         return idSet.contains(id)
     }

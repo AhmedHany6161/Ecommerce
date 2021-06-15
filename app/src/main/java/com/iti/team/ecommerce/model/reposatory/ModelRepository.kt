@@ -332,7 +332,12 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
 
 
     override suspend fun addToWishList(product: Product) {
-        offlineDB?.addToWishList(product)
+        val conProduct = offlineDB?.getById(product.id)
+        if (conProduct == null) {
+            offlineDB?.addToWishList(product)
+        } else {
+            offlineDB?.addToWishList(conProduct)
+        }
     }
 
     override suspend fun removeFromWishList(id: Long) {

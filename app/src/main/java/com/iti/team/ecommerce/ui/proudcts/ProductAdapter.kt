@@ -1,21 +1,15 @@
 package com.iti.team.ecommerce.ui.proudcts
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.model.reposatory.ModelRepo
-import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import java.net.URL
 
 class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private val viewModel: ProductsViewModel) :
 
@@ -42,7 +36,11 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private va
             brand.text = item.first.vendor
             Glide.with(view).load(item.second).into(image)
             addCart.setOnClickListener {
-                viewModel.addToCart(item.first, item.second)
+                if (viewModel.isLogin()) {
+                    viewModel.addToCart(item.first, item.second)
+                } else {
+                    viewModel.navigateToLogin()
+                }
             }
 
             layout.setOnClickListener {
@@ -55,12 +53,16 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private va
                 addFav.setImageResource(R.drawable.ic_favorite)
             }
             addFav.setOnClickListener {
-                if (!viewModel.inWishList(item.first.productId ?: -1)) {
-                    viewModel.addToWishList(item.first, item.second)
-                    addFav.setImageResource(R.drawable.ic_favorite_red)
+                if (viewModel.isLogin()) {
+                    if (!viewModel.inWishList(item.first.productId ?: -1)) {
+                        viewModel.addToWishList(item.first, item.second)
+                        addFav.setImageResource(R.drawable.ic_favorite_red)
+                    } else {
+                        viewModel.removeFromWishList(item.first.productId ?: -1)
+                        addFav.setImageResource(R.drawable.ic_favorite)
+                    }
                 } else {
-                    viewModel.removeFromWishList(item.first.productId ?: -1)
-                    addFav.setImageResource(R.drawable.ic_favorite)
+                    viewModel.navigateToLogin()
                 }
             }
         }
