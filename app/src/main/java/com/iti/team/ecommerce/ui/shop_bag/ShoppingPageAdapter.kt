@@ -88,7 +88,6 @@ class ShoppingPageAdapter (
             builder.setIcon(R.drawable.ic_shopping)
             builder.setPositiveButton(R.string.yes){dialogInterface, which ->
                 viewModel.addToWishList(item)
-                viewModel.removeFromCard(item.id)
             }
             builder.setNeutralButton(R.string.no){dialogInterface, which ->
 

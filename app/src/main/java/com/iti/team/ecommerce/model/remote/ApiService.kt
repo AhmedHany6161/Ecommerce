@@ -46,8 +46,8 @@ interface ApiService {
 
     @PUT("customers/{id}.json")
     suspend fun updateCustomer(@Path("id") customerId:Long,
-                               @Body customer:CustomerModel):
-            Response<CustomerModel>
+                               @Body customer:EditCustomerModel):
+            Response<EditCustomerModel>
 
     @GET("customers.json?")
     suspend fun login(@Query("email") email: String):

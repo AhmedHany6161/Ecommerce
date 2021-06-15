@@ -242,6 +242,10 @@
             android:name="orderListString"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.iti.team.ecommerce.ui.edit_profile.EditProfileFragment"
+        android:label="EditProfileFragment" />
 
 
 </navigation>

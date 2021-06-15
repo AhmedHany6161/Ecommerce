@@ -1,18 +1,15 @@
 package com.iti.team.ecommerce.ui.login
 
+
 import android.app.Application
 import android.util.Log
-
 import androidx.lifecycle.*
-
-
+import com.iti.team.ecommerce.model.data_classes.Customer
+import com.iti.team.ecommerce.model.data_classes.CustomerModel
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import com.iti.team.ecommerce.utils.extensions.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class LoginViewModel( application: Application): AndroidViewModel(application)  {
     private val  modelRepository: ModelRepo = ModelRepository(null,application)
@@ -67,6 +64,16 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
                             Log.i("login:", "valid email")
                             Log.i("login:", password)
                             modelRepository.setLogin(true)
+
+                            modelRepository.setCustomerID(
+                                result.data.customer.get(0)?.customerId ?: 0
+                            )
+                            modelRepository.setLastName(
+                                result.data.customer.get(0)?.lastName ?: "unknown"
+                            )
+                            modelRepository.setPhoneNum(
+                                result.data.customer.get(0)?.phone ?: "unknown"
+                            )
                         }
                     }
                 }
@@ -86,9 +93,33 @@ class LoginViewModel( application: Application): AndroidViewModel(application)  
         user.getContentIfNotHandled()?.let {
             if (it != null) {
                 modelRepository.setLogin(true)
-                modelRepository.setEmail(it.email?:"unknown")
-                modelRepository.setUserName(it.displayName?:"unknown")
-                AuthenticationState.AUTHENTICATED
+                modelRepository.setEmail(it.email ?: "unknown")
+                modelRepository.setUserName(it.displayName ?: "unknown")
+                val initUser = viewModelScope.async(Dispatchers.IO) {
+                    modelRepository.createCustomer(
+                        CustomerModel(
+                            Customer(
+                                null,
+                                it.email,
+                                it.phoneNumber,
+                                it.displayName,
+                                it.displayName,
+                                password = it.email,
+                                passwordConfirmation = it.email
+                            ),
+                            null,
+                        )
+                    )
+
+                }
+                val log = viewModelScope.async(Dispatchers.IO) {
+                    login(it.email)
+                    return@async AuthenticationState.AUTHENTICATED
+                }
+                runBlocking {
+                    initUser.await()
+                    return@runBlocking log.await()
+                }
             } else {
                 modelRepository.setLogin(false)
                 AuthenticationState.UNAUTHENTICATED

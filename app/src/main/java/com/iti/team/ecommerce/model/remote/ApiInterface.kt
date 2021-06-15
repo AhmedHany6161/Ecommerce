@@ -16,7 +16,7 @@ interface ApiInterface {
     suspend fun getProductsFromVendor(vendor: String): Response<ProductsModel>
     suspend fun smartCollection(): Response<SmartCollectionModel>
 
-    suspend fun updateCustomer(customerId: Long,customer: CustomerModel): Response<CustomerModel>
+    suspend fun updateCustomer(customerId: Long,customer: EditCustomerModel): Response<EditCustomerModel>
     suspend fun login(email: String): Response<CustomerLoginModel>
     suspend fun addOrder(order: AddOrderModel): Response<GettingOrderModel>
 
