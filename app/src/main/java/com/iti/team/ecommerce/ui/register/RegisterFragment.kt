@@ -16,8 +16,7 @@ class RegisterFragment : Fragment() {
 
     private lateinit var viewModel: RegisterViewModel
     private lateinit var binding: FragmentRegisterBinding
-
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -176,7 +175,6 @@ class RegisterFragment : Fragment() {
     }
 
     private fun createCustomer(): CustomerModel {
-
         val customer = Customer(
             null,
             binding.editTextEmail.getText().toString(),
