@@ -55,21 +55,30 @@ class CategoryProductsAdapter(val viewModel: CategoriesViewModel) :
         override fun onClick(v: View?) {
             when (v?.id) {
                 R.id.add_fav_item -> {
-                    if (!viewModel.inWishList(productArray[adapterPosition].productId ?: -1)) {
-                      Log.e("cat","error ${productArray[adapterPosition].image.src}")
-                        productArray[adapterPosition].image.src?.let {
-                            viewModel.addToWishList(productArray[adapterPosition],
-                                it
+                    if (viewModel.isLogin()) {
+                        if (!viewModel.inWishList(productArray[adapterPosition].productId ?: -1)) {
+                            Log.e("cat", "error ${productArray[adapterPosition].image.src}")
+                            productArray[adapterPosition].image.src?.let {
+                                viewModel.addToWishList(
+                                    productArray[adapterPosition],
+                                    it
+                                )
+                            }
+
+                            binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
+                        } else {
+                            viewModel.removeFromWishList(
+                                productArray[adapterPosition].productId ?: -1
                             )
+                            binding.addFavItem.setImageResource(R.drawable.ic_favorite)
                         }
 
-                        binding.addFavItem.setImageResource(R.drawable.ic_favorite_red)
-                    } else {
-                        viewModel.removeFromWishList(productArray[adapterPosition].productId ?: -1)
-                        binding.addFavItem.setImageResource(R.drawable.ic_favorite)
                     }
-
+                    else{
+                            viewModel.navigateToLogin()
+                    }
                 }
+
                 R.id.card -> {
                     viewModel.navigateToDetails(productArray[adapterPosition])
                 }

@@ -2,34 +2,47 @@ package com.iti.team.ecommerce.ui.payment
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.iti.team.ecommerce.databinding.FragmentCheckoutBinding
-import com.iti.team.ecommerce.ui.shop.DiscountDialog
 import com.iti.team.ecommerce.utils.PaymentsUtil
-import kotlinx.android.synthetic.main.fragment_checkout.*
 import org.json.JSONException
 import org.json.JSONObject
 
-class Payment: FragmentActivity() {
-    private lateinit var binding:FragmentCheckoutBinding
+class PaymentActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = FragmentCheckoutBinding.inflate(layoutInflater)
+        // Set up the mock information for our item in the UI.
+
+        Log.i("args", args.totalPrice)
+
+        // Initialize a Google Pay API client for an environment suitable for testing.
+        // It's recommended to create the PaymentsClient object inside of the onCreate method.
+        paymentsClient = PaymentsUtil.createPaymentsClient(this)
+        possiblyShowGooglePayButton()
+
+        binding.googlePayButton.layout.setOnClickListener {
+            Log.i("googlePayButton", "clicked")
+            requestPayment(viewModel.getPrice())
+        }
+
+        init()
+        setContentView(binding.root)
+    }
+
+    private lateinit var binding: FragmentCheckoutBinding
     private lateinit var paymentsClient: PaymentsClient
-    private val args:PaymentArgs by navArgs()
+    private val args: PaymentArgs by navArgs()
 
 
     private val viewModel by lazy {
@@ -42,38 +55,17 @@ class Payment: FragmentActivity() {
      * @value #LOAD_PAYMENT_DATA_REQUEST_CODE
      */
     private val LOAD_PAYMENT_DATA_REQUEST_CODE = 991
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        binding = FragmentCheckoutBinding.inflate(layoutInflater)
-        // Set up the mock information for our item in the UI.
 
-        Log.i("args",args.totalPrice)
-
-        // Initialize a Google Pay API client for an environment suitable for testing.
-        // It's recommended to create the PaymentsClient object inside of the onCreate method.
-        paymentsClient = PaymentsUtil.createPaymentsClient(this)
-        possiblyShowGooglePayButton()
-
-        binding.googlePayButton.layout.setOnClickListener {
-            Log.i("googlePayButton","clicked")
-            requestPayment(viewModel.getPrice())
-        }
-
-        init()
-
-        return binding.root
-    }
-
-
-    private fun init(){
+    private fun init() {
         binding.viewModel = viewModel
-        viewModel.getOrdersData(args.totalPrice,args.orderListString)
+        viewModel.getOrdersData(args.totalPrice, args.orderListString)
 
         observeData()
         //editTextListener()
         //viewModel.getCouponText(binding.couponEditText.text.toString())
     }
 
-    private fun observeData(){
+    private fun observeData() {
         observeButtonBackClicked()
         observeOpenDialog()
         observeCouponText()
@@ -85,21 +77,24 @@ class Payment: FragmentActivity() {
 //        }
 //    }
 
-    private fun observeButtonBackClicked(){
-        viewModel.buttonBackClicked.observe(this,{
+    private fun observeButtonBackClicked() {
+        viewModel.buttonBackClicked.observe(this, {
             it.getContentIfNotHandled()?.let {
-                Navigation.findNavController(this, com.iti.team.ecommerce.R.id.nav_host_fragment)
-                    .popBackStack()
+//                Navigation.findNavController(this, com.iti.team.ecommerce.R.id.nav_host_fragment)
+//                    .popBackStack()
+                finish()
             }
         })
     }
-    private fun applyButtonClicked(){
+
+    private fun applyButtonClicked() {
         binding.apply.setOnClickListener {
             viewModel.applyButtonClicked(binding.couponEditText.text.toString())
         }
     }
-    private fun observeCouponText(){
-        viewModel.couponText.observe(this,{
+
+    private fun observeCouponText() {
+        viewModel.couponText.observe(this, {
             //viewModel.getCouponText(binding.couponEditText.text.toString())
         })
     }
@@ -121,13 +116,14 @@ class Payment: FragmentActivity() {
         task.addOnCompleteListener { completedTask ->
             try {
                 completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
-                Log.i("googlePayButton","addOnCompleteListener")
+                Log.i("googlePayButton", "addOnCompleteListener")
             } catch (exception: ApiException) {
                 // Process error
                 Log.w("isReadyToPay failed", exception)
             }
         }
     }
+
     /**
      * If isReadyToPay returned `true`, show the button and hide the "checking" text. Otherwise,
      * notify the user that Google Pay is not available. Please adjust to fit in with your current
@@ -137,19 +133,20 @@ class Payment: FragmentActivity() {
      */
     private fun setGooglePayAvailable(available: Boolean) {
         if (available) {
-            googlePayButton.visibility = View.VISIBLE
+            binding.googlePayButton.layout.visibility = View.VISIBLE
         } else {
             Toast.makeText(
                 this,
                 "Unfortunately, Google Pay is not available on this device",
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
-    private fun requestPayment(price:String) {
+    private fun requestPayment(price: String) {
 
         // Disables the button to prevent multiple clicks.
-        googlePayButton.isClickable = false
+        binding.googlePayButton.layout.isClickable = false
 
         // The price provided to the API should include taxes and shipping.
         // This price is not displayed to the user.
@@ -167,8 +164,9 @@ class Payment: FragmentActivity() {
         // onActivityResult will be called with the result.
         if (request != null) {
             AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE)
-            googlePayButton.isClickable = true
+                paymentsClient.loadPaymentData(request), this, LOAD_PAYMENT_DATA_REQUEST_CODE
+            )
+            binding.googlePayButton.layout.isClickable = true
         }
     }
 
@@ -182,41 +180,44 @@ class Payment: FragmentActivity() {
      * @see [Getting a result
      * from an Activity](https://developer.android.com/training/basics/intents/result)
      */
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            // value passed in AutoResolveHelper
             LOAD_PAYMENT_DATA_REQUEST_CODE -> {
                 when (resultCode) {
-                    Activity.RESULT_OK ->{
+                    Activity.RESULT_OK -> {
                         data?.let { intent ->
                             PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
-                            Log.i("googlePayButton","RESULT_OK")
+                            Log.i("googlePayButton", "RESULT_OK")
                             viewModel.addOrder("paid")
+                            viewModel.removeCart()
+                            finish()
                         }
-                        Log.i("onActivityResult","success")
+                        Log.i("onActivityResult", "success")
                     }
 
                     Activity.RESULT_CANCELED -> {
                         // Nothing to do here normally - the user simply cancelled without selecting a
                         // payment method.
-                        Log.i("googlePayButton","RESULT_CANCELED")
+                        Log.i("googlePayButton", "RESULT_CANCELED")
                     }
 
                     AutoResolveHelper.RESULT_ERROR -> {
                         AutoResolveHelper.getStatusFromIntent(data)?.let {
                             handleError(it.statusCode)
                         }
-                        Log.i("googlePayButton","RESULT_ERROR")
+                        Log.i("googlePayButton", "RESULT_ERROR")
                     }
                 }
                 // Re-enables the Google Pay payment button.
-                googlePayButton.isClickable = true
+                binding.googlePayButton.layout.isClickable = true
             }
 
         }
-        googlePayButton.isClickable = true
+        binding.googlePayButton.layout.isClickable = true
     }
+
     /**
      * PaymentData response object contains the payment information, as well as any additional
      * requested information, such as billing and shipping address.
@@ -230,7 +231,8 @@ class Payment: FragmentActivity() {
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
-            val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
+            val paymentMethodData =
+                JSONObject(paymentInformation).getJSONObject("paymentMethodData")
 
             // If the gateway is set to "example", no payment information is returned - instead, the
             // token will only consist of "examplePaymentMethodToken".
@@ -238,12 +240,15 @@ class Payment: FragmentActivity() {
                     .getJSONObject("tokenizationData")
                     .getString("type") == "PAYMENT_GATEWAY" && paymentMethodData
                     .getJSONObject("tokenizationData")
-                    .getString("token") == "examplePaymentMethodToken") {
+                    .getString("token") == "examplePaymentMethodToken"
+            ) {
 
                 AlertDialog.Builder(this)
                     .setTitle("Warning")
-                    .setMessage("Gateway name set to \"example\" - please modify " +
-                            "Constants.java and replace it with your own gateway.")
+                    .setMessage(
+                        "Gateway name set to \"example\" - please modify " +
+                                "Constants.java and replace it with your own gateway."
+                    )
                     .setPositiveButton("OK", null)
                     .create()
                     .show()
@@ -253,12 +258,18 @@ class Payment: FragmentActivity() {
                 .getJSONObject("billingAddress").getString("name")
             Log.d("BillingName", billingName)
 
-            Toast.makeText(this, getString(R.string.wallet_buy_button_place_holder, billingName), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                getString(R.string.wallet_buy_button_place_holder, billingName),
+                Toast.LENGTH_LONG
+            ).show()
 
             // Logging token string.
-            Log.d("GooglePaymentToken", paymentMethodData
-                .getJSONObject("tokenizationData")
-                .getString("token"))
+            Log.d(
+                "GooglePaymentToken", paymentMethodData
+                    .getJSONObject("tokenizationData")
+                    .getString("token")
+            )
 
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString())
@@ -279,8 +290,8 @@ class Payment: FragmentActivity() {
         Log.w("loadPaymentData failed", String.format("Error code: %d", statusCode))
     }
 
-    fun observeOpenDialog(){
-        viewModel.openDialog.observe(this,{
+    fun observeOpenDialog() {
+        viewModel.openDialog.observe(this, {
             it.getContentIfNotHandled()?.let { it1 ->
                 it1.show(this.supportFragmentManager, "AddDialog")
             }

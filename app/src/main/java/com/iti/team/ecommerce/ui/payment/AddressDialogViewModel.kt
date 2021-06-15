@@ -38,7 +38,7 @@ class AddressDialogViewModel(application: Application):AndroidViewModel(applicat
             }
             val discountCodes = listOf(DiscountCodes("SUMMERSALE10OFF", "10.0"))
             val order = SendedOrder(
-                email = "mm@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus,
                 discountCodes = discountCodes,
@@ -55,7 +55,7 @@ class AddressDialogViewModel(application: Application):AndroidViewModel(applicat
                 lineItems.add(item)
             }
             val order = SendedOrder(
-                email = "mm@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus,
                 billingAddress = billingShippingAddress,

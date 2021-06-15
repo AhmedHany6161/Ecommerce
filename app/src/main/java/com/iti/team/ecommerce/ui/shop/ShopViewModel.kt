@@ -7,17 +7,19 @@ import android.view.View
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.*
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ShopViewModel(application: Application): AndroidViewModel(application)  {
-    private val  modelRepository: ModelRepo =
-        ModelRepository(null, application.applicationContext)
+    private val  modelRepository: ModelRepository =
+        ModelRepository(OfflineDatabase.getInstance(application), application.applicationContext)
     private var code:String = ""
     var shopAdapter = ShopAdapter(this)
 
@@ -43,13 +45,14 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
     private var _navigateToSearch = MutableLiveData<Event<String>>()
     private var _navigateToShopProduct = MutableLiveData<Event<Pair<Long,String>>>()
     private var _navigateToLogin = MutableLiveData<Event<Boolean>>()
-
+    private var _cartCount = MutableLiveData<Int>()
     private var productTypeSet: HashSet<String> = hashSetOf()
 
     val loading : LiveData<Int>
     get() = _loading
 
-
+    val cartCount: LiveData<Int>
+        get() = _cartCount
     val transparentView: LiveData<Int>
         get() = _transparentView
 
@@ -131,7 +134,13 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
         }
 
     }
-
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            modelRepository.getCartProducts().collect {
+                _cartCount.postValue(it.size)
+            }
+        }
+    }
 
     fun smartCollection(){
 
@@ -209,6 +218,7 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
         _navigateToSearch.postValue(Event(productTypeSet.toString()))
         Log.i("navigateToSearch","$productTypeSet")
     }
+
 
 
 

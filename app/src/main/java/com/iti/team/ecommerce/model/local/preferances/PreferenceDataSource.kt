@@ -1,9 +1,6 @@
 package com.iti.team.ecommerce.model.local.preferances
 
-import com.iti.team.ecommerce.utils.ADDRESS_KEY
-import com.iti.team.ecommerce.utils.DISCOUNT_KEY
-import com.iti.team.ecommerce.utils.EMAIL_KEY
-import com.iti.team.ecommerce.utils.LOGIN_KEY
+import com.iti.team.ecommerce.utils.*
 
 class PreferenceDataSource(private val sharedPreference: MySharedPreference):Preference {
     override fun isLogin(): Boolean {
@@ -28,6 +25,16 @@ class PreferenceDataSource(private val sharedPreference: MySharedPreference):Pre
 
     override fun getEmail(): String {
         return sharedPreference.getString(EMAIL_KEY)
+    }
+
+    override fun setUserName(userName: String) {
+        sharedPreference.setString(UserName_KEY, userName)
+
+    }
+
+    override fun getUserName(): String {
+        return sharedPreference.getString(UserName_KEY)
+
     }
 
     override fun setAddress(address: String) {

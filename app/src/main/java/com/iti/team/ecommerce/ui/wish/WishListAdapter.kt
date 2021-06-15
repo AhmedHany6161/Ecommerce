@@ -45,9 +45,11 @@ class WishListAdapter(
             }
 
             Fav.setOnClickListener {
-                viewModel.removeFromWishList(item.id)
+                viewModel.askForRemove(item.id)
             }
         }
+
+
     }
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)

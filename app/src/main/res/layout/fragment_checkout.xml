@@ -113,7 +113,6 @@
                         android:textSize="18sp"
                         android:textColor="@color/black"
                         app:layout_constraintEnd_toEndOf="@+id/view"
-                        android:onClick="@{()->viewModel.applyButtonClicked()}"
                         mutableVisibility="@{viewModel.applyVisibility}"/>
                     <ProgressBar
                         android:layout_width="wrap_content"
@@ -123,6 +122,18 @@
                         app:layout_constraintStart_toStartOf="@+id/apply"
                         app:layout_constraintEnd_toEndOf="@+id/apply"
                         mutableVisibility="@{viewModel.loadingVisibility}"/>
+
+                    <TextView
+                        android:id="@+id/error_text"
+                        mutableText="@{viewModel.errorText}"
+                        mutableVisibility="@{viewModel.errorVisibility}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/apply"
+                        android:textColor="@color/red"
+                        android:textSize="12sp"
+                        app:layout_constraintStart_toStartOf="@+id/view"
+                        app:layout_constraintTop_toBottomOf="@+id/view" />
                     <TextView
                         android:id="@+id/subtotal_text"
                         android:layout_width="wrap_content"
@@ -131,7 +142,7 @@
                         android:text="@string/subTotal"
                         android:textSize="16sp"
                         android:textColor="@color/black_gray"
-                        app:layout_constraintTop_toBottomOf="@+id/view"
+                        app:layout_constraintTop_toBottomOf="@+id/error_text"
                         android:layout_marginTop="16dp"/>
 
                     <TextView

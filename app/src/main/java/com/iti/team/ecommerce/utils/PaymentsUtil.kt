@@ -167,7 +167,8 @@ object PaymentsUtil {
     private val merchantInfo: JSONObject
         @Throws(JSONException::class)
         get() = JSONObject().apply {
-            put("merchantName", "Example Merchant")
+            put("merchantName", "ITI Ecommerce")
+            put("merchantId", "BCR2DN6TR7G2X2D5")
         }
 
 

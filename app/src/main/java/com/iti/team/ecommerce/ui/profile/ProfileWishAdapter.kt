@@ -45,7 +45,7 @@ class ProfileWishAdapter(
             }
 
             Fav.setOnClickListener {
-                viewModel.removeFromWishList(item.id)
+                viewModel.askForRemove(item.id)
             }
         }
     }

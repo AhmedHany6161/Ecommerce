@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
@@ -41,7 +42,26 @@ class WishListFragment : Fragment() {
         listingForAddToCart(viewModel)
         listingForProfileClick(profile)
         listingToBack(back)
+        observeForRemoveFav(viewModel)
         return view
+    }
+
+    private fun observeForRemoveFav(viewModel: WishListViewModel) {
+        viewModel.remove.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { it1 ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Remove")
+                    .setMessage("Are you sure to remove from wish list ?")
+                    .setNeutralButton(resources.getString(R.string.cancel)) { dialog, which ->
+                        dialog.cancel()
+                    }
+                    .setNegativeButton(resources.getString(R.string.yes)) { dialog, which ->
+                        viewModel.removeFromWishList(it1)
+                        dialog.cancel()
+
+                    }.show()
+            }
+        })
     }
 
     private fun listingToBack(back: ImageView) {

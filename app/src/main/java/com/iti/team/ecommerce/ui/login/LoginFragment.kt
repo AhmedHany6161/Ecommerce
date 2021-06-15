@@ -9,8 +9,10 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -20,10 +22,11 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentLoginBinding
+import com.iti.team.ecommerce.ui.MainActivity
 
 class LoginFragment: Fragment()  {
 
-    private lateinit var viewModel: LoginViewModel
+    private  val viewModel: LoginViewModel by viewModels()
     private lateinit var binding : FragmentLoginBinding
 
     private companion object {
@@ -37,10 +40,13 @@ class LoginFragment: Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater)
-        viewModel = LoginViewModel(requireActivity().application)
         init()
-
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).bottomNavigation.isGone = true
     }
     fun init(){
         binding.cirLoginButton.setOnClickListener {
@@ -122,7 +128,6 @@ class LoginFragment: Fragment()  {
 
 
     private fun animationToRegister() {
-
         val action = LoginFragmentDirections.actionFromLoginFragmentToRegisterFragment()
         findNavController().navigate(action)
 
@@ -130,7 +135,7 @@ class LoginFragment: Fragment()  {
 
     private fun navigation() {
         binding.progress.visibility = GONE
-        findNavController().navigate(R.id.categoriesFragment)
+        findNavController().popBackStack()
 
     }
 

@@ -41,4 +41,7 @@ interface ModelRepo {
 
     fun setEmail(email:String)
     fun getEmail():String
+
+    fun setUserName(userName:String)
+    fun getUserName():String
 }

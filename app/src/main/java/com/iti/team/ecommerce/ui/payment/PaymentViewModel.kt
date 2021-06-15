@@ -9,19 +9,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.*
-import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import com.iti.team.ecommerce.utils.extensions.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.Constants
+import com.iti.team.ecommerce.utils.extensions.Event
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     val  modelRepository: ModelRepository =
-        ModelRepository(null,application)
+        ModelRepository(OfflineDatabase.getInstance(application), application)
 
     private var subTotalPrice: String? = ""
     private var productList:List<Product> = ArrayList()
@@ -38,6 +39,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var _subTotalText = MutableLiveData<String>()
     private var _discountText = MutableLiveData<String>()
     private var _totalText = MutableLiveData<String>()
+
+    private var _errorText = MutableLiveData<String>()
+    private var _errorVisibility = MutableLiveData<Int>()
 
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
@@ -67,10 +71,18 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     val totalText: LiveData<String>
         get() = _totalText
 
+    val errorText: LiveData<String>
+        get() = _errorText
+
+    val errorVisibility: LiveData<Int>
+        get() = _errorVisibility
+
     init {
         _discountVisibility.postValue(View.GONE)
         _loadingVisibility.postValue(View.GONE)
-        _couponTextColor.postValue(Color.BLACK)
+        _errorVisibility.postValue(View.GONE)
+        //_couponTextColor.postValue(Color.GRAY)
+        //_couponText.postValue("")
        // calDiscount()
     }
 
@@ -108,7 +120,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
             }
             val discountCodes = listOf(DiscountCodes("SUMMERSALE10OFF", "10.0"))
             val order = SendedOrder(
-                email = "email@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus,
                 discountCodes = discountCodes
@@ -123,7 +135,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
                 lineItems.add(item)
             }
             val order = SendedOrder(
-                email = "email@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus
             )
@@ -152,24 +164,32 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         _buttonBackClicked.postValue(Event(true))
     }
 
-    fun applyButtonClicked(){
+    fun applyButtonClicked(text:String?){
+        _errorVisibility.postValue(View.GONE)
+        _couponTextColor.postValue(Color.BLACK)
         val id = modelRepository.getDiscountId()
-        if(!couponText.value.isNullOrBlank() &&
-            _couponText.value.equals("coupon must not be empty") ){
-            if(id > 0){
+        if(!text.isNullOrBlank()){
+            if(id > 0 && text == "SUMMERSALE10OFF"){
+                Log.i("applyButtonClicked","get data")
                 _loadingVisibility.postValue(View.VISIBLE)
                 _applyVisibility.postValue(View.GONE)
                 getDiscount(id)
             }else{
-                _couponText.postValue("not valid code")
-                _couponTextColor.postValue(Color.RED)
+                Log.i("applyButtonClicked","not valid")
+                _errorText.postValue("not valid code")
+                _errorVisibility.postValue(View.VISIBLE)
             }
         }else{
-            _couponTextColor.postValue(Color.RED)
-            _couponText.postValue("coupon must not be empty")
+            _errorText.postValue("coupon must not be empty")
+            _errorVisibility.postValue(View.VISIBLE)
+
         }
     }
 
+    fun getCouponText(text:String){
+        Log.i("PaymentViewModel","getCouponText")
+        _couponText.postValue(text)
+    }
     fun cashOnDeliveryClicked(){
         if (modelRepository.getAddress() != ""){
             Log.i("PaymentViewModel","cashOnDeliveryClicked")
@@ -196,14 +216,20 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         return productList
     }
 
-    private fun calDiscount(){
+    private fun calDiscount() {
         val discount = (subTotalPrice?.toDouble()?.div(100.0f))?.times(10)
-        Log.i("getOrdersData","$discount")
-         totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
+        Log.i("getOrdersData", "$discount")
+        totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
         _discountText.postValue("EGP $discount")
         _totalText.postValue("EGP $totalPrice")
     }
 
-     fun getPrice():String = totalPrice.toString()
-
+    fun getPrice(): String = totalPrice.toString()
+    fun removeCart() {
+        viewModelScope.launch(Dispatchers.IO) {
+            productList.forEach {
+                modelRepository.removeFromCart(it.id)
+            }
+        }
+    }
 }

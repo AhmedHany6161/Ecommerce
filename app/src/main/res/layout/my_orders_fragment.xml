@@ -70,6 +70,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
         <androidx.cardview.widget.CardView
+            android:id="@+id/myOrder_card"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:cardCornerRadius="25dp"

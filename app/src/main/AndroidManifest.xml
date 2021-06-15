@@ -37,7 +37,9 @@
             </intent-filter>
         </activity>
         <!--     ahmed-->
- 
+        <activity android:name="com.iti.team.ecommerce.ui.payment.PaymentActivity">
+
+        </activity>
         <!--    ahmed-->
 
         <!--    wesam-->

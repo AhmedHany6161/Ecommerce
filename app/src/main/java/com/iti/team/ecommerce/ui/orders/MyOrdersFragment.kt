@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.cardview.widget.CardView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +23,7 @@ import com.iti.team.ecommerce.ui.MainActivity
 class MyOrdersFragment : Fragment() {
     private lateinit var noData: LottieAnimationView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var card:CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,7 @@ class MyOrdersFragment : Fragment() {
         val viewModel: MyOrdersViewModel by viewModels()
         val refresh: SwipeRefreshLayout = view.findViewById(R.id.order_swipe)
         recyclerView = view.findViewById(R.id.order_rec)
+        card = view.findViewById(R.id.myOrder_card)
         val backBTN: ImageView = view.findViewById(R.id.my_order_back)
         noData = view.findViewById(R.id.order_no_data)
         val adapter = MyOrderAdapter(ArrayList())
@@ -88,10 +91,10 @@ class MyOrdersFragment : Fragment() {
                 adapter.setData(it)
                 adapter.notifyDataSetChanged()
                 noData.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
+                card.visibility = View.VISIBLE
             }else{
                 noData.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
+                card.visibility = View.GONE
             }
             refresh.isRefreshing = false
         })

@@ -24,7 +24,9 @@ class WishListViewModel(application: Application) : AndroidViewModel(application
     private var dataOfProduct: List<Product> = mutableListOf()
     private val productFlowData: MutableLiveData<List<Product>> by lazy { MutableLiveData() }
     private var _navigateToDetails = MutableLiveData<Event<Pair<String, Boolean?>>>()
-
+    private var _remove = MutableLiveData<Event<Long>>()
+    val remove: LiveData<Event<Long>>
+        get() = _remove
     val navigateToDetails: LiveData<Event<Pair<String, Boolean?>>>
         get() = _navigateToDetails
 
@@ -54,7 +56,10 @@ class WishListViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.removeFromWishList(id)
         }
+    }
 
+    fun askForRemove(id: Long) {
+        _remove.value = Event(id)
     }
 
     private fun checkIsAccepted(
