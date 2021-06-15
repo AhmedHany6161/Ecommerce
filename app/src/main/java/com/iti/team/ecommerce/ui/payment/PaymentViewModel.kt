@@ -9,19 +9,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.*
-import com.iti.team.ecommerce.model.reposatory.ModelRepository
-import com.iti.team.ecommerce.utils.extensions.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.Constants
+import com.iti.team.ecommerce.utils.extensions.Event
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Types
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     val  modelRepository: ModelRepository =
-        ModelRepository(null,application)
+        ModelRepository(OfflineDatabase.getInstance(application), application)
 
     private var subTotalPrice: String? = ""
     private var productList:List<Product> = ArrayList()
@@ -119,7 +120,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
             }
             val discountCodes = listOf(DiscountCodes("SUMMERSALE10OFF", "10.0"))
             val order = SendedOrder(
-                email = "email@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus,
                 discountCodes = discountCodes
@@ -134,7 +135,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
                 lineItems.add(item)
             }
             val order = SendedOrder(
-                email = "email@email.com",
+                email = modelRepository.getEmail(),
                 lineItems = lineItems,
                 financialStatus = financialStatus
             )
@@ -215,14 +216,20 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         return productList
     }
 
-    private fun calDiscount(){
+    private fun calDiscount() {
         val discount = (subTotalPrice?.toDouble()?.div(100.0f))?.times(10)
-        Log.i("getOrdersData","$discount")
-         totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
+        Log.i("getOrdersData", "$discount")
+        totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
         _discountText.postValue("EGP $discount")
         _totalText.postValue("EGP $totalPrice")
     }
 
-     fun getPrice():String = totalPrice.toString()
-
+    fun getPrice(): String = totalPrice.toString()
+    fun removeCart() {
+        viewModelScope.launch(Dispatchers.IO) {
+            productList.forEach {
+                modelRepository.removeFromCart(it.id)
+            }
+        }
+    }
 }

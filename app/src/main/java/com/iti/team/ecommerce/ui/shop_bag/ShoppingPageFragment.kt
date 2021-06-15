@@ -90,7 +90,7 @@ class ShoppingPageFragment: Fragment() {
                     findNavController().navigate(action)
                 }else{
                     val action = ShoppingPageFragmentDirections.
-                    actionShoppingPageFragmentToPayment(viewModel.total.toString(),convertObjectToString(productList))
+                    actionShoppingPageFragmentToPaymentA(viewModel.total.toString(),convertObjectToString(productList))
                     findNavController().navigate(action)
                 }
 

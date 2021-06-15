@@ -61,7 +61,7 @@ private val financialStatus:String): DialogFragment() {
                 Toast.makeText(context,"Address field is required",Toast.LENGTH_SHORT).show()
             }else{
                 viewModel.addOrder(orderWithDiscount,productList,
-                    "authorized",binding.textAddress.text.toString())
+                    "voided",binding.textAddress.text.toString())
             }
 
         }
