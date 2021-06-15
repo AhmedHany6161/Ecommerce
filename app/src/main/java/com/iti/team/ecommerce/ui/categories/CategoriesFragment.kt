@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentCategoriesBinding
+import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
 class CategoriesFragment: Fragment() {
@@ -124,5 +126,10 @@ class CategoriesFragment: Fragment() {
     }
     companion object {
 
+    }
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).bottomNavigation.isGone = false
+        (activity as MainActivity).bottomNavigation.show(2)
     }
 }
