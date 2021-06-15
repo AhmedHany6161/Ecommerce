@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
+import com.iti.team.ecommerce.ui.MainActivity
 
 
 class RegisterFragment : Fragment() {
@@ -41,7 +43,10 @@ class RegisterFragment : Fragment() {
             navigate()
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).bottomNavigation.isGone = true
+    }
     private fun observeSuccessRigister() {
         viewModel.successRegister.observe(viewLifecycleOwner, {
             it?.let {
@@ -69,6 +74,7 @@ class RegisterFragment : Fragment() {
 //            .commit()
         val action = RegisterFragmentDirections.actionFromRegisterToLoginFragment()
         findNavController().navigate(action)
+
     }
 
 
