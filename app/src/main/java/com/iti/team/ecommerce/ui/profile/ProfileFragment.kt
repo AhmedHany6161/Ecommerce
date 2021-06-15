@@ -231,6 +231,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
+        val viewModel: ProfileViewModel by viewModels()
         when (item?.getItemId()) {
             R.id.edit_profile_item -> {
                 navigateToEditProfile()
@@ -238,6 +239,7 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
             }
             R.id.logout_item -> {
                 logout()
+
                 return true
             }
             else->{
@@ -246,14 +248,16 @@ class ProfileFragment : Fragment() ,PopupMenu.OnMenuItemClickListener{
         }
     }
 
+
     private fun logout() {
         viewModel.logout()
         findNavController().popBackStack()
         findNavController().navigate(R.id.profileFragment)
+
     }
 
     private fun navigateToEditProfile() {
-   //     findNavController().navigate(R.id.loginFragment)
+        findNavController().navigate(R.id.loginFragment)
     }
 
 }

@@ -138,11 +138,13 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         return modelRepository.getEmail()
     }
 
+
     fun logout() {
         modelRepository.setLogin(false)
         modelRepository.setEmail("")
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.reset()
         }
+
     }
 }

@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
+import androidx.navigation.fragment.findNavController
+import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.model.data_classes.Product
@@ -34,20 +36,22 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
     )
 
     private  var _mainCategories:MutableLiveData<List<MainCollections>> =MutableLiveData()
-
-
     private var _navigateToWish = MutableLiveData<Event<Boolean>>()
     private var _navigateToCart = MutableLiveData<Event<Boolean>>()
     private var _navigateToSearch = MutableLiveData<Event<String>>()
     private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
     private var _loading = MutableLiveData<Int>()
     private var _navigateToDetails = MutableLiveData<Event<String>>()
+    private var _navigateToLogin = MutableLiveData<Boolean>()
     private var idSet: HashSet<Long> = hashSetOf()
     val mainCategories: LiveData<List<MainCollections>>
         get() = _mainCategories
 
     val navigateToDetails:LiveData<Event<String>>
         get() = _navigateToDetails
+
+    val navigateToLogin:LiveData<Boolean>
+        get() = _navigateToLogin
 
     val loading : LiveData<Int>
         get() = _loading
@@ -217,5 +221,10 @@ class CategoriesViewModel(application: Application): AndroidViewModel(applicatio
         }
         return false
     }
-
+    fun isLogin():Boolean{
+       return modelRepository.isLogin()
+    }
+    fun navigateToLogin(){
+        _navigateToLogin.value=true
+    }
 }
