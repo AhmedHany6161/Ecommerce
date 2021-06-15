@@ -292,6 +292,104 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
         return result
     }
 
+    override suspend fun getAddress(
+        customerId: Long,
+        addressId: Long
+    ): Result<CustomerAddressModel?> {
+        var result:Result<CustomerAddressModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.getAddress(customerId,addressId)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
+
+    override suspend fun updateAddress(
+        customerId: Long,
+        addressId: Long,
+        address: AddressModel
+    ): Result<CustomerAddressModel?> {
+        var result:Result<CustomerAddressModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.updateAddress(customerId,addressId,address)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
+    override suspend fun deleteAddress(
+        customerId: Long,
+        addressId: Long
+    ): Result<CustomerAddressModel?> {
+        var result:Result<CustomerAddressModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.deleteAddress(customerId,addressId)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
+    override suspend fun addAddress(
+        customerId: Long,
+        address: AddressModel
+    ): Result<CustomerAddressModel?> {
+        var result:Result<CustomerAddressModel?> = Result.Loading
+
+        try {
+            val response = apiDataSource.addAddress(customerId,address)
+            if(response.isSuccessful){
+                result = Result.Success(response.body())
+                Log.i("ModelRepository","Result $result")
+            }else{
+                Log.i("ModelRepository","Error")
+                Log.i("ModelRepository",response.code().toString())
+            }
+        }catch (e: IOException){
+            result = Result.Error(e)
+            Log.e("ModelRepository","IOException ${e.message}")
+            Log.e("ModelRepository","IOException ${e.localizedMessage}")
+
+        }
+        return result
+
+    }
     override fun isLogin(): Boolean {
         return sharedPreference.isLogin()
     }

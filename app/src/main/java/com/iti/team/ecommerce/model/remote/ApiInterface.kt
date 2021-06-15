@@ -22,4 +22,10 @@ interface ApiInterface {
 
     suspend fun getOrders(email:String): Response<OrdersModels>
 
+    suspend fun getAddress(customerId:Long,addressId: Long): Response<CustomerAddressModel>
+    suspend fun deleteAddress(customerId:Long,addressId: Long): Response<CustomerAddressModel>
+
+    suspend fun addAddress(customerId:Long,address: AddressModel): Response<CustomerAddressModel>
+    suspend fun updateAddress(customerId:Long,addressId: Long,address: AddressModel): Response<CustomerAddressModel>
+
 }
