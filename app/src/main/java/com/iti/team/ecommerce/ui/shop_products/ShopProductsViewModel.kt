@@ -119,7 +119,8 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
                     products.title ?: "",
                     image,
                     products.vendor ?: "",
-                    (products.variants[0]?.price ?: "")
+                    (products.variants[0]?.price ?: ""),
+                    variant_id = products.variants[0]?.id ?:0
                 )
             )
         }

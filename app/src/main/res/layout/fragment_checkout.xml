@@ -216,6 +216,14 @@
                         app:layout_constraintBottom_toTopOf="@+id/googlePayButton"
                         app:layout_constraintTop_toBottomOf="@+id/total_text"
                         android:onClick="@{()->viewModel.cashOnDeliveryClicked()}"/>
+                    <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toTopOf="@+id/googlePayButton"
+                        app:layout_constraintTop_toBottomOf="@+id/total_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        mutableVisibility="@{viewModel.cashLoadingVisibility}"/>
 
                     <include
                         android:id="@+id/googlePayButton"

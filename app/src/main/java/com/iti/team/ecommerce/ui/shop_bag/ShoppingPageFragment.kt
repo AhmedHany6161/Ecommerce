@@ -46,16 +46,16 @@ class ShoppingPageFragment: Fragment() {
         viewModel.total_price().observe(viewLifecycleOwner,{
             binding.price.text = "EGP ${viewModel.total}"
         })
-        binding.cheakoutBtn.setOnClickListener {
-            if(viewModel.total ==0.0){
-                val action = ShoppingPageFragmentDirections.actionFromShopBagToShopFragment()
-                findNavController().navigate(action)
-            }else{
-                val action = ShoppingPageFragmentDirections.
-                actionShoppingPageFragmentToPayment(viewModel.total.toString(),"")
-                findNavController().navigate(action)
-            }
-        }
+//        binding.cheakoutBtn.setOnClickListener {
+//            if(viewModel.total ==0.0){
+//                val action = ShoppingPageFragmentDirections.actionFromShopBagToShopFragment()
+//                findNavController().navigate(action)
+//            }else{
+//                val action = ShoppingPageFragmentDirections.
+//                actionShoppingPageFragmentToPaymentFragment(viewModel.total.toString(),"")
+//                findNavController().navigate(action)
+//            }
+//        }
         binding.favoriteImage.setOnClickListener {
             val action = ShoppingPageFragmentDirections.actionFromShopBagToWishlist()
             findNavController().navigate(action)
@@ -90,7 +90,7 @@ class ShoppingPageFragment: Fragment() {
                     findNavController().navigate(action)
                 }else{
                     val action = ShoppingPageFragmentDirections.
-                    actionShoppingPageFragmentToPaymentA(viewModel.total.toString(),convertObjectToString(productList))
+                    actionShoppingPageFragmentToPaymentFragment(viewModel.total.toString(),convertObjectToString(productList))
                     findNavController().navigate(action)
                 }
 

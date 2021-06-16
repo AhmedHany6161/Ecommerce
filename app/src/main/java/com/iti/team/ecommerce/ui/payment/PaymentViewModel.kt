@@ -30,6 +30,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var orderWithDiscount = false
 
     private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+    private var _catchOrderAdded= MutableLiveData<Event<Boolean>>()
     private var _openDialog = MutableLiveData<Event<AddressDialog>>()
     private var _discountVisibility = MutableLiveData<Int>()
     private var _loadingVisibility = MutableLiveData<Int>()
@@ -39,12 +40,16 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     private var _subTotalText = MutableLiveData<String>()
     private var _discountText = MutableLiveData<String>()
     private var _totalText = MutableLiveData<String>()
+    private var _cashLoadingVisibility = MutableLiveData<Int>()
 
     private var _errorText = MutableLiveData<String>()
     private var _errorVisibility = MutableLiveData<Int>()
 
     val buttonBackClicked: LiveData<Event<Boolean>>
         get() = _buttonBackClicked
+
+    val catchOrderAdded: LiveData<Event<Boolean>>
+        get() = _catchOrderAdded
 
     val openDialog: LiveData<Event<AddressDialog>>
         get() = _openDialog
@@ -54,6 +59,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
 
     val loadingVisibility: LiveData<Int>
         get() = _loadingVisibility
+
+    val cashLoadingVisibility: LiveData<Int>
+        get() = _cashLoadingVisibility
 
     val applyVisibility: LiveData<Int>
         get() = _applyVisibility
@@ -80,6 +88,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     init {
         _discountVisibility.postValue(View.GONE)
         _loadingVisibility.postValue(View.GONE)
+        _cashLoadingVisibility.postValue(View.GONE)
         _errorVisibility.postValue(View.GONE)
         //_couponTextColor.postValue(Color.GRAY)
         //_couponText.postValue("")
@@ -148,12 +157,16 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
            when (val result = modelRepository.addOrder(order = addOrderModel)) {
                is Result.Success-> {
                    Log.i("addOrder:", "${result.data?.order}")
+                   _catchOrderAdded.postValue(Event(true))
+                   _cashLoadingVisibility.postValue(View.GONE)
                }
                is Result.Error -> {
                    Log.e("addOrder:", "${result.exception.message}")
+                   _cashLoadingVisibility.postValue(View.GONE)
                }
                is Result.Loading -> {
                    Log.i("addOrder", "Loading")
+                   _cashLoadingVisibility.postValue(View.GONE)
                }
            }
        }
@@ -191,12 +204,15 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         _couponText.postValue(text)
     }
     fun cashOnDeliveryClicked(){
+        _cashLoadingVisibility.postValue(View.VISIBLE)
         if (modelRepository.getAddress() != ""){
             Log.i("PaymentViewModel","cashOnDeliveryClicked")
-            addOrder("authorized")
+            addOrder("voided")
         }else{
-            val dialog = AddressDialog.newInstance(orderWithDiscount,productList,"authorized")
-            _openDialog.postValue(Event(dialog))
+            _cashLoadingVisibility.postValue(View.GONE)
+           val dialog = AddressDialog.newInstance(orderWithDiscount,productList,"authorized")
+           _openDialog.postValue(Event(dialog))
+            //addOrder("voided")
         }
     }
 
@@ -210,9 +226,11 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     }
 
     private fun convertStringToList(productObject:String):List<Product>{
+
         val productListType = Types.newParameterizedType(List::class.java, Product::class.java)
         val adapterProductList: JsonAdapter<List<Product>> = Constants.moshi.adapter(productListType)
         productList = adapterProductList.fromJson(productObject)?: listOf()
+        Log.i("convertStringToList",productList.toString())
         return productList
     }
 

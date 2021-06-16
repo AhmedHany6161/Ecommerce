@@ -66,6 +66,7 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
                 is Result.Success -> {
                     Log.i("getProducts:", "${result.data?.customerAddress?.id}")
                     result.data?.customerAddress?.id?.let { modelRepository.setAddressID(it) }
+                    result.data?.customerAddress?.address?.let { modelRepository.setAddress(it) }
                     _finishLoading.postValue(Event(true))
                 }
 

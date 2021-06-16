@@ -261,7 +261,8 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
                 Log.i("ModelRepository","Result $result")
             }else{
                 Log.i("ModelRepository","Error")
-                Log.i("ModelRepository",response.code().toString())
+                Log.i("ModelRepository",response.errorBody().toString())
+                result = Result.Error(Exception(response.errorBody()?.string()))
             }
         }catch (e: IOException){
             result = Result.Error(e)
