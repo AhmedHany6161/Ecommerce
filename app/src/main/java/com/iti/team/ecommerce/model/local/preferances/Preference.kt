@@ -19,4 +19,7 @@ interface Preference {
     fun getPhoneNum():String
     fun setCustomerID(customer_id:Long)
     fun getCustomerID():Long
+
+    fun setAddressID(addressId:Long)
+    fun getAddressID():Long
 }

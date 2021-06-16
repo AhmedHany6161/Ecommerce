@@ -40,6 +40,12 @@
     <string name="total">Total</string>
     <string name="add_address">Add Your Address</string>
     <string name="add">Add</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="city">City</string>
+    <string name="address1">Address Line 1</string>
+    <string name="address">Shipping Address</string>
+    <string name="zip">Zip Code</string>
     <string name="buy_with_googlepay_button_content_description">Buy with Google Pay</string>
     <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
     <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>

@@ -516,4 +516,12 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
     override fun getCustomerID(): Long {
         return sharedPreference.getCustomerID()
     }
+
+    override fun setAddressID(addressId: Long) {
+        sharedPreference.setAddressID(addressId)
+    }
+
+    override fun getAddressID(): Long {
+        return  sharedPreference.getAddressID()
+    }
 }
