@@ -21,9 +21,11 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
 
 
-class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
+class ProfileFragment : Fragment(){
+   // , PopupMenu.OnMenuItemClickListener {
 
 
     private lateinit var email: TextView
@@ -58,7 +60,8 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         pleaseLogin = view.findViewById(R.id.profile_please_login)
         profile_setting = view.findViewById(R.id.profile_setting)
         profile_setting.setOnClickListener {
-            showPopup(it)
+            //showPopup(it)
+            navigate()
         }
         val viewModel: ProfileViewModel by viewModels()
         val wishListAdapter = ProfileWishAdapter(ArrayList(), viewModel)
@@ -254,32 +257,32 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerView.adapter = adapter
     }
 
-    private fun showPopup(view: View) {
-        val popup = context?.let { PopupMenu(it, view) }
-        if (popup != null) {
-            popup.inflate(R.menu.setting_menu)
-            popup.show()
-            popup.setOnMenuItemClickListener(this)
+//    private fun showPopup(view: View) {
+//        val popup = context?.let { PopupMenu(it, view) }
+//        if (popup != null) {
+//            popup.inflate(R.menu.setting_menu)
+//            popup.show()
+//            popup.setOnMenuItemClickListener(this)
+//
+//        }
+//    }
 
-        }
-    }
-
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
-            R.id.edit_profile_item -> {
-                navigateToEditProfile()
-                return true
-            }
-            R.id.logout_item -> {
-                logout()
-
-                return true
-            }
-            else->{
-                return false
-            }
-        }
-    }
+//    override fun onMenuItemClick(item: MenuItem?): Boolean {
+//        when (item?.getItemId()) {
+//            R.id.edit_profile_item -> {
+//                navigateToEditProfile()
+//                return true
+//            }
+//            R.id.logout_item -> {
+//                logout()
+//
+//                return true
+//            }
+//            else->{
+//                return false
+//            }
+//        }
+//    }
 
 
     private fun logout() {
@@ -291,6 +294,11 @@ class ProfileFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun navigateToEditProfile() {
         findNavController().navigate(R.id.loginFragment)
+    }
+
+    private fun navigate(){
+        val action = ProfileFragmentDirections.actionProfileFragmentToSettingFragment()
+        findNavController().navigate(action)
     }
 
 }

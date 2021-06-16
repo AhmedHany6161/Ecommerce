@@ -12,11 +12,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.SettingFragmentBinding
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 
 class SettingFragment : Fragment() {
 
     private val viewModel: SettingViewModel by viewModels()
     private lateinit var binding: SettingFragmentBinding
+    private lateinit var modelRepository: ModelRepository
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +32,9 @@ class SettingFragment : Fragment() {
     }
 
     private fun initUI() {
+       modelRepository = ModelRepository(OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().application)
+
         binding.addressTxt.setOnClickListener {
             navigateToAddrees()
         }
@@ -46,8 +53,7 @@ class SettingFragment : Fragment() {
     }
 
     private fun navigateToAbout() {
-        findNavController().popBackStack()
-        findNavController().navigate(R.id.profileFragment)
+            findNavController().navigate(R.id.aboutFragment)
     }
 
     private fun navigateToPlayStore() {
@@ -61,18 +67,30 @@ class SettingFragment : Fragment() {
     }
 
     private fun logout() {
-        viewModel.logout()
-        findNavController().popBackStack()
-        findNavController().navigate(R.id.profileFragment)    }
+        if (modelRepository.isLogin()){
+            viewModel.logout()
+        }else{
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.profileFragment)
+        }
+
+    }
 
     private fun navigateToEditProfile() {
-        findNavController().popBackStack()
-        findNavController().navigate(R.id.profileFragment)
+        if (modelRepository.isLogin()){
+            findNavController().navigate(R.id.editProfileFragment)
+        }else{
+            findNavController().navigate(R.id.loginFragment)
+        }
+
     }
 
     private fun navigateToAddrees() {
-        findNavController().popBackStack()
-        findNavController().navigate(R.id.profileFragment)
+        if (modelRepository.isLogin()){
+            findNavController().navigate(R.id.addressFragment2)
+        }else{
+            findNavController().navigate(R.id.loginFragment)
+        }
     }
 
     companion object {

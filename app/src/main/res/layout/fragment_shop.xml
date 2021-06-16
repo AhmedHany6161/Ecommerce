@@ -47,6 +47,31 @@
             app:layout_constraintBottom_toTopOf="@+id/cart_image"
             app:layout_constraintEnd_toEndOf="@+id/cart_image"
             />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_network_result"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            app:lottie_rawRes="@raw/no_internet"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/text_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/no_network_result"
+            android:textSize="16sp"
+            android:text="@string/no_internet"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"/>
         <!--        <SearchView-->
 <!--            android:id="@+id/search_view"-->
 <!--            android:layout_width="wrap_content"-->
@@ -91,6 +116,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="16dp">
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -198,6 +224,8 @@
                />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

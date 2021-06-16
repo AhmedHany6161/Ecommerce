@@ -47,6 +47,12 @@
     <string name="address1">Address Line 1</string>
     <string name="address">Shipping Address</string>
     <string name="zip">Zip Code</string>
+    <string name="about">About</string>
+    <string name="developer">About</string>
+    <string name="no_internet">No Network Connection</string>
+    <string name="about_developers">Today a lot of people want to buy products form brand but they don’t find brand shop near and they don’t have time to travel to buy the products. So, from here a lot of people try to use online shopping to save their time and from here our project helps theme to found and buy brand products.
+
+The Ecommerce App allows people to show shop brand, show all products belong to this brand, add product to favorite and buy some products with easy way. </string>
     <string name="buy_with_googlepay_button_content_description">Buy with Google Pay</string>
     <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
     <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>

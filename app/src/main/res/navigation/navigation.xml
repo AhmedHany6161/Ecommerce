@@ -217,6 +217,9 @@
         <action
             android:id="@+id/action_profileFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/payment"
@@ -267,7 +270,11 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.iti.team.ecommerce.ui.setting.SettingFragment"
-        android:label="SettingFragment" />
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addressFragment2"
         android:name="com.iti.team.ecommerce.ui.address.AddressFragment"
@@ -295,6 +302,10 @@
             app:popUpTo="@id/paymentFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.iti.team.ecommerce.ui.about.AboutFragment"
+        android:label="AboutFragment" />
 
 
 </navigation>
