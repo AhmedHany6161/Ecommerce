@@ -23,6 +23,10 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
         ModelRepository(OfflineDatabase.getInstance(application),application)
     private var  addressItem:Address? = null
 
+    private var _buttonBackClicked = MutableLiveData<Event<Boolean>>()
+    private var _finishLoading = MutableLiveData<Event<Boolean>>()
+    private var _error = MutableLiveData<Event<Boolean>>()
+
     private var _firstName = MutableLiveData<Event<Boolean>>()
     private var _lastName = MutableLiveData<Event<Boolean>>()
     private var _city = MutableLiveData<Event<Boolean>>()
@@ -46,19 +50,32 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
     val addressObject:LiveData<Event<Address>>
         get() = _addressObject
 
+
+    val buttonBackClicked: LiveData<Event<Boolean>>
+        get() = _buttonBackClicked
+
+    val finishLoading: LiveData<Event<Boolean>>
+        get() = _finishLoading
+
+    val error: LiveData<Event<Boolean>>
+        get() = _error
+
     fun addAddress(customerId: Long,address: AddressModel) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = modelRepository.addAddress(customerId,address)) {
                 is Result.Success -> {
                     Log.i("getProducts:", "${result.data?.customerAddress?.id}")
                     result.data?.customerAddress?.id?.let { modelRepository.setAddressID(it) }
+                    _finishLoading.postValue(Event(true))
                 }
 
                 is Result.Error -> {
                     Log.e("getDiscount:", "${result.exception.message}")
+                    _error.postValue(Event(true))
                 }
                 is Result.Loading -> {
                     Log.i("getDiscount", "Loading")
+                    _error.postValue(Event(true))
                 }
             }
         }
@@ -70,13 +87,16 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
             when (val result = modelRepository.updateAddress(customerId,addressId,address)) {
                 is Result.Success -> {
                     Log.i("getProducts:", "${result.data?.customerAddress?.id}")
+                    _finishLoading.postValue(Event(true))
                 }
 
                 is Result.Error -> {
                     Log.e("getDiscount:", "${result.exception.message}")
+                    _error.postValue(Event(true))
                 }
                 is Result.Loading -> {
                     Log.i("getDiscount", "Loading")
+                    _error.postValue(Event(true))
                 }
             }
         }
@@ -159,5 +179,11 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
         }
 
     }
+
+    fun buttonBackClicked(){
+        Log.i("AddressViewModel","buttonBackClicked")
+        _buttonBackClicked.postValue(Event(true))
+    }
+
 
 }
