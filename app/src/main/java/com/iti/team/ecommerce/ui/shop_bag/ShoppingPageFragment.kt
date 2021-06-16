@@ -44,7 +44,7 @@ class ShoppingPageFragment: Fragment() {
         listForShopList(viewModel, shoppingPageAdapter)
         ObserveData(viewModel)
         viewModel.total_price().observe(viewLifecycleOwner,{
-            binding.price.text = "EGP ${viewModel.total}"
+            binding.price.text = "${viewModel.total} EGP"
         })
 //        binding.cheakoutBtn.setOnClickListener {
 //            if(viewModel.total ==0.0){

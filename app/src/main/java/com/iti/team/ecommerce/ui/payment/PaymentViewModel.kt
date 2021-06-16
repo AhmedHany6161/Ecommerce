@@ -219,8 +219,8 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     fun getOrdersData(totalPrice:String,ordersListString:String){
         Log.i("getOrdersData","${convertStringToList(ordersListString)}")
         convertStringToList(ordersListString)
-        _subTotalText.postValue("EGP $totalPrice")
-        _totalText.postValue("EGP $totalPrice")
+        _subTotalText.postValue("$totalPrice EGP")
+        _totalText.postValue("$totalPrice EGP")
         subTotalPrice = totalPrice
 
     }
@@ -238,8 +238,8 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         val discount = (subTotalPrice?.toDouble()?.div(100.0f))?.times(10)
         Log.i("getOrdersData", "$discount")
         totalPrice = discount?.let { subTotalPrice?.toDouble()?.minus(it) }
-        _discountText.postValue("EGP $discount")
-        _totalText.postValue("EGP $totalPrice")
+        _discountText.postValue("$discount EGP")
+        _totalText.postValue("$totalPrice EGP")
     }
 
     fun getPrice(): String = totalPrice.toString()

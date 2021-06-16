@@ -21,7 +21,7 @@ class MyOrderAdapter(private var dataSet: List<Order?> ) :
         private val status: TextView = view.findViewById(R.id.order_holder_stute)
         fun bind(item: Order?) {
             createdAt.text = item?.createdAt
-            price.text = "Price : EGP ${item?.finalPrice}"
+            price.text = "Price : ${item?.finalPrice} EGP"
             status.text = if (item?.financialStatus == "voided") {
                 "unpaid"
             } else {
