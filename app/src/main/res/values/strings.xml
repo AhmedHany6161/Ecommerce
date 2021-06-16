@@ -29,7 +29,8 @@
     <string name="wishlist">Wishlist</string>
     <string name="no_search_result">Your search did not match any products.</string>
     <string name="cart">Cart</string>
-
+    <string name="my_address">My Address</string>
+    <string name="no_address">address is empty</string>
     <string name="cash">Cash On Delivery </string>
     <string name="checkout">CheckOut </string>
     <string name="coupon">Coupon</string>

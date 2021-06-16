@@ -30,7 +30,7 @@ interface ModelRepo {
 
     suspend fun getOrders(email:String): Result<OrdersModels?>
 
-    suspend fun getAddress(customerId:Long,addressId: Long): Result<CustomerAddressModel?>
+    suspend fun getAddress(customerId:Long): Result<CustomerModel?>
     suspend fun deleteAddress(customerId:Long,addressId: Long): Result<CustomerAddressModel?>
 
     suspend fun addAddress(customerId:Long,address: AddressModel): Result<CustomerAddressModel?>

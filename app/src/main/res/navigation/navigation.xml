@@ -245,8 +245,15 @@
     <fragment
 
         android:id="@+id/addressFragment"
-        android:name="com.iti.team.ecommerce.ui.address.AddressFragment"
-        android:label="AddressFragment" />
+        android:name="com.iti.team.ecommerce.ui.address.AddAddressFragment"
+        android:label="AddressFragment" >
+        <argument
+            android:name="addressObjetString"
+            app:argType="string" />
+        <argument
+            android:name="actioTypr"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.iti.team.ecommerce.ui.edit_profile.EditProfileFragment"
@@ -255,7 +262,14 @@
         android:id="@+id/settingFragment"
         android:name="com.iti.team.ecommerce.ui.setting.SettingFragment"
         android:label="SettingFragment" />
-
+    <fragment
+        android:id="@+id/addressFragment2"
+        android:name="com.iti.team.ecommerce.ui.address.AddressFragment"
+        android:label="AddressFragment" >
+        <action
+            android:id="@+id/action_addressFragment2_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
 
 
 </navigation>

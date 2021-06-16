@@ -66,10 +66,9 @@ class ApiDataSource: ApiInterface {
     }
 
     override suspend fun getAddress(
-        customerId: Long,
-        addressId: Long
-    ): Response<CustomerAddressModel> {
-        return _apiService.getAddress(customerId,addressId)
+        customerId: Long
+    ): Response<CustomerModel> {
+        return _apiService.getAddress(customerId)
     }
 
     override suspend fun deleteAddress(

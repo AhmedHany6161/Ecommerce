@@ -294,13 +294,12 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
     }
 
     override suspend fun getAddress(
-        customerId: Long,
-        addressId: Long
-    ): Result<CustomerAddressModel?> {
-        var result:Result<CustomerAddressModel?> = Result.Loading
+        customerId: Long
+    ): Result<CustomerModel?> {
+        var result:Result<CustomerModel?> = Result.Loading
 
         try {
-            val response = apiDataSource.getAddress(customerId,addressId)
+            val response = apiDataSource.getAddress(customerId)
             if(response.isSuccessful){
                 result = Result.Success(response.body())
                 Log.i("ModelRepository","Result $result")

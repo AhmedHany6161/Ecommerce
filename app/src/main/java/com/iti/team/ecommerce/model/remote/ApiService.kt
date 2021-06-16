@@ -77,9 +77,8 @@ interface ApiService {
                            @Body address:AddressModel):
             Response<CustomerAddressModel>
 
-    @GET("customers/{customer_id}/addresses/{address_id}.json")
-    suspend fun getAddress(@Path("customer_id") customerId:Long,
-                              @Path("address_id") addressId:Long):
-            Response<CustomerAddressModel>
+    @GET("customers/{customer_id}.json")
+    suspend fun getAddress(@Path("customer_id") customerId:Long):
+            Response<CustomerModel>
 
 }
