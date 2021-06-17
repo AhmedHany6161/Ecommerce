@@ -43,7 +43,6 @@
             app:layout_constraintTop_toTopOf="@+id/favorite_image"
             android:src="@drawable/ic_search"
             android:layout_marginEnd="16dp"
-            app:tint="@android:color/darker_gray"
             android:onClick="@{()->viewModel.navigateToSearch()}"/>
 
         <TextView
@@ -58,7 +57,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/favorite_image" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/no_network_result"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            app:lottie_rawRes="@raw/no_internet"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/text_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/no_network_result"
+            android:textSize="16sp"
+            android:text="@string/no_internet"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mainCatagoryRecycle"
@@ -90,8 +113,9 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:layout_marginTop="20dp"                android:orientation="vertical">
+                android:layout_weight="3"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/shoesTxt"
@@ -127,12 +151,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productsRecycle"
                 adapter="@{viewModel.categoriesProductAdapter}"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:background="@color/light_gray"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="4dp"
-                android:layout_weight="7.5"
                 tools:listitem="@layout/shop_product_row_item" />
 
 
@@ -151,6 +174,7 @@
             app:layout_constraintEnd_toEndOf="@+id/cart_image"
             />
         <ProgressBar
+            android:id="@+id/progress"
             mutableVisibility="@{viewModel.loading}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

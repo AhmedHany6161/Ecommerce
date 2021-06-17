@@ -180,12 +180,15 @@
         <action
             android:id="@+id/action_from_shopBag_to_shopFragment"
             app:destination="@id/shopFragment" />
+<!--        <action-->
+<!--            android:id="@+id/action_shoppingPageFragment_to_payment"-->
+<!--            app:destination="@id/payment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_shoppingPageFragment_to_paymentA"-->
+<!--            app:destination="@id/paymentA" />-->
         <action
-            android:id="@+id/action_shoppingPageFragment_to_payment"
-            app:destination="@id/payment" />
-        <action
-            android:id="@+id/action_shoppingPageFragment_to_paymentA"
-            app:destination="@id/paymentA" />
+            android:id="@+id/action_shoppingPageFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -214,6 +217,9 @@
         <action
             android:id="@+id/action_profileFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/payment"
@@ -225,6 +231,9 @@
         <argument
             android:name="orderListString"
             app:argType="string" />
+        <action
+            android:id="@+id/action_payment_to_addressFragment"
+            app:destination="@id/addressFragment" />
     </fragment>
     <fragment
         android:id="@+id/payTabFragment"
@@ -243,13 +252,60 @@
             app:argType="string" />
     </activity>
     <fragment
+
+        android:id="@+id/addressFragment"
+        android:name="com.iti.team.ecommerce.ui.address.AddAddressFragment"
+        android:label="AddressFragment" >
+        <argument
+            android:name="addressObjetString"
+            app:argType="string" />
+        <argument
+            android:name="actioTypr"
+            app:argType="string" />
+    </fragment>
+    <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.iti.team.ecommerce.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.iti.team.ecommerce.ui.setting.SettingFragment"
-        android:label="SettingFragment" />
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_settingFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment2"
+        android:name="com.iti.team.ecommerce.ui.address.AddressFragment"
+        android:label="AddressFragment" >
+        <action
+            android:id="@+id/action_addressFragment2_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.iti.team.ecommerce.ui.payment.PaymentFragment"
+        android:label="PaymentFragment" >
+        <argument
+            android:name="totalPrice"
+            app:argType="string" />
+        <argument
+            android:name="orderListString"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_paymentFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_myOrdersFragment"
+            app:destination="@id/myOrdersFragment"
+            app:popUpTo="@id/paymentFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.iti.team.ecommerce.ui.about.AboutFragment"
+        android:label="AboutFragment" />
 
 
 </navigation>

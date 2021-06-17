@@ -1,5 +1,6 @@
 package com.iti.team.ecommerce.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
@@ -7,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.iti.team.ecommerce.R
+import com.iti.team.ecommerce.ui.shop.ShopFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -61,6 +63,32 @@ class MainActivity : AppCompatActivity() {
                 }
                 else->{
 
+                }
+            }
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val navHostFragment = supportFragmentManager.fragments.first()
+                as? NavHostFragment
+
+        navHostFragment?.let {
+            val childFragments =
+                navHostFragment.childFragmentManager.fragments
+
+            childFragments.forEach { fragment ->
+                fragment.onActivityResult(requestCode, resultCode, data)
+
+                if (fragment is ShopFragment) {
+                    val page = supportFragmentManager
+                        .findFragmentByTag(
+                            "android:switcher:${R.id.shopFragment}:${fragment.arguments}"
+                        )
+
+                    page?.let {
+                        page.onActivityResult(requestCode, resultCode, data)
+                    }
                 }
             }
         }

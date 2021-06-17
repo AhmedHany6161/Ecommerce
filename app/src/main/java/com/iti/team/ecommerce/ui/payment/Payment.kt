@@ -15,12 +15,15 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navArgs
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
 import com.iti.team.ecommerce.databinding.FragmentCheckoutBinding
 import com.iti.team.ecommerce.ui.shop.DiscountDialog
+import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
 import com.iti.team.ecommerce.utils.PaymentsUtil
 import kotlinx.android.synthetic.main.fragment_checkout.*
 import org.json.JSONException
@@ -88,12 +91,14 @@ class Payment: FragmentActivity() {
     private fun observeButtonBackClicked(){
         viewModel.buttonBackClicked.observe(this,{
             it.getContentIfNotHandled()?.let {
+                Log.i("hhhhhhhh","hhhhhhhhh")
                 Navigation.findNavController(this, com.iti.team.ecommerce.R.id.nav_host_fragment)
                     .popBackStack()
             }
         })
     }
     private fun applyButtonClicked(){
+        Log.i("hhhhhhhh","hhhhhhhhh")
         binding.apply.setOnClickListener {
             viewModel.applyButtonClicked(binding.couponEditText.text.toString())
         }
@@ -283,6 +288,10 @@ class Payment: FragmentActivity() {
         viewModel.openDialog.observe(this,{
             it.getContentIfNotHandled()?.let { it1 ->
                 it1.show(this.supportFragmentManager, "AddDialog")
+                this.findNavController(com.iti.team.ecommerce.R.id.navigation).navigate(
+                    com.iti.team.ecommerce.R.id.addressFragment
+                )
+
             }
         })
     }

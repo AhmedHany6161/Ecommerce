@@ -30,6 +30,13 @@ interface ModelRepo {
 
     suspend fun getOrders(email:String): Result<OrdersModels?>
 
+    suspend fun getAddress(customerId:Long): Result<CustomerModel?>
+    suspend fun deleteAddress(customerId:Long,addressId: Long): Result<CustomerAddressModel?>
+
+    suspend fun addAddress(customerId:Long,address: AddressModel): Result<CustomerAddressModel?>
+    suspend fun updateAddress(customerId:Long,addressId: Long,address: AddressModel): Result<CustomerAddressModel?>
+
+
     fun isLogin():Boolean
     fun setLogin(login:Boolean)
 
@@ -53,4 +60,7 @@ interface ModelRepo {
     fun getPhoneNum():String
     fun setCustomerID(customer_id:Long)
     fun getCustomerID():Long
+
+    fun setAddressID(addressId:Long)
+    fun getAddressID():Long
 }

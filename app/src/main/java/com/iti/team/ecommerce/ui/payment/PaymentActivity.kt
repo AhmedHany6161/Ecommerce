@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.navArgs
 import com.google.android.gms.common.api.ApiException
@@ -23,7 +24,7 @@ class PaymentActivity : AppCompatActivity() {
 
         binding = FragmentCheckoutBinding.inflate(layoutInflater)
         // Set up the mock information for our item in the UI.
-
+        Log.e("ppppppp","mmmmmmmmmmm")
         Log.i("args", args.totalPrice)
 
         // Initialize a Google Pay API client for an environment suitable for testing.
@@ -70,6 +71,7 @@ class PaymentActivity : AppCompatActivity() {
         observeOpenDialog()
         observeCouponText()
         applyButtonClicked()
+        observeCashOrder()
     }
 //    private fun editTextListener(){
 //        binding.couponEditText.addTextChangedListener {
@@ -293,7 +295,19 @@ class PaymentActivity : AppCompatActivity() {
     fun observeOpenDialog() {
         viewModel.openDialog.observe(this, {
             it.getContentIfNotHandled()?.let { it1 ->
-                it1.show(this.supportFragmentManager, "AddDialog")
+                //it1.show(this.supportFragmentManager, "AddDialog")
+                Navigation.findNavController(this, com.iti.team.ecommerce.R.id.nav_host_fragment)
+                    .navigate(com.iti.team.ecommerce.R.id.addressFragment)
+            }
+        })
+    }
+
+    fun observeCashOrder() {
+        viewModel.catchOrderAdded.observe(this, {
+            it.getContentIfNotHandled()?.let { it1 ->
+                Toast.makeText(this,"order created",Toast.LENGTH_SHORT).show()
+                viewModel.removeCart()
+                finish()
             }
         })
     }

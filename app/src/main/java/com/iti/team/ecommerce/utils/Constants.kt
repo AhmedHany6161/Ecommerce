@@ -9,6 +9,8 @@ object Constants {
     val moshi = Moshi.Builder().build()
     const val  url= "https://ce751b18c7156bf720ea405ad19614f4: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@itiana.myshopify.com/"
     const val  BASE_URL = url + "admin/api/2021-04/"
+    const val EDIT ="EDIT"
+    const val ADD ="ADD"
     /**
      * Changing this to ENVIRONMENT_PRODUCTION will make the API return chargeable card information.
      * Please refer to the documentation to read about the required steps needed to enable

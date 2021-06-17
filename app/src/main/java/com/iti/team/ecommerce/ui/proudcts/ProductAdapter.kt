@@ -32,7 +32,7 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private va
 
         fun bind(item: Pair<Products,String>){
             name.text = item.first.title
-            price.text = "EGP ${item.first.variants[0]?.price}"
+            price.text = "${item.first.variants[0]?.price} EGP"
             brand.text = item.first.vendor
             Glide.with(view).load(item.second).into(image)
             addCart.setOnClickListener {

@@ -61,4 +61,24 @@ interface ApiService {
     suspend fun getOrders(@Query("email") email: String):
             Response<OrdersModels>
 
+    @POST("customers/{customer_id}/addresses.json")
+    suspend fun addAddress(@Path("customer_id") customerId:Long,
+        @Body address:AddressModel):
+            Response<CustomerAddressModel>
+
+    @DELETE("customers/{customer_id}/addresses/{address_id}.json")
+    suspend fun deleteAddress(@Path("customer_id") customerId:Long,
+                              @Path("address_id") addressId:Long):
+            Response<CustomerAddressModel>
+
+    @PUT("customers/{customer_id}/addresses/{address_id}.json")
+    suspend fun updateAddress(@Path("customer_id") customerId:Long,
+                              @Path("address_id") addressId:Long,
+                           @Body address:AddressModel):
+            Response<CustomerAddressModel>
+
+    @GET("customers/{customer_id}.json")
+    suspend fun getAddress(@Path("customer_id") customerId:Long):
+            Response<CustomerModel>
+
 }

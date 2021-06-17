@@ -1,9 +1,14 @@
 package com.iti.team.ecommerce.ui.categories
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +19,7 @@ import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentCategoriesBinding
 import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
+import com.iti.team.ecommerce.utils.NetworkConnection
 
 class CategoriesFragment: Fragment() {
     private lateinit var viewModel: CategoriesViewModel
@@ -33,10 +39,11 @@ class CategoriesFragment: Fragment() {
 
     private fun init(){
         binding.viewModel = viewModel
-        viewModel.getMainCategories()
         setUpUI()
         observeData()
         observeCartCount()
+        checkNetwork()
+        registerConnectivityNetworkMonitor()
     }
     private fun setUpUI() {
         binding.mainCatagoryRecycle.apply {
@@ -142,5 +149,54 @@ class CategoriesFragment: Fragment() {
         super.onResume()
         (activity as MainActivity).bottomNavigation.isGone = false
         (activity as MainActivity).bottomNavigation.show(2)
+    }
+
+    private fun registerConnectivityNetworkMonitor() {
+        if (context != null) {
+            val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val builder = NetworkRequest.Builder()
+            connectivityManager.registerNetworkCallback(builder.build(),
+                object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        super.onAvailable(network)
+                        if (activity != null) {
+                            activity!!.runOnUiThread {
+                                binding.progress.visibility = View.VISIBLE
+                                binding.linearLayout.visibility = View.VISIBLE
+                                binding.mainCatagoryRecycle.visibility = View.VISIBLE
+                                binding.noNetworkResult.visibility = View.GONE
+                                binding.textNoInternet.visibility = View.GONE
+                                viewModel.getMainCategories()
+                            }
+                        }
+                    }
+
+                    override fun onLost(network: Network) {
+                        super.onLost(network)
+                        if (activity != null) {
+                            activity!!.runOnUiThread {
+                                Toast.makeText(
+                                    context, "Network Not Available",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    private fun checkNetwork(){
+        val networkConnection = NetworkConnection()
+        if (networkConnection.checkInternetConnection(requireContext())) {
+            viewModel.getMainCategories()
+        } else {
+            binding.noNetworkResult.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.GONE
+            binding.mainCatagoryRecycle.visibility = View.GONE
+            binding.progress.visibility = View.GONE
+            binding.textNoInternet.visibility = View.VISIBLE
+        }
     }
 }

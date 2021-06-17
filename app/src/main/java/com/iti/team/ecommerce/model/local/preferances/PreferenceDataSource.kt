@@ -76,4 +76,12 @@ class PreferenceDataSource(private val sharedPreference: MySharedPreference):Pre
     override fun getCustomerID(): Long {
         return sharedPreference.getLong(CUSTOMER_ID)
     }
+
+    override fun setAddressID(addressId: Long) {
+        sharedPreference.setLong(ADDRESS_ID_KEY,addressId)
+    }
+
+    override fun getAddressID(): Long {
+        return  sharedPreference.getLong(ADDRESS_ID_KEY)
+    }
 }

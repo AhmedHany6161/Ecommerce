@@ -26,7 +26,7 @@ class CategoryProductsAdapter(val viewModel: CategoriesViewModel) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         holder.binding.productName.text = productArray[position].title
-        holder.binding.productPrice.text = "EGP ${productArray[position].variants[0]?.price}"
+        holder.binding.productPrice.text = "${productArray[position].variants[0]?.price} EGP"
         holder.binding.productBrand.text = productArray[position].vendor
 
         Glide.with(holder.binding.productImage.context)

@@ -86,6 +86,10 @@ android {
         }
     }
 
+    testOptions.unitTests{
+        includeAndroidResources = true
+    }
+
 //    signingConfigs {
 //        pt2_sample {
 //            storeFile file('C:\\work\\jks\\pt2_sample.jks')
@@ -166,6 +170,10 @@ dependencies {
 
     //spinner
     implementation('com.github.ganfra:material-spinner:2.0.0')
+
+    testImplementation 'androidx.test.ext:junit-ktx:1.1.2'
+    testImplementation 'androidx.core:core-ktx:1.5.0'
+    testImplementation 'org.robolectric:robolectric:4.4'
 
 
     //wesam

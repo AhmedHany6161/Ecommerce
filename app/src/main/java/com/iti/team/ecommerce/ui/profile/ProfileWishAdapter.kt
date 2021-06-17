@@ -31,7 +31,7 @@ class ProfileWishAdapter(
 
         fun bind(item: Product) {
             name.text = item.name
-            price.text = "EGP ${item.price}"
+            price.text = "${item.price} EGP"
             brand.text = item.brand
             Glide.with(view).load(item.image).into(image)
             Fav.setImageResource(R.drawable.ic_favorite_red)
