@@ -92,7 +92,6 @@
             app:layout_constraintTop_toTopOf="@+id/favorite_image"
             android:src="@drawable/ic_search"
             android:layout_marginEnd="16dp"
-            app:tint="@android:color/darker_gray"
             android:onClick="@{()->viewModel.navigateToSearch()}"/>
 
         <TextView

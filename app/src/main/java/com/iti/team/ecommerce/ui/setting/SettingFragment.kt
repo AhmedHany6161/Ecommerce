@@ -31,9 +31,19 @@ class SettingFragment : Fragment() {
         return binding.root
     }
 
+    private fun init(){
+        if (modelRepository.isLogin()){
+            binding.logoutTxt.visibility = View.VISIBLE
+        }else{
+            binding.logoutTxt.visibility = View.GONE
+        }
+    }
+
     private fun initUI() {
        modelRepository = ModelRepository(OfflineDatabase.getInstance(requireActivity().application),
             requireActivity().application)
+
+        init()
 
         binding.addressTxt.setOnClickListener {
             navigateToAddrees()

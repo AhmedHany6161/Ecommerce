@@ -14,7 +14,9 @@ import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class AddAddressViewModel(application: Application):AndroidViewModel(application) {
@@ -61,7 +63,7 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
         get() = _error
 
     fun addAddress(customerId: Long,address: AddressModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             when (val result = modelRepository.addAddress(customerId,address)) {
                 is Result.Success -> {
                     Log.i("getProducts:", "${result.data?.customerAddress?.id}")
