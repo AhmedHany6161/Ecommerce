@@ -16,7 +16,6 @@ import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class AddAddressViewModel(application: Application):AndroidViewModel(application) {
@@ -86,10 +85,12 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
 
 
     fun updateAddress(customerId: Long,addressId: Long,address:AddressModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        //deleteAddress(modelRepository.getCustomerID(),modelRepository.getAddressID())
+        CoroutineScope(Dispatchers.IO).launch {
             when (val result = modelRepository.updateAddress(customerId,addressId,address)) {
                 is Result.Success -> {
-                    Log.i("getProducts:", "${result.data?.customerAddress?.id}")
+                    Log.i("updateAddress:", "${result.data?.customerAddress?.id}")
+                    Log.i("updateAddress:", "${result.data?.customerAddress}")
                     _finishLoading.postValue(Event(true))
                 }
 
@@ -153,8 +154,9 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
 
     private fun addOrEdit(firstName: String?,lastName: String?,
                                       city: String?,address: String?,zip: String?,type:String){
-        val addressModel = AddressModel(Address(address,city,firstName,lastName,zip))
+        val addressModel = AddressModel(Address(modelRepository.getAddressID(),address,city,firstName,lastName,zip))
         if (type == Constants.EDIT){
+            Log.i("setAddress","addOrEdit")
             updateAddress(modelRepository.getCustomerID(),modelRepository.getAddressID(),addressModel)
         }else if(type == Constants.ADD){
             addAddress(modelRepository.getCustomerID(),addressModel)

@@ -1,6 +1,7 @@
 package com.iti.team.ecommerce.ui.address
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,11 @@ class AddressFragment: Fragment() {
     }
 
 
+//    override fun onResume() {
+//        super.onResume()
+//        Log.i("onResume","onResume")
+//        viewModel.getAddress()
+//    }
 
 
 }

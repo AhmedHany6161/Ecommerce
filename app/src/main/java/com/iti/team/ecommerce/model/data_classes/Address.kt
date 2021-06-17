@@ -5,6 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Address(
+
+    @Json(name = "id")
+    val id: Long? = 0,
+
     @Json(name = "address1")
     val address: String? = "",
 

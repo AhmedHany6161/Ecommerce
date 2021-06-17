@@ -2,6 +2,8 @@ package com.iti.team.ecommerce.ui.product_details
 
 import android.app.Application
 import android.graphics.Color
+import android.os.Build
+import android.text.Html
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
@@ -97,7 +99,10 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
         products?.let {
            getProductImage(it.productId)
             Log.i("description","${it.description}" )
-            it.description?.let { it1 -> _descriptionText.value = it1 }
+            it.description?.let { it1 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                _descriptionText.value =  Html.fromHtml(it1, Html.FROM_HTML_MODE_COMPACT).toString()
+            }
+            }
             it.vendor?.let { it1 -> _vendor.value = it1 }
             it.title?.let { it1 -> _title.value = it1 }
             it.variants[0]?.price?.let { it1 -> _price.value = "$it1 EGP" }

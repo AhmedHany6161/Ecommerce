@@ -67,20 +67,28 @@ class AddressViewModel(application: Application):AndroidViewModel(application) {
 
     fun getAddress() {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.i("getAddress:", "${modelRepository.getCustomerID()}")
             when (val result = modelRepository.getAddress(modelRepository.getCustomerID())) {
                 is Result.Success -> {
-                    Log.i("getProducts:", "${result.data?.customer?.addresses}")
+                    Log.i("getAddress:", "${result.data?.customer?.addresses}")
                     if (result.data?.customer?.addresses?.isEmpty() == true){
                         _noAddressVisibility.postValue(View.VISIBLE)
                         _loadingVisibility.postValue(View.GONE)
                     }else{
+                        result.data?.customer?.addresses?.let { it[0].id }?.let {
+                            modelRepository.setAddressID(
+                                it
+                            )
+                        }
                         _loadingVisibility.postValue(View.GONE)
                         _noAddressVisibility.postValue(View.GONE)
                         _cardVisibility.postValue(View.VISIBLE)
                         _cityText.postValue(result.data?.customer?.addresses?.let {it[0].city})
                         _addressText.postValue(result.data?.customer?.addresses?.let {it[0].address})
                         _zipText.postValue(result.data?.customer?.addresses?.let {it[0].zip})
-                        address = Address(result.data?.customer?.addresses?.let {it[0].address},
+                        address = Address(
+                            result.data?.customer?.addresses?.let { it[0].id },
+                            result.data?.customer?.addresses?.let {it[0].address},
                             result.data?.customer?.addresses?.let {it[0].city},
                             result.data?.customer?.addresses?.let {it[0].firstName},
                             result.data?.customer?.addresses?.let {it[0].lastName},
@@ -88,11 +96,11 @@ class AddressViewModel(application: Application):AndroidViewModel(application) {
                     }
                 }
                 is Result.Error -> {
-                    Log.e("getDiscount:", "${result.exception.message}")
+                    Log.e("getAddress:", "${result.exception.message}")
                     _loadingVisibility.postValue(View.GONE)
                 }
                 is Result.Loading -> {
-                    Log.i("getDiscount", "Loading")
+                    Log.i("getAddress", "Loading")
                     _loadingVisibility.postValue(View.GONE)
                 }
             }
