@@ -22,17 +22,13 @@ class ShopViewModelTest{
     var executer= InstantTaskExecutorRule()
 
     @Test
-    fun addNewValue_SetLiveData(){
+    fun navigateToCart_SetLiveData(){
         val viewModel =  ShopViewModel(ApplicationProvider.getApplicationContext())
-        viewModel.navigateToSearch()
+        viewModel.navigateToCart()
 
-        val observer = Observer<Unit>{}
-
-        viewModel.navigateToSearch.observeForever { observer }
-
+        val observer = viewModel.navigateToCart.getOrAwaitValue()
         Assert.assertNotNull(observer)
 
-        viewModel.navigateToSearch.removeObserver { observer }
     }
     @Test
     fun getSmartCollection_SetNavigatLiveData(){

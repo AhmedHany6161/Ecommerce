@@ -13,19 +13,34 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentShopBinding
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
+import com.iti.team.ecommerce.model.reposatory.ModelRepo
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
 import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.utils.NetworkConnection
 
 
 class ShopFragment : Fragment() {
 
-    private lateinit var viewModel: ShopViewModel
+
     private lateinit var binding: FragmentShopBinding
     val args:ShopFragmentArgs by navArgs()
+
+
+    val viewModel: ShopViewModel by viewModels {
+       ShopViewModelFactory( ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext),   ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext))
+    }
 
 
     override fun onCreateView(
@@ -33,7 +48,8 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentShopBinding.inflate(inflater)
-        viewModel = ShopViewModel(requireActivity().application)
+
+
         init()
         return binding.root
     }

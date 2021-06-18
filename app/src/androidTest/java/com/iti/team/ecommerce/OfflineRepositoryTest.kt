@@ -22,23 +22,23 @@ class OfflineRepositoryTest {
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val db = OfflineDatabase.getInstance(context)
-        repo = ModelRepository(db)
+        repo = ModelRepository(db,context)
     }
     @Test
     fun deleteProduct() {
         runBlocking {
-            repo.removeFromWishList(Product(12, "ssss", "sss", "ssss", 41))
+            repo.removeFromWishList(12)
         }
     }
 
     @Test
     fun writeUserAndReadInList() {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.addToWishList(Product(12, "ssss", "sss", "ssss", 41))
-            repo.addToWishList(Product(13, "ssss", "sss", "ssss", 41))
-            repo.addToWishList(Product(14, "ssss", "sss", "ssss", 41))
-            repo.addToWishList(Product(15, "ssss", "sss", "ssss", 41))
-            Assert.assertEquals(repo.getAllProducts().singleOrNull()?.size, 5)
+            repo.addToWishList(Product(12, "ssss", "sss", "ssss","12"))
+            repo.addToWishList(Product(13, "ssss", "sss", "ssss", "41"))
+            repo.addToWishList(Product(14, "ssss", "sss", "ssss", "41"))
+            repo.addToWishList(Product(15, "ssss", "sss", "ssss", "41"))
+            Assert.assertEquals(repo.getAllWishListProducts().singleOrNull()?.size, 5)
         }
 
 

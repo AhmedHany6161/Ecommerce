@@ -1,25 +1,24 @@
 package com.iti.team.ecommerce.ui.shop
 
 
-import android.app.Application
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.*
-import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
-import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShopViewModel(application: Application): AndroidViewModel(application)  {
-    private val  modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application), application.applicationContext)
+class ShopViewModel(val modelRepository: ModelRepo,
+                    val offlineRepository: OfflineRepo): ViewModel()  {
+//    private val  modelRepository: ModelRepository =
+//        ModelRepository(OfflineDatabase.getInstance(application), application.applicationContext)
     private var code:String = ""
     var shopAdapter = ShopAdapter(this)
 
@@ -136,7 +135,7 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
     }
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.getCartProducts().collect {
+            offlineRepository.getCartProducts().collect {
                 _cartCount.postValue(it.size)
             }
         }
@@ -223,3 +222,10 @@ class ShopViewModel(application: Application): AndroidViewModel(application)  {
 
 
 }
+
+class ShopViewModelFactory (
+    private val modelRepository: ModelRepo,
+    private val offlineRepository: OfflineRepo
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (ShopViewModel(modelRepository,offlineRepository) as T)}
