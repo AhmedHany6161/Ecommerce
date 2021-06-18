@@ -1,16 +1,25 @@
-package com.iti.team.ecommerce.ui.shop
+package com.iti.team.ecommerce.shop
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.iti.team.ecommerce.getOrAwaitValue
+import com.iti.team.ecommerce.ui.shop.ShopViewModel
 import org.junit.Assert
+import org.junit.Rule
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 
+@Config(sdk = [29])
 @RunWith(AndroidJUnit4::class)
 class ShopViewModelTest{
+
+    @get:Rule
+    var executer= InstantTaskExecutorRule()
 
     @Test
     fun addNewValue_SetLiveData(){
@@ -42,14 +51,11 @@ class ShopViewModelTest{
     @Test
     fun addNewValue_SetNavigationLiveData(){
         val viewModel =  ShopViewModel(ApplicationProvider.getApplicationContext())
-        viewModel.navigateToCart()
+        viewModel.navigateToSearch()
 
-        val observer = Observer<Unit>{}
+        val value = viewModel.navigateToSearch.getOrAwaitValue()
+        Assert.assertNotNull(value)
 
-        viewModel.navigateToSearch.observeForever { observer }
 
-        Assert.assertNotNull(observer)
-
-        viewModel.navigateToSearch.removeObserver { observer }
     }
 }

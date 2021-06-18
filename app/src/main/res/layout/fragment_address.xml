@@ -180,7 +180,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/rounded_rectangle"/>
+                        android:background="@drawable/rounded_rectangle"
+                        mutableVisibility="@{viewModel.buttonVisibility}"/>
                     <ProgressBar
                         android:id="@+id/loading"
                         android:layout_width="wrap_content"
@@ -191,7 +192,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
-                        android:visibility="gone"/>
+                        mutableVisibility="@{viewModel.loadingVisibility}"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 

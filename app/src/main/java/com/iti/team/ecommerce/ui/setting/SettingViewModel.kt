@@ -16,6 +16,9 @@ class SettingViewModel (application: Application) : AndroidViewModel(application
     fun logout() {
         modelRepository.setLogin(false)
         modelRepository.setEmail("")
+        modelRepository.setAddressID(0)
+        modelRepository.setAddress("")
+        modelRepository.setDiscount(0)
         FirebaseAuth.getInstance().signOut()
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.reset()
