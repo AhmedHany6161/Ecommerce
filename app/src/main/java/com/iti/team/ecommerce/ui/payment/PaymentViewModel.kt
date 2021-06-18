@@ -93,6 +93,9 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         //_couponTextColor.postValue(Color.GRAY)
         //_couponText.postValue("")
        // calDiscount()
+        if (modelRepository.getAddressID() > 0 ){
+            getAddress()
+        }
     }
 
     fun getDiscount(discountId: Long){
@@ -205,7 +208,7 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
     }
     fun cashOnDeliveryClicked(){
         _cashLoadingVisibility.postValue(View.VISIBLE)
-        if (modelRepository.getAddress() != ""){
+        if (modelRepository.getAddressID() > 0){
             Log.i("PaymentViewModel","cashOnDeliveryClicked")
             addOrder("voided")
         }else{
@@ -247,6 +250,33 @@ class PaymentViewModel(application: Application):AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             productList.forEach {
                 modelRepository.removeFromCart(it.id)
+            }
+        }
+    }
+
+   private fun getAddress() {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.i("getAddress:", "${modelRepository.getCustomerID()}")
+            when (val result = modelRepository.getAddress(modelRepository.getCustomerID())) {
+                is Result.Success -> {
+                    Log.i("getAddress:", "${result.data?.customer?.addresses}")
+                    if (result.data?.customer?.addresses?.isEmpty() == true){
+                    }else{
+                        result.data?.customer?.addresses?.let { it[0].id }?.let {
+                            modelRepository.setAddressID(
+                                it
+                            )
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    Log.e("getAddress:", "${result.exception.message}")
+                    _loadingVisibility.postValue(View.GONE)
+                }
+                is Result.Loading -> {
+                    Log.i("getAddress", "Loading")
+                    _loadingVisibility.postValue(View.GONE)
+                }
             }
         }
     }

@@ -60,8 +60,8 @@ class AddAddressFragment:Fragment() {
     private fun buttonAddressClicked(){
 
         binding.addressButton.setOnClickListener {
-            binding.loading.visibility = View.VISIBLE
-            binding.addressButton.visibility = View.GONE
+//            binding.loading.visibility = View.VISIBLE
+//            binding.addressButton.visibility = View.GONE
             checkEmptyFields()
         }
     }

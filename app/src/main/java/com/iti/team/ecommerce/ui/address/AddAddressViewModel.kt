@@ -2,13 +2,13 @@ package com.iti.team.ecommerce.ui.address
 
 import android.app.Application
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.iti.team.ecommerce.model.data_classes.Address
 import com.iti.team.ecommerce.model.data_classes.AddressModel
-import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
@@ -36,6 +36,9 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
 
     private var _addressObject = MutableLiveData<Event<Address>>()
 
+    private var _loadingVisibility = MutableLiveData<Int>()
+    private var _buttonVisibility = MutableLiveData<Int>()
+
 
     val firstName: LiveData<Event<Boolean>>
         get() = _firstName
@@ -61,22 +64,40 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
     val error: LiveData<Event<Boolean>>
         get() = _error
 
+    val loadingVisibility: LiveData<Int>
+        get() = _loadingVisibility
+
+    val buttonVisibility: LiveData<Int>
+        get() = _buttonVisibility
+
+    init {
+        _loadingVisibility.postValue(View.GONE)
+    }
+
     fun addAddress(customerId: Long,address: AddressModel) {
+        _buttonVisibility.postValue(View.GONE)
+        _loadingVisibility.postValue(View.VISIBLE)
         CoroutineScope(Dispatchers.IO).launch {
             when (val result = modelRepository.addAddress(customerId,address)) {
                 is Result.Success -> {
                     Log.i("getProducts:", "${result.data?.customerAddress?.id}")
                     result.data?.customerAddress?.id?.let { modelRepository.setAddressID(it) }
                     result.data?.customerAddress?.address?.let { modelRepository.setAddress(it) }
+                    _buttonVisibility.postValue(View.VISIBLE)
+                    _loadingVisibility.postValue(View.GONE)
                     _finishLoading.postValue(Event(true))
                 }
 
                 is Result.Error -> {
                     Log.e("getDiscount:", "${result.exception.message}")
+                    _buttonVisibility.postValue(View.VISIBLE)
+                    _loadingVisibility.postValue(View.GONE)
                     _error.postValue(Event(true))
                 }
                 is Result.Loading -> {
                     Log.i("getDiscount", "Loading")
+                    _buttonVisibility.postValue(View.VISIBLE)
+                    _loadingVisibility.postValue(View.GONE)
                     _error.postValue(Event(true))
                 }
             }
@@ -87,6 +108,8 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
     fun updateAddress(customerId: Long,addressId: Long,address:AddressModel) {
         //deleteAddress(modelRepository.getCustomerID(),modelRepository.getAddressID())
         CoroutineScope(Dispatchers.IO).launch {
+            _buttonVisibility.postValue(View.GONE)
+            _loadingVisibility.postValue(View.VISIBLE)
             when (val result = modelRepository.updateAddress(customerId,addressId,address)) {
                 is Result.Success -> {
                     Log.i("updateAddress:", "${result.data?.customerAddress?.id}")
@@ -96,10 +119,14 @@ class AddAddressViewModel(application: Application):AndroidViewModel(application
 
                 is Result.Error -> {
                     Log.e("getDiscount:", "${result.exception.message}")
+                    _buttonVisibility.postValue(View.VISIBLE)
+                    _loadingVisibility.postValue(View.GONE)
                     _error.postValue(Event(true))
                 }
                 is Result.Loading -> {
                     Log.i("getDiscount", "Loading")
+                    _buttonVisibility.postValue(View.VISIBLE)
+                    _loadingVisibility.postValue(View.GONE)
                     _error.postValue(Event(true))
                 }
             }
