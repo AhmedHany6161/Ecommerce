@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Default).launch{
             delay(3000)
             CoroutineScope(Dispatchers.Main).launch{
-                bottomNavigation.isGone = false
                 navController.popBackStack()
                 navController.navigate(R.id.shopFragment)
             }
