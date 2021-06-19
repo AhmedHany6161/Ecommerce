@@ -1,14 +1,13 @@
 package com.iti.team.ecommerce.ui.shop_products
 
-import android.app.Application
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
-import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.ModelRepo
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
 import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
 import com.squareup.moshi.JsonAdapter
@@ -17,9 +16,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ShopProductsViewModel(application: Application) : AndroidViewModel(application) {
-     val  modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application),application)
+class ShopProductsViewModel(val modelRepository: ModelRepo,
+                            val offlineRepository: OfflineRepo
+) : ViewModel() {
+//     val  modelRepository: ModelRepository =
+//        ModelRepository(OfflineDatabase.getInstance(application),application)
 
 
     var shopProductAdapter = ShopProductAdapter(this)
@@ -52,7 +53,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
    private fun readWishList(){
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                modelRepository.getAllId().collect {
+                offlineRepository.getAllId().collect {
                     idSet = HashSet(it)
                 }
             }
@@ -113,7 +114,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     fun addToWishList(products: Products, image: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.addToWishList(
+            offlineRepository.addToWishList(
                 Product(
                     products.productId ?: 0,
                     products.title ?: "",
@@ -128,7 +129,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
 
     fun removeFromWishList(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.removeFromWishList(id)
+            offlineRepository.removeFromWishList(id)
         }
 
     }
@@ -140,3 +141,10 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
         _navigateToLogin.postValue(Event(true))
     }
 }
+
+class ShopProductViewModelFactory (
+    private val modelRepository: ModelRepo,
+    private val offlineRepository: OfflineRepo
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (ShopProductsViewModel(modelRepository,offlineRepository) as T)}

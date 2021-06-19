@@ -7,21 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentShopProductsBinding
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 
 class ShopProducts: Fragment() {
 
     private lateinit var binding: FragmentShopProductsBinding
     val arg:ShopProductsArgs by navArgs()
-    private val viewModel by lazy {
-        ShopProductsViewModel(requireActivity().application)
+
+
+    val viewModel: ShopProductsViewModel by viewModels {
+        ShopProductViewModelFactory( ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext),   ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext)
+        )
     }
 
     override fun onCreateView(

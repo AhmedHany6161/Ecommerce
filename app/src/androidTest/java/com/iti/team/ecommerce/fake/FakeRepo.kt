@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.ui.shop
+package com.iti.team.ecommerce.fake
 
 import android.content.Context
 import com.iti.team.ecommerce.model.data_classes.*
@@ -13,35 +13,7 @@ class FakeRepo(context: Context):ModelRepo {
     }
 
     override suspend fun getProducts(collectionId: Long): Result<ProductsModel?> {
-        val product = listOf(
-            Products(
-                11, "test", "http://image", "adidas",
-                "170", "vendor", listOf(), listOf(), Images("testsImage")
-            ),
-            Products(
-                12,
-                "test",
-                "http://image",
-                "adidas",
-                "170",
-                "vendor",
-                listOf(),
-                listOf(),
-                Images("testsImage")
-            ), Products(
-                13,
-                "test",
-                "http://image",
-                "adidas",
-                "170",
-                "vendor",
-                listOf(),
-                listOf(),
-                Images("testsImage")
-            )
-        )
-        val productModel = ProductsModel(product)
-        return Result.Success(productModel)
+        TODO("Not yet implemented")
     }
 
     override suspend fun createDiscount(discount: Discount): Result<Discount?> {
@@ -65,10 +37,7 @@ class FakeRepo(context: Context):ModelRepo {
     }
 
     override suspend fun smartCollection(): Result<SmartCollectionModel?> {
-        val image = Images("testsImage")
-        val smartCollectionList = listOf(SmartCollection(1,image),SmartCollection(1,image))
-        val smartCollectionModel = SmartCollectionModel(smartCollectionList)
-        return Result.Success(smartCollectionModel)
+        TODO("Not yet implemented")
     }
 
     override suspend fun updateCustomer(

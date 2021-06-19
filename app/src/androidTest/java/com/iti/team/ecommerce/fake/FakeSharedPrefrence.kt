@@ -1,4 +1,4 @@
-package com.iti.team.ecommerce.ui.shop
+package com.iti.team.ecommerce.fake
 
 import android.content.Context
 import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
