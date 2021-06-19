@@ -148,15 +148,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productsRecycle"
             adapter="@{viewModel.categoriesProductAdapter}"
-            android:layout_width="320dp"
-            android:layout_height="550dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="25dp"
             android:background="@color/dark_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tabLayout"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/shop_product_row_item" />
+            tools:listitem="@layout/shop_product_row_item"
+            />
 
         <TextView
             android:id="@+id/shop_cart_badge"
