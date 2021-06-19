@@ -32,6 +32,8 @@ class SearchViewModelTest {
 
     @Mock
     private lateinit var mockRepo: ModelRepo
+
+
     private lateinit var fakeRepository:FakeRepo
     private lateinit var offlineRepository:OfflineRepo
     private  var viewModel:SearchViewModel? = null

@@ -7,11 +7,14 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentProductDetailsBinding
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.ui.MainActivity
 
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType
@@ -22,8 +25,14 @@ class ProductDetailsFragment: Fragment() {
 
     private lateinit var binding: FragmentProductDetailsBinding
 
-    private val viewModel by lazy {
-        ProductDetailsViewModel(requireActivity().application)
+
+    private val viewModel: ProductDetailsViewModel by viewModels {
+        ProductDetailsViewModelFactory( ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext),   ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext)
+        )
     }
 
     private lateinit var sliderAdapter: SliderAdapter

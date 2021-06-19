@@ -12,15 +12,20 @@ import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
+import com.iti.team.ecommerce.ui.shop.ShopViewModel
 import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductDetailsViewModel(application: Application) : AndroidViewModel(application) {
-     val  modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
+class ProductDetailsViewModel(val modelRepository: ModelRepo,
+                              val offlineRepository: OfflineRepo
+) : ViewModel() {
+//     val  modelRepository: ModelRepository =
+//        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
     private var  inWishL: Boolean? = false
     private var  product:Products? = null
@@ -182,7 +187,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun addToWishList(products: Products, image: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.addToWishList(
+            offlineRepository.addToWishList(
                 Product(
                     products.productId ?: 0,
                     products.title ?: "",
@@ -197,7 +202,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun removeFromWishList(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.removeFromWishList(id)
+            offlineRepository.removeFromWishList(id)
         }
 
     }
@@ -215,7 +220,7 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
                         variant_id = product?.variants?.get(0)?.id ?:0
                     )
                 }?.let {
-                    modelRepository.addToCart(
+                    offlineRepository.addToCart(
                         it
                     )
                 }
@@ -227,3 +232,9 @@ class ProductDetailsViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 }
+class ProductDetailsViewModelFactory (
+    private val modelRepository: ModelRepo,
+    private val offlineRepository: OfflineRepo
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (ProductDetailsViewModel(modelRepository,offlineRepository) as T)}
