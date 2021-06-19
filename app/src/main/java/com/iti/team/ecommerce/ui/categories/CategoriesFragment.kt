@@ -54,7 +54,7 @@ class CategoriesFragment: Fragment() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 mainCatagoriesList?.let {
-                it[tab.position].collectionsId?.let { it1 ->
+                it[tab.position+1].collectionsId?.let { it1 ->
                     viewModel.getProductsById(it1)
                 }}
             }
@@ -73,22 +73,7 @@ class CategoriesFragment: Fragment() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-//        binding.mainCatagoryRecycle.apply {
-//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//            adapter = mainCategoriesAdapter
-//        }
-//        binding.accessoryTxt.setOnClickListener{
-//           viewModel.getProductFromType("ACCESSORIES")
-////            binding.accessoryTxt.setTextColor(getResources().getColor(R.color.register_bk_color))
-////            binding.tShirtTxt.setTextColor(getResources().getColor(R.color.gray))
-////            binding.shoesTxt.setTextColor(getResources().getColor(R.color.gray))
-//        }
-//        binding.shoesTxt.setOnClickListener{
-//            viewModel.getProductFromType("SHOES")
-//        }
-//        binding.tShirtTxt.setOnClickListener{
-//            viewModel.getProductFromType("T-SHIRTS")
-//        }
+
     }
     private fun observeData(){
         observeMainCategoriesList()
