@@ -8,39 +8,40 @@ import com.iti.team.ecommerce.model.reposatory.ModelRepo
 
 class FakeRepo(context: Context):ModelRepo {
     val preference  :Preference = FakeSharedPrefrence(context)
+    val product = listOf(
+        Products(
+            11, "test", "http://image", "adidas",
+            "170", "vendor", listOf(), listOf(), Images("testsImage")
+        ),
+        Products(
+            12,
+            "test",
+            "http://image",
+            "adidas",
+            "170",
+            "vendor",
+            listOf(),
+            listOf(),
+            Images("testsImage")
+        ), Products(
+            13,
+            "test",
+            "http://image",
+            "adidas",
+            "170",
+            "vendor",
+            listOf(),
+            listOf(),
+            Images("testsImage")
+        )
+    )
+    val productModel = ProductsModel(product)
     override suspend fun getMainCategories(): Result<MainCategories?> {
         TODO("Not yet implemented")
     }
 
     override suspend fun getProducts(collectionId: Long): Result<ProductsModel?> {
-        val product = listOf(
-            Products(
-                11, "test", "http://image", "adidas",
-                "170", "vendor", listOf(), listOf(), Images("testsImage")
-            ),
-            Products(
-                12,
-                "test",
-                "http://image",
-                "adidas",
-                "170",
-                "vendor",
-                listOf(),
-                listOf(),
-                Images("testsImage")
-            ), Products(
-                13,
-                "test",
-                "http://image",
-                "adidas",
-                "170",
-                "vendor",
-                listOf(),
-                listOf(),
-                Images("testsImage")
-            )
-        )
-        val productModel = ProductsModel(product)
+
         return Result.Success(productModel)
     }
 
@@ -61,7 +62,7 @@ class FakeRepo(context: Context):ModelRepo {
     }
 
     override suspend fun getProductsFromType(productType: String): Result<ProductsModel?> {
-        TODO("Not yet implemented")
+        return Result.Success(productModel)
     }
 
     override suspend fun smartCollection(): Result<SmartCollectionModel?> {

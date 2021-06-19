@@ -23,7 +23,7 @@ class OfflineRepo:OfflineRepo {
     }
 
     override fun getAllId(): Flow<List<Long>> {
-        TODO("Not yet implemented")
+        return flow { emit(listOf<Long>()) }
     }
 
     override suspend fun addToWishList(product: Product) {

@@ -8,7 +8,10 @@ import com.iti.team.ecommerce.model.data_classes.Product
 import com.iti.team.ecommerce.model.data_classes.Products
 import com.iti.team.ecommerce.model.local.room.OfflineDatabase
 import com.iti.team.ecommerce.model.remote.Result
+import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
+import com.iti.team.ecommerce.ui.shop.ShopViewModel
 import com.iti.team.ecommerce.utils.Constants
 import com.iti.team.ecommerce.utils.extensions.Event
 
@@ -18,9 +21,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
-    private val modelRepository: ModelRepository =
-        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
+class SearchViewModel(val modelRepository: ModelRepo,
+                      val offlineRepository: OfflineRepo
+) : ViewModel(){
+//    private val modelRepository: ModelRepository =
+//        ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
 
 
     var searchProductAdapter = SearchProductAdapter(this)
@@ -68,7 +73,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                modelRepository.getAllId().collect {
+                offlineRepository.getAllId().collect {
                     idSet = HashSet(it)
                 }
             }
@@ -203,7 +208,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun addToWishList(products: Products, image: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.addToWishList(
+            offlineRepository.addToWishList(
                 Product(
                     products.productId ?: 0,
                     products.title ?: "",
@@ -217,7 +222,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun removeFromWishList(id: Long) {
         viewModelScope.launch(Dispatchers.IO) {
-            modelRepository.removeFromWishList(id)
+            offlineRepository.removeFromWishList(id)
         }
 
     }
@@ -228,3 +233,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 }
+class SearchViewModelFactory (
+    private val modelRepository: ModelRepo,
+    private val offlineRepository: OfflineRepo
+) : ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel> create(modelClass: Class<T>) =
+        (SearchViewModel(modelRepository,offlineRepository) as T)}

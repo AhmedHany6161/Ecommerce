@@ -16,19 +16,19 @@ import org.junit.runner.RunWith
 class ShopFragmentTest {
 
 
-    @Test
-    fun testMainState() {
-        val binding = FragmentShopBinding.inflate(ApplicationProvider.getApplicationContext())
-        val fakeRepository = FakeRepo(ApplicationProvider.getApplicationContext())
-        val offlineRepository = OfflineRepo()
-        val viewModel = ShopViewModel(fakeRepository,offlineRepository)
-        binding.viewModel = viewModel
-
-
-        binding.viewModel.smartCollection()
-
-        binding.executePendingBindings()
-
-        assertEquals(binding.textNoInternet.visibility,View.GONE)
-    }
+//    @Test
+//    fun testMainState() {
+//        val binding = FragmentShopBinding.inflate(ApplicationProvider.getApplicationContext())
+//        val fakeRepository = FakeRepo(ApplicationProvider.getApplicationContext())
+//        val offlineRepository = OfflineRepo()
+//        val viewModel = ShopViewModel(fakeRepository,offlineRepository)
+//        binding.viewModel = viewModel
+//
+//
+//        binding.viewModel.smartCollection()
+//
+//        binding.executePendingBindings()
+//
+//        assertEquals(binding.textNoInternet.visibility,View.GONE)
+//    }
 }

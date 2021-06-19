@@ -10,18 +10,25 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.iti.team.ecommerce.databinding.FragmentSearchBinding
+import com.iti.team.ecommerce.model.local.room.OfflineDatabase
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.ui.MainActivity
-import com.iti.team.ecommerce.ui.shop_products.ShopProductsDirections
 
 class SearchFragment: Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private val viewModel by lazy {
-        SearchViewModel(requireActivity().application)
+    private val viewModel:SearchViewModel by viewModels {
+        SearchViewModelFactory( ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext),   ModelRepository(
+            OfflineDatabase.getInstance(requireActivity().application),
+            requireActivity().applicationContext)
+        )
     }
     private val arg:SearchFragmentArgs by navArgs()
 
