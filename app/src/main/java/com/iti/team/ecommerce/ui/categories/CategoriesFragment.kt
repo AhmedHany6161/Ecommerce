@@ -53,10 +53,13 @@ class CategoriesFragment: Fragment() {
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mainCatagoriesList?.let {
-                it[tab.position+1].collectionsId?.let { it1 ->
-                    viewModel.getProductsById(it1)
-                }}
+                if(mainCatagoriesList.isNotEmpty()){
+                    mainCatagoriesList?.let {
+                        it[tab.position+1].collectionsId?.let { it1 ->
+                            viewModel.getProductsById(it1)
+                        }}
+                }
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -172,11 +175,13 @@ class CategoriesFragment: Fragment() {
                         super.onAvailable(network)
                         if (activity != null) {
                             activity!!.runOnUiThread {
-                                binding.progress.visibility = View.VISIBLE
+                               // binding.progress.visibility = View.VISIBLE
 //                                binding.linearLayout.visibility = View.VISIBLE
 //                                binding.mainCatagoryRecycle.visibility = View.VISIBLE
                                 binding.noNetworkResult.visibility = View.GONE
                                 binding.textNoInternet.visibility = View.GONE
+                                binding.productsRecycle.visibility = View.VISIBLE
+                                binding.subCategoryTabLayout.visibility = View.VISIBLE
                                 viewModel.getMainCategories()
                             }
                         }
@@ -208,6 +213,8 @@ class CategoriesFragment: Fragment() {
 //            binding.mainCatagoryRecycle.visibility = View.GONE
             binding.progress.visibility = View.GONE
             binding.textNoInternet.visibility = View.VISIBLE
+            binding.productsRecycle.visibility = View.GONE
+            binding.subCategoryTabLayout.visibility = View.GONE
         }
     }
 }
