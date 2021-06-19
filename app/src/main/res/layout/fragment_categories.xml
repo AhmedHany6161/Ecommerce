@@ -83,83 +83,83 @@
             android:visibility="gone"
             android:layout_marginTop="16dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainCatagoryRecycle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginStart="100dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"></androidx.recyclerview.widget.RecyclerView>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="13"
-            android:orientation="horizontal"
-            android:weightSum="10"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="313dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:tabMode="scrollable">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kids" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/men" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sale" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/women" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/sub_CategoryTabLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="25dp"
+            android:rotation="-90"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/productsRecycle"
+            app:layout_constraintHorizontal_bias="0.56"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+            app:layout_constraintVertical_bias="0.319"
+            app:tabMode="scrollable">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shoes" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/accessory" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/t_shirt" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productsRecycle"
+            adapter="@{viewModel.categoriesProductAdapter}"
+            android:layout_width="320dp"
+            android:layout_height="550dp"
+            android:layout_marginTop="25dp"
+            android:background="@color/dark_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainCatagoryRecycle"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+            app:layout_constraintVertical_bias="0.0"
+            tools:listitem="@layout/shop_product_row_item" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/shoesTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textColor="@color/register_bk_color"
-                    android:textSize="15sp"
-                    android:clickable="true"
-                    android:text="@string/shoes" />
-
-                <TextView
-                    android:id="@+id/accessoryTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/register_bk_color"
-                    android:clickable="true"
-                    android:text="@string/accessory" />
-
-                <TextView
-                    android:id="@+id/t_shirtTxt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:textSize="15sp"
-                    android:textColor="@color/register_bk_color"
-                    android:text="@string/t_shirt" />
-            </LinearLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productsRecycle"
-                adapter="@{viewModel.categoriesProductAdapter}"
-                android:layout_width="wrap_content"
-                android:background="@color/light_gray"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="4dp"
-                tools:listitem="@layout/shop_product_row_item" />
-
-
-        </LinearLayout>
         <TextView
             android:id="@+id/shop_cart_badge"
             android:layout_width="16dp"
@@ -173,6 +173,7 @@
             app:layout_constraintBottom_toTopOf="@+id/cart_image"
             app:layout_constraintEnd_toEndOf="@+id/cart_image"
             />
+
         <ProgressBar
             android:id="@+id/progress"
             mutableVisibility="@{viewModel.loading}"
@@ -181,6 +182,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainCatagoryRecycle" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

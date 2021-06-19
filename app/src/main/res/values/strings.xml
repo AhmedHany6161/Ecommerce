@@ -19,7 +19,7 @@
 
     <!--    wesam-->
     <string name="description">Description</string>
-    <string name="t_shirt">T-Shirt</string>
+    <string name="t_shirt">T-Shirts</string>
     <string name="shoes">Shoes</string>
     <string name="accessory">Accessories</string>
     <string name="special_offer">Special\nOffer</string>
@@ -242,5 +242,13 @@ The Ecommerce App allows people to show shop brand, show all products belong to 
     <string name="egp">EGP</string>
     <string name="aboutUs">About Us</string>
     <string name="rating">Rating/feedback</string>
+    <string name="wishop">WiShop</string>
+    <string name="wi">Wi</string>
+    <string name="op">op</string>
+    <string name="sh">sh</string>
+    <string name="sale">Sale</string>
+    <string name="women">Women</string>
+    <string name="men">Men</string>
+    <string name="kids">Kids</string>
     <!--    nermeen-->
 </resources>

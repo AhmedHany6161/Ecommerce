@@ -15,8 +15,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.databinding.FragmentCategoriesBinding
+import com.iti.team.ecommerce.model.data_classes.MainCollections
 import com.iti.team.ecommerce.ui.MainActivity
 import com.iti.team.ecommerce.ui.shop.ShopFragmentDirections
 import com.iti.team.ecommerce.utils.NetworkConnection
@@ -25,6 +27,7 @@ class CategoriesFragment: Fragment() {
     private lateinit var viewModel: CategoriesViewModel
     private lateinit var binding: FragmentCategoriesBinding
     private lateinit var mainCategoriesAdapter: MainCategoriesAdapter
+    private lateinit var mainCatagoriesList: List<MainCollections>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,13 +35,13 @@ class CategoriesFragment: Fragment() {
         viewModel = ViewModelProvider(this).get(CategoriesViewModel::class.java)
         mainCategoriesAdapter= MainCategoriesAdapter(ArrayList(),this.context,viewModel)
         binding = FragmentCategoriesBinding.inflate(inflater, container, false)
-        setUpUI()
         init()
         return binding.root
     }
 
     private fun init(){
         binding.viewModel = viewModel
+        mainCatagoriesList= emptyList()
         setUpUI()
         observeData()
         observeCartCount()
@@ -46,23 +49,31 @@ class CategoriesFragment: Fragment() {
         registerConnectivityNetworkMonitor()
     }
     private fun setUpUI() {
-        binding.mainCatagoryRecycle.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = mainCategoriesAdapter
-        }
         binding.productsRecycle.layoutManager = GridLayoutManager(context,2)
-        binding.accessoryTxt.setOnClickListener{
-           viewModel.getProductFromType("ACCESSORIES")
-//            binding.accessoryTxt.setTextColor(getResources().getColor(R.color.register_bk_color))
-//            binding.tShirtTxt.setTextColor(getResources().getColor(R.color.gray))
-//            binding.shoesTxt.setTextColor(getResources().getColor(R.color.gray))
-        }
-        binding.shoesTxt.setOnClickListener{
-            viewModel.getProductFromType("SHOES")
-        }
-        binding.tShirtTxt.setOnClickListener{
-            viewModel.getProductFromType("T-SHIRTS")
-        }
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                mainCatagoriesList?.let {
+                it[tab.position+1].collectionsId?.let { it1 ->
+                    viewModel.getProductsById(it1)
+                }}
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+        binding.subCategoryTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewModel.getProductFromType(tab.text.toString().uppercase())
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+
     }
     private fun observeData(){
         observeMainCategoriesList()
@@ -76,9 +87,9 @@ class CategoriesFragment: Fragment() {
     private fun observeMainCategoriesList(){
         viewModel.mainCategories.observe(viewLifecycleOwner,{
             it?.let {
-                mainCategoriesAdapter.updateFavorite(it)
+                mainCatagoriesList=it
                 //  viewModel.getData(it[0].collectionsImage)
-                it[0].collectionsId?.let { it1 -> viewModel.getProductsById(it1) }
+                it[1].collectionsId?.let { it1 -> viewModel.getProductsById(it1) }
             }
         })
     }
@@ -162,8 +173,8 @@ class CategoriesFragment: Fragment() {
                         if (activity != null) {
                             activity!!.runOnUiThread {
                                 binding.progress.visibility = View.VISIBLE
-                                binding.linearLayout.visibility = View.VISIBLE
-                                binding.mainCatagoryRecycle.visibility = View.VISIBLE
+//                                binding.linearLayout.visibility = View.VISIBLE
+//                                binding.mainCatagoryRecycle.visibility = View.VISIBLE
                                 binding.noNetworkResult.visibility = View.GONE
                                 binding.textNoInternet.visibility = View.GONE
                                 viewModel.getMainCategories()
@@ -193,8 +204,8 @@ class CategoriesFragment: Fragment() {
             viewModel.getMainCategories()
         } else {
             binding.noNetworkResult.visibility = View.VISIBLE
-            binding.linearLayout.visibility = View.GONE
-            binding.mainCatagoryRecycle.visibility = View.GONE
+//            binding.linearLayout.visibility = View.GONE
+//            binding.mainCatagoryRecycle.visibility = View.GONE
             binding.progress.visibility = View.GONE
             binding.textNoInternet.visibility = View.VISIBLE
         }
