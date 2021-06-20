@@ -4,9 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.iti.team.ecommerce.model.data_classes.Images
-import com.iti.team.ecommerce.model.data_classes.Products
-import com.iti.team.ecommerce.ui.proudcts.ProductsViewModel
 import com.iti.team.ecommerce.ui.wish.WishListViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -14,7 +11,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+
 
 @Config(sdk = [29])
 @RunWith(AndroidJUnit4::class)
@@ -29,49 +28,25 @@ class WishViewModelTest {
     }
 
     @Test
-    fun navigateToLogin() {
-        val live = viewModel.get
-        viewModel.navigateToLogin()
-        Assert.assertNotNull(live.value)
-    }
-
-    @Test
-    fun inWishListTest() {
-        viewModel.addToWishList(
-            Products(
-                12, "asas", "asas",
-                "asas", "asas", "asas", listOf(), listOf(), Images("")
-            ), ""
-        )
-        Assert.assertTrue(viewModel.inWishList(12))
-    }
-
-    @Test
-    fun navigateToDetailsTest() {
+    fun getWishListTest() {
         runBlocking {
-            val live = viewModel.navigateToDetails
-            viewModel.navigateToDetails(
-                Products(
-                    12, "asas", "asas",
-                    "asas", "asas", "asas", listOf(), listOf(), Images("")
-                )
-            )
-            delay(2000)
-            Assert.assertNotNull(live.value)
+            val live = viewModel.getWishLis()
+            live.observeForever {
+                Assert.assertNotNull(it)
+            }
+            delay(6000)
+
         }
     }
-
     @Test
-    fun addToCart() {
+    fun askForRemoveTest() {
         runBlocking {
-            val live = viewModel.addToCart
-            viewModel.addToCart(
-                Products(
-                    12, "asas", "asas",
-                    "asas", "asas", "asas", listOf(), listOf(), Images("")
-                )," "
-            )
-            Assert.assertEquals(live.value,"product successfully added to cart")
+            val live = viewModel.remove
+            viewModel.askForRemove(12)
+            delay(1000)
+            live.value?.getContentIfNotHandled()?.let {
+                Assert.assertEquals(it,12)
+            }
         }
     }
 
