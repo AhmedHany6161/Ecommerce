@@ -11,11 +11,11 @@ import com.bumptech.glide.Glide
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Products
 
-class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private val viewModel: ProductsViewModel) :
+class ProductAdapter(private var dataSet: List<Products>,private val viewModel: ProductsViewModel) :
 
 
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
-    fun setData(products:List<Pair<Products,String>>){
+    fun setData(products:List<Products>){
         dataSet = products
     }
 
@@ -30,35 +30,35 @@ class ProductAdapter(private var dataSet: List<Pair<Products,String>>,private va
         private val addFav: ImageView = view.findViewById(R.id.add_fav_item)
         private val layout: ConstraintLayout = view.findViewById(R.id.product_layout)
 
-        fun bind(item: Pair<Products,String>){
-            name.text = item.first.title
-            price.text = "${item.first.variants[0]?.price} EGP"
-            brand.text = item.first.vendor
-            Glide.with(view).load(item.second).into(image)
+        fun bind(item: Products){
+            name.text = item.title
+            price.text = "${item.variants[0]?.price} EGP"
+            brand.text = item.vendor
+            Glide.with(view).load(item.image.src).into(image)
             addCart.setOnClickListener {
                 if (viewModel.isLogin()) {
-                    viewModel.addToCart(item.first, item.second)
+                    viewModel.addToCart(item)
                 } else {
                     viewModel.navigateToLogin()
                 }
             }
 
             layout.setOnClickListener {
-                viewModel.navigateToDetails(item.first)
+                viewModel.navigateToDetails(item)
             }
 
-            if(viewModel.inWishList(item.first.productId?:-1)){
+            if(viewModel.inWishList(item.productId?:-1)){
                 addFav.setImageResource(R.drawable.ic_favorite_red)
             }else{
                 addFav.setImageResource(R.drawable.ic_favorite)
             }
             addFav.setOnClickListener {
                 if (viewModel.isLogin()) {
-                    if (!viewModel.inWishList(item.first.productId ?: -1)) {
-                        viewModel.addToWishList(item.first, item.second)
+                    if (!viewModel.inWishList(item.productId ?: -1)) {
+                        viewModel.addToWishList(item)
                         addFav.setImageResource(R.drawable.ic_favorite_red)
                     } else {
-                        viewModel.removeFromWishList(item.first.productId ?: -1)
+                        viewModel.removeFromWishList(item.productId ?: -1)
                         addFav.setImageResource(R.drawable.ic_favorite)
                     }
                 } else {

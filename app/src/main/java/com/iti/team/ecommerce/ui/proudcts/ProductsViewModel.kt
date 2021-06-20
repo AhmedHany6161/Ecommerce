@@ -23,10 +23,10 @@ import kotlinx.coroutines.launch
 class ProductsViewModel(application: Application) : AndroidViewModel(application) {
     private val modelRepository: ModelRepository =
         ModelRepository(OfflineDatabase.getInstance(application),application.applicationContext)
-    private var dataOfProduct: MutableList<Pair<Products, String>> = mutableListOf()
+    private var dataOfProduct: MutableList<Products> = mutableListOf()
     private var dataOfBrand: MutableList<String> = mutableListOf()
     private val filteredSet: MutableSet<String> = HashSet()
-    private var productFlowData: MutableLiveData<List<Pair<Products, String>>> = MutableLiveData()
+    private var productFlowData: MutableLiveData<List<Products>> = MutableLiveData()
     private var brandFlowData: MutableLiveData<List<String>> = MutableLiveData()
     private val stateProductType: MutableStateFlow<String?> = MutableStateFlow(null)
     private var praType = ""
@@ -54,8 +54,9 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
                         praType = it
                         val list = getMainDataForCard(it)
                         bindBrands(list)
+                        dataOfProduct.addAll(list);
+                        productFlowData.postValue(dataOfProduct)
                         brandFlowData.postValue(dataOfBrand)
-                        fetchImages(list)
                     }
                 }
             }
@@ -83,19 +84,19 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
     fun search(name: String) {
         if (name.isNotEmpty()) {
-            productFlowData.value = (dataOfProduct.filter { checkIsAccepted(it.first, name) })
+            productFlowData.value = (dataOfProduct.filter { checkIsAccepted(it, name) })
         } else {
             filterBrand()
         }
     }
 
-    fun addToWishList(products: Products, image: String) {
+    fun addToWishList(products: Products) {
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.addToWishList(
                 Product(
                     products.productId ?: 0,
                     products.title ?: "",
-                    image,
+                    products.image.src?:"",
                     products.vendor ?: "",
                     (products.variants[0]?.price ?: ""),
                     variant_id = products.variants[0]?.id ?:0
@@ -118,7 +119,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         (filteredSet.contains(it.vendor) || filteredSet.isEmpty()) && it.title?.lowercase()
             ?.contains(name.lowercase()) ?: false
 
-    fun getProductsData(): LiveData<List<Pair<Products, String>>> {
+    fun getProductsData(): LiveData<List<Products>> {
         return productFlowData
     }
 
@@ -132,7 +133,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
     }
     private fun filterBrand(){
         if (filteredSet.isNotEmpty()) {
-            productFlowData.value = (dataOfProduct.filter { filteredSet.contains(it.first.vendor) })
+            productFlowData.value = (dataOfProduct.filter { filteredSet.contains(it.vendor) })
         } else {
             productFlowData.value = (dataOfProduct)
         }
@@ -147,17 +148,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         stateProductType.value = productType
     }
 
-    private suspend fun fetchImages(list: List<Products>) {
-        list.forEach {
-            when (val im = modelRepository.getProductImages(it.productId!!)) {
-                is Result.Success -> {
-                    dataOfProduct.add(Pair(it, im.data?.images?.get(0)?.src!!))
-                    productFlowData.postValue(dataOfProduct)
-                }
-            }
-        }
 
-    }
 
     private suspend fun getMainDataForCard(productType: String): List<Products> {
         when (val result = modelRepository.getProductsFromType(productType)) {
@@ -195,14 +186,14 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
         convertObjectToString(product)
     }
 
-    fun addToCart(products: Products, image: String) {
+    fun addToCart(products: Products) {
         _addToCart.value = "product successfully added to cart"
         viewModelScope.launch(Dispatchers.IO) {
             modelRepository.addToCart(
                 Product(
                     products.productId ?: 0,
                     products.title ?: "",
-                    image,
+                    products.image.src?:"",
                     products.vendor ?: "",
                     (products.variants[0]?.price ?: ""),
                     variant_id = products.variants[0]?.id ?:0
