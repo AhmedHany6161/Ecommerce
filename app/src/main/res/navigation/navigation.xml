@@ -208,7 +208,11 @@
         android:id="@+id/myOrdersFragment"
         android:name="com.iti.team.ecommerce.ui.orders.MyOrdersFragment"
         android:label="my_orders_fragment"
-        tools:layout="@layout/my_orders_fragment" />
+        tools:layout="@layout/my_orders_fragment" >
+        <action
+            android:id="@+id/action_myOrdersFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.iti.team.ecommerce.ui.profile.ProfileFragment"
@@ -306,6 +310,15 @@
         android:id="@+id/aboutFragment"
         android:name="com.iti.team.ecommerce.ui.about.AboutFragment"
         android:label="AboutFragment" />
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.iti.team.ecommerce.ui.order_details.OrderDetailsFragment"
+        android:label="order_details_fragment"
+        tools:layout="@layout/order_details_fragment" >
+        <argument
+            android:name="orderDetails"
+            app:argType="string" />
+    </fragment>
 
 
 </navigation>

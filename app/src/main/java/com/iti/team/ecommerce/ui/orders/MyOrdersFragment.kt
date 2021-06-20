@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.ui.proudcts.ProductsFragmentDirections
 
 class MyOrdersFragment : Fragment() {
     private lateinit var noData: LottieAnimationView
@@ -37,13 +38,21 @@ class MyOrdersFragment : Fragment() {
         card = view.findViewById(R.id.myOrder_card)
         val backBTN: ImageView = view.findViewById(R.id.my_order_back)
         noData = view.findViewById(R.id.order_no_data)
-        val adapter = MyOrderAdapter(ArrayList())
+        val adapter = MyOrderAdapter(ArrayList(),viewModel)
         listingToBack(backBTN)
         setupOrdersListRecyclerView(adapter)
         swipToRefresh(refresh, viewModel)
         viewModel.getOrders()
         listingForOrderChanges(viewModel, refresh, adapter)
         onTabSelected(tabLayout, viewModel)
+
+        viewModel.navigateToDetails.observe(viewLifecycleOwner,{
+            it.getContentIfNotHandled()?.let {
+                val action = MyOrdersFragmentDirections
+                    .actionMyOrdersFragmentToOrderDetailsFragment(it)
+                findNavController().navigate(action)
+            }
+        })
         return view
     }
 
