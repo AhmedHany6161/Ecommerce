@@ -20,21 +20,26 @@ import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
 
 class WishListFragment : Fragment() {
-
+    private lateinit var noData: LottieAnimationView
+    private lateinit var mainAnimation: LottieAnimationView
+    private lateinit var recyclerView:RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.products_fragment, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.products_rec)
+         recyclerView= view.findViewById(R.id.products_rec)
         val search: SearchView = view.findViewById(R.id.product_search)
         val title: TextView = view.findViewById(R.id.textView)
         val profile: LottieAnimationView = view.findViewById(R.id.shapeableImageView)
         val back: ImageView = view.findViewById(R.id.product_back)
         title.text = "Wish List"
+        noData = view.findViewById(R.id.no_network_result)
+        mainAnimation = view.findViewById(R.id.stop_animation)
+        noData.setAnimation(R.raw.no_datar)
         val viewModel: WishListViewModel by viewModels()
         val wishListAdapter = WishListAdapter(ArrayList(), viewModel)
-        setupWishListRecyclerView(recyclerView, wishListAdapter)
+        setupWishListRecyclerView(wishListAdapter)
         setupSearch(search, viewModel)
         listForWishList(viewModel, wishListAdapter)
         listeningForNavigate(viewModel)
@@ -88,8 +93,17 @@ class WishListFragment : Fragment() {
         wishListAdapter: WishListAdapter
     ) {
         viewModel.getWishLis().observe(viewLifecycleOwner, {
-            wishListAdapter.setData(it)
-            wishListAdapter.notifyDataSetChanged()
+            if (it.isNotEmpty()) {
+                recyclerView.visibility = View.VISIBLE
+                noData.visibility = View.INVISIBLE
+                mainAnimation.visibility = View.VISIBLE
+                wishListAdapter.setData(it)
+                wishListAdapter.notifyDataSetChanged()
+            } else {
+                recyclerView.visibility = View.INVISIBLE
+                noData.visibility = View.VISIBLE
+                mainAnimation.visibility = View.INVISIBLE
+            }
         })
     }
 
@@ -126,7 +140,6 @@ class WishListFragment : Fragment() {
     }
 
     private fun setupWishListRecyclerView(
-        recyclerView: RecyclerView,
         adapter: WishListAdapter
     ) {
         val gridLayoutManager = GridLayoutManager(context, 2)
