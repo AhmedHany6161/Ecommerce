@@ -1,5 +1,10 @@
 package com.iti.team.ecommerce.ui.proudcts
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +13,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.ui.MainActivity
+import com.iti.team.ecommerce.utils.NetworkConnection
 
 
 class ProductsFragment : Fragment() {
@@ -27,26 +34,39 @@ class ProductsFragment : Fragment() {
     private val viewModel: ProductsViewModel by viewModels()
     private lateinit var profile: LottieAnimationView
 
+   private lateinit var noInternet: TextView
+   private lateinit var  lottie: LottieAnimationView
+    private lateinit var  stopLottie: LottieAnimationView
+   private lateinit var productRecyclerView:RecyclerView
+   private lateinit var  brandRecyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.products_fragment, container, false)
-        val productRecyclerView: RecyclerView = view.findViewById(R.id.products_rec)
-        val brandRecyclerView: RecyclerView = view.findViewById(R.id.brand_rec)
+         productRecyclerView = view.findViewById(R.id.products_rec)
+         brandRecyclerView = view.findViewById(R.id.brand_rec)
         val search: SearchView = view.findViewById(R.id.product_search)
         val title: TextView = view.findViewById(R.id.textView)
         val back: ImageView = view.findViewById(R.id.product_back)
+        lottie = view.findViewById(R.id.no_network_result)
+        stopLottie = view.findViewById(R.id.stop_animation)
+         noInternet = view.findViewById(R.id.text_no_internet)
+//        productRecyclerView.visibility = View.GONE
+//        loti.visibility = View.VISIBLE
         profile = view.findViewById(R.id.shapeableImageView)
         title.text = arg.productType
         val productAdapter = ProductAdapter(ArrayList(),viewModel)
         val brandAdapter = BrandAdapter(ArrayList(),viewModel)
+        checkNetwork()
+        registerConnectivityNetworkMonitor()
         setupProductRecyclerView(productRecyclerView, productAdapter)
         setupBrandRecyclerView(brandRecyclerView, brandAdapter)
         listeningForProducts( productAdapter)
         setupSearch(search)
         listeningForBrand(brandAdapter)
-        viewModel.getProductsFromType(arg.productType)
+        //viewModel.getProductsFromType(arg.productType)
         navigateToProfile()
         listingToBack(back)
         listingToAddCart()
@@ -165,5 +185,55 @@ class ProductsFragment : Fragment() {
         val action = ProductsFragmentDirections
             .actionProductsToProductDetailsFragment(productObject,inWish)
         findNavController().navigate(action)
+    }
+
+    private fun registerConnectivityNetworkMonitor() {
+        if (context != null) {
+            val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val builder = NetworkRequest.Builder()
+            connectivityManager.registerNetworkCallback(builder.build(),
+                object : ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: Network) {
+                        super.onAvailable(network)
+                        if (activity != null) {
+                            activity!!.runOnUiThread {
+                                noInternet.visibility = View.INVISIBLE
+                                lottie.visibility = View.INVISIBLE
+                                productRecyclerView.visibility = View.VISIBLE
+                                brandRecyclerView.visibility = View.VISIBLE
+                                stopLottie.visibility = View.VISIBLE
+                                viewModel.getProductsFromType(arg.productType)
+                            }
+                        }
+                    }
+
+                    override fun onLost(network: Network) {
+                        super.onLost(network)
+                        if (activity != null) {
+                            activity!!.runOnUiThread {
+                                Toast.makeText(
+                                    context, "Network Not Available",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+    private fun checkNetwork(){
+        val networkConnection = NetworkConnection()
+        if (networkConnection.checkInternetConnection(requireContext())) {
+            viewModel.getProductsFromType(arg.productType)
+        } else {
+            productRecyclerView.visibility = View.GONE
+            brandRecyclerView.visibility = View.GONE
+            noInternet.visibility = View.VISIBLE
+            lottie.visibility = View.VISIBLE
+            stopLottie.visibility = View.GONE
+
+        }
     }
 }
