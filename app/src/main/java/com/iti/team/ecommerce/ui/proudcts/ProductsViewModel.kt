@@ -220,7 +220,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 
 
     private fun sendObjectToDetailsScreen(objectString: String,inWish:Boolean?){
-        _navigateToDetails.postValue(Event(Pair(objectString,inWish)))
+        _navigateToDetails.value = (Event(Pair(objectString,inWish)))
 
     }
 }
