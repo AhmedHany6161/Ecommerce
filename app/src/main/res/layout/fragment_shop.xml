@@ -56,7 +56,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp"
-            app:lottie_rawRes="@raw/no_internet"
+            app:lottie_rawRes="@raw/network"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             android:scaleType="fitXY"

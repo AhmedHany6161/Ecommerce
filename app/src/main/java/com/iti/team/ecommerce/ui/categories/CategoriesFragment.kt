@@ -182,6 +182,7 @@ class CategoriesFragment: Fragment() {
                                 binding.textNoInternet.visibility = View.GONE
                                 binding.productsRecycle.visibility = View.VISIBLE
                                 binding.subCategoryTabLayout.visibility = View.VISIBLE
+                                binding.tabLayout.visibility = View.VISIBLE
                                 viewModel.getMainCategories()
                             }
                         }
@@ -215,6 +216,7 @@ class CategoriesFragment: Fragment() {
             binding.textNoInternet.visibility = View.VISIBLE
             binding.productsRecycle.visibility = View.GONE
             binding.subCategoryTabLayout.visibility = View.GONE
+            binding.tabLayout.visibility = View.GONE
         }
     }
 }
