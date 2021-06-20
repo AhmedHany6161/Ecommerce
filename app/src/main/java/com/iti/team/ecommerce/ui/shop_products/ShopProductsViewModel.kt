@@ -49,6 +49,10 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
     val navigateToLogin: LiveData<Event<Boolean>>
         get() = _navigateToLogin
 
+    init {
+        _loading.postValue(View.GONE)
+    }
+
    private fun readWishList(){
         viewModelScope.launch(Dispatchers.IO) {
             launch {
@@ -63,6 +67,7 @@ class ShopProductsViewModel(application: Application) : AndroidViewModel(applica
         }
 
         fun getProducts(collectionId: Long) {
+            _loading.postValue(View.VISIBLE)
             readWishList()
             viewModelScope.launch(Dispatchers.IO) {
                 when (val result = modelRepository.getProducts(collectionId)) {

@@ -15,7 +15,7 @@
             android:id="@+id/lottieAnimationView"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:lottie_rawRes="@raw/orders"
+            app:lottie_rawRes="@raw/cart"
             android:layout_marginStart="16dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="false"
