@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
 import com.iti.team.ecommerce.model.data_classes.Order
 
-class MyOrderAdapter(private var dataSet: List<Order?> ) :
+class MyOrderAdapter(private var dataSet: List<Order?>, private val viewModel: MyOrdersViewModel) :
 
     RecyclerView.Adapter<MyOrderAdapter.ViewHolder>() {
     fun setData(list: List<Order?>) {
         dataSet = list
     }
-    class ViewHolder(val view: View) :
+
+    class ViewHolder(val view: View, val viewModel: MyOrdersViewModel) :
         RecyclerView.ViewHolder(view) {
         private val createdAt: TextView = view.findViewById(R.id.order_holder_created_at)
         private val price: TextView = view.findViewById(R.id.order_holder_final_price)
@@ -27,7 +28,11 @@ class MyOrderAdapter(private var dataSet: List<Order?> ) :
             } else {
                 item?.financialStatus
             }
-
+            view.setOnClickListener {
+                item?.let { it1 ->
+                    viewModel.navigateToDetails(it1)
+                }
+            }
         }
     }
 
@@ -35,7 +40,7 @@ class MyOrderAdapter(private var dataSet: List<Order?> ) :
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.order_holder, viewGroup, false)
 
-        return ViewHolder(view)
+        return ViewHolder(view,viewModel)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {

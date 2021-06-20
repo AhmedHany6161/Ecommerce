@@ -27,5 +27,7 @@ data class Order(
     @Json(name = "financial_status")
     val financialStatus: String? = "",
 
+    @Json(name = "line_items")
+    val items: List<OrderDetails>? = listOf(),
 
 )
