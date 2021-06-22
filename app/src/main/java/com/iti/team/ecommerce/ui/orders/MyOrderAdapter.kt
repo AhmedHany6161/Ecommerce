@@ -24,8 +24,8 @@ class MyOrderAdapter(private var dataSet: List<RequestAllOrdersQuery.Edge>, priv
         fun bind(item: RequestAllOrdersQuery.Node?) {
             createdAt.text = item?.createdAt.toString()
             price.text = "Price : ${item?.totalPrice.toString()} EGP"
-            status.text = if (item?.displayFinancialStatus?.name == "voided") {
-                "unpaid"
+            status.text = if (item?.displayFinancialStatus?.name?.lowercase() == "voided") {
+                "UNPAID"
             } else {
                 item?.displayFinancialStatus?.name
             }

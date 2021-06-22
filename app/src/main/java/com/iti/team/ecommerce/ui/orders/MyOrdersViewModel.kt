@@ -27,14 +27,14 @@ class MyOrdersViewModel(application: Application) : AndroidViewModel(application
     val orders: MutableLiveData<List<RequestAllOrdersQuery.Edge>> get() = _mutableOrder
     private lateinit var data: List<RequestAllOrdersQuery.Edge>
     private var _navigateToDetails = MutableLiveData<Event<String>>()
-
+    private var lastState ="all"
     val navigateToDetails: LiveData<Event<String>>get() = _navigateToDetails
     fun getOrders() {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = modelRepository.getAllOrderFormGQL(modelRepository.getEmail())) {
                 is Result.Success -> {
                     data = result.data.edges
-                    orders.postValue(data)
+                    filterByStatus(lastState)
                 }
                 is Result.Error -> {
                     Log.e("getProductsFromType:", "${result.exception.message}")
@@ -46,14 +46,15 @@ class MyOrdersViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun filterByStatus(status: String) {
-        var state = status
-        if (state == "unpaid"){
-            state = "voided"
+    fun filterByStatus(status: String = lastState) {
+        lastState = status
+        if (lastState == "unpaid"){
+            lastState = "voided"
         }
         if (status != "all") {
             orders.postValue(data.filter {
-                it.node.displayFinancialStatus?:"paid" == state
+                Log.e("aaaaaaaaaaaa",it.node.displayFinancialStatus?.name.toString())
+                it.node.displayFinancialStatus?.name.toString().lowercase() == lastState.lowercase()
             })
         } else {
             orders.postValue(data)
