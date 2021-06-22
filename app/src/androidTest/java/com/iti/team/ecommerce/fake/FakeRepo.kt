@@ -29,7 +29,8 @@ class FakeRepo(context: Context):ModelRepo {
     }
 
     override suspend fun createCustomer(customer: CustomerModel): Result<CustomerModel?> {
-        TODO("Not yet implemented")
+
+        return Result.Success(customer)
     }
 
     override suspend fun getProductsFromType(productType: String): Result<ProductsModel?> {

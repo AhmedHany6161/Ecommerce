@@ -11,14 +11,15 @@ import com.iti.team.ecommerce.model.data_classes.CustomerModel
 import com.iti.team.ecommerce.model.remote.Result
 import com.iti.team.ecommerce.model.reposatory.ModelRepo
 import com.iti.team.ecommerce.model.reposatory.ModelRepository
+import com.iti.team.ecommerce.model.reposatory.OfflineRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class RegisterViewModel(application: Application) : AndroidViewModel(application) {
+class RegisterViewModel(val modelRepository: ModelRepo): ViewModel() {
 
-    private val modelRepository: ModelRepo =
-        ModelRepository(null, application.applicationContext)
+//    private val modelRepository: ModelRepo =
+//        ModelRepository(null, application.applicationContext)
     private var _setError = MutableLiveData<String>()
     private var _successRegister = MutableLiveData<Boolean>()
     private var _loading = MutableLiveData<Int>(View.GONE)

@@ -12,6 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.iti.team.ecommerce.databinding.FragmentRegisterBinding
 import com.iti.team.ecommerce.model.data_classes.Customer
 import com.iti.team.ecommerce.model.data_classes.CustomerModel
+import com.iti.team.ecommerce.model.reposatory.ModelRepo
+import com.iti.team.ecommerce.model.reposatory.ModelRepository
 import com.iti.team.ecommerce.ui.MainActivity
 
 
@@ -19,12 +21,14 @@ class RegisterFragment : Fragment() {
 
     private lateinit var viewModel: RegisterViewModel
     private lateinit var binding: FragmentRegisterBinding
+    private lateinit var  modelRepository: ModelRepo
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = RegisterViewModel(requireActivity().application)
+        modelRepository= ModelRepository(null, requireActivity().application)
+        viewModel = RegisterViewModel(modelRepository)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         observeSuccessRigister()
         observeShowError()
