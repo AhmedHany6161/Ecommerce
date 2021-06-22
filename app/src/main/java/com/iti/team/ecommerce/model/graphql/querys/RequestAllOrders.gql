@@ -1,0 +1,25 @@
+query RequestAllOrders($email:String) {
+    orders(first: 15, query: $email) {
+        edges {
+            node {
+                email
+                createdAt
+                lineItems(first: 15) {
+                    edges {
+                        node {
+                            image {
+                                src
+                            }
+                            vendor
+                            currentQuantity
+                            title
+                            originalTotal
+                        }
+                    }
+                }
+                totalPrice
+                displayFinancialStatus
+            }
+        }
+    }
+}

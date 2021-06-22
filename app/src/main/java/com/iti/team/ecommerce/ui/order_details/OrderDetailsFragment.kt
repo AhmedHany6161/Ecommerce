@@ -1,7 +1,6 @@
 package com.iti.team.ecommerce.ui.order_details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.team.ecommerce.R
-import com.iti.team.ecommerce.ui.proudcts.ProductsFragmentArgs
 
 class OrderDetailsFragment : Fragment() {
 
@@ -29,7 +27,7 @@ class OrderDetailsFragment : Fragment() {
         val orderDetailsAdapter = OrderDetailsAdapter(ArrayList(), viewModel)
         val recyclerView: RecyclerView = view.findViewById(R.id.order_details_rec)
         setupRecyclerView(recyclerView, orderDetailsAdapter)
-        viewModel.getImages(viewModel.setOrder(arg.orderDetails))
+        viewModel.setData(viewModel.setOrder(arg.orderDetails))
         observeForData(orderDetailsAdapter)
         back.setOnClickListener {
             findNavController().popBackStack()
