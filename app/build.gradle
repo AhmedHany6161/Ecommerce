@@ -3,12 +3,14 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 ext{
 
     // ahmed
-
+     room_version = "2.3.0"
     //ahmed
 
     //wesam
@@ -24,6 +26,12 @@ ext{
     okhttp3Version = "4.5.0"
     kotlinCoroutinesAdapterVersion = "0.9.2"
     coroutinesVersion = '1.4.2'
+    imageSlider = '1.4.0'
+    lottieVersion = '3.4.0'
+    fragment_version = '1.3.4'
+    google_api = '18.1.3'
+    //payTab = '6.1.0'
+    payTab = '6.1.0'
     //wesam
 
     //norhan
@@ -46,6 +54,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,14 +73,44 @@ android {
         jvmTarget = '1.8'
     }
 
-    dataBinding {
+    buildFeatures {
+        dataBinding true
+    }
+
+    viewBinding {
         enabled = true
     }
+    configurations.all {
+        resolutionStrategy {
+            exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+        }
+    }
+
+    testOptions.unitTests{
+        includeAndroidResources = true
+    }
+
+//    signingConfigs {
+//        pt2_sample {
+//            storeFile file('C:\\work\\jks\\pt2_sample.jks')
+//            storePassword '7386889'
+//            keyAlias 'pt2_sample'
+//            keyPassword '7386889'
+//        }
+//    }
 
 }
 
 dependencies {
     // ahmed
+    implementation 'com.etebarian:meow-bottom-navigation:1.2.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "com.airbnb.android:lottie:3.4.0"
 
     //ahmed
 
@@ -91,6 +130,8 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+    //
+
 
     // Retrofit with Moshi Converter
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -112,9 +153,45 @@ dependencies {
     // Retrofit Coroutines Support
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$kotlinCoroutinesAdapterVersion"
 
+    //image slider
+    implementation "com.github.smarteist:autoimageslider:$imageSlider"
+
+    //lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    //fragment
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+    //google pay
+    implementation "com.google.android.gms:play-services-wallet:$google_api"
+
+    //paytab
+    implementation "com.paytabs:payment-sdk:$payTab"
+
+    //spinner
+    implementation('com.github.ganfra:material-spinner:2.0.0')
+
+    testImplementation 'androidx.test.ext:junit-ktx:1.1.2'
+    testImplementation 'androidx.core:core-ktx:1.5.0'
+    testImplementation 'org.robolectric:robolectric:4.4'
+
+    testImplementation "org.hamcrest:hamcrest-all:1.3"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+
+
     //wesam
 
     //norhan
+
+     //circle imageview
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //firebase
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+    //facebook
+    implementation 'com.facebook.android:facebook-android-sdk:4.29.0'
 
     //norhan
 

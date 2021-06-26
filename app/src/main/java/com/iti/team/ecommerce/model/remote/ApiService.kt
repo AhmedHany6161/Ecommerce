@@ -16,6 +16,10 @@ interface ApiService {
             Response<ProductsModel>
 
     @GET("products.json?")
+    suspend fun getProductsByVendor(@Query("vendor") vendor: String):
+            Response<ProductsModel>
+
+    @GET("products.json?")
     suspend fun getProductsFromType(@Query("product_type") productType: String):
             Response<ProductsModel>
 
@@ -35,6 +39,46 @@ interface ApiService {
     suspend fun register(@Body customer:CustomerModel):
             Response<CustomerModel>
 
+    @GET("smart_collections.json")
+    suspend fun smartCollection():
+            Response<SmartCollectionModel>
 
+
+    @PUT("customers/{id}.json")
+    suspend fun updateCustomer(@Path("id") customerId:Long,
+                               @Body customer:EditCustomerModel):
+            Response<EditCustomerModel>
+
+    @GET("customers.json?")
+    suspend fun login(@Query("email") email: String):
+            Response<CustomerLoginModel>
+
+    @POST("orders.json")
+    suspend fun addOrder(@Body order:AddOrderModel):
+            Response<GettingOrderModel>
+
+    @GET("orders.json?")
+    suspend fun getOrders(@Query("email") email: String):
+            Response<OrdersModels>
+
+    @POST("customers/{customer_id}/addresses.json")
+    suspend fun addAddress(@Path("customer_id") customerId:Long,
+        @Body address:AddressModel):
+            Response<CustomerAddressModel>
+
+    @DELETE("customers/{customer_id}/addresses/{address_id}.json")
+    suspend fun deleteAddress(@Path("customer_id") customerId:Long,
+                              @Path("address_id") addressId:Long):
+            Response<CustomerAddressModel>
+
+    @PUT("customers/{customer_id}/addresses/{address_id}.json")
+    suspend fun updateAddress(@Path("customer_id") customerId:Long,
+                              @Path("address_id") addressId:Long,
+                           @Body address:AddressModel):
+            Response<CustomerAddressModel>
+
+    @GET("customers/{customer_id}.json")
+    suspend fun getAddress(@Path("customer_id") customerId:Long):
+            Response<CustomerModel>
 
 }

@@ -24,8 +24,14 @@ data class Products(
     val vendor: String?,
 
     @Json(name = "variants")
-    val variants: List<Variants?> = listOf()
+    val variants: List<Variants?> = listOf(),
 
+
+    @Json(name = "options")
+    val options: List<Options?> = listOf(),
+
+    @Json(name = "image")
+    val image: Images
 
 
 )

@@ -38,4 +38,59 @@ class ApiDataSource: ApiInterface {
         return _apiService.getProductsFromType(productType)
     }
 
+    override suspend fun getProductsFromVendor(vendor: String): Response<ProductsModel> {
+        return _apiService.getProductsByVendor(vendor)
+    }
+
+    override suspend fun smartCollection(): Response<SmartCollectionModel> {
+        return  _apiService.smartCollection()
+    }
+
+    override suspend fun updateCustomer(
+        customerId: Long,
+        customer: EditCustomerModel
+    ): Response<EditCustomerModel> {
+        return  _apiService.updateCustomer(customerId,customer)
+    }
+
+    override suspend fun login(email: String): Response<CustomerLoginModel> {
+        return _apiService.login(email)
+    }
+
+    override suspend fun addOrder(order: AddOrderModel): Response<GettingOrderModel> {
+      return _apiService.addOrder(order)
+    }
+
+    override suspend fun getOrders(email: String): Response<OrdersModels> {
+        return _apiService.getOrders(email)
+    }
+
+    override suspend fun getAddress(
+        customerId: Long
+    ): Response<CustomerModel> {
+        return _apiService.getAddress(customerId)
+    }
+
+    override suspend fun deleteAddress(
+        customerId: Long,
+        addressId: Long
+    ): Response<CustomerAddressModel> {
+        return _apiService.deleteAddress(customerId,addressId)
+    }
+
+    override suspend fun addAddress(
+        customerId: Long,
+        address: AddressModel
+    ): Response<CustomerAddressModel> {
+        return _apiService.addAddress(customerId,address)
+    }
+
+    override suspend fun updateAddress(
+        customerId: Long,
+        addressId: Long,
+        address: AddressModel
+    ): Response<CustomerAddressModel> {
+        return _apiService.updateAddress(customerId,addressId,address)
+    }
+
 }

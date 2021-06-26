@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.iti.team.ecommerce.ui.product_details.ProductDetailsViewModel" />
 
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:bind="http://schemas.android.com/apk/res-auto"
-        android:background="#FBFCFC">
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_header"
+            app:srcCompat="@drawable/ic_arrow_back"
+            android:onClick="@{()->viewModel.layoutClicked()}"
+            >
+
 
         <ImageView
             android:id="@+id/img_header"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.45"
-            android:background="@color/teal_700"
+            android:layout_height="300dp"
+            android:background="@color/primaryTextColor"
             app:layout_constraintTop_toTopOf="parent"
             />
         <ImageView
@@ -31,38 +44,146 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             app:tint="@color/white"
+            android:onClick="@{()->viewModel.backButtonClicked()}"
             />
-
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/more"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="@+id/img_back"
+                app:srcCompat="@drawable/ic_favorite"
+                app:tint="@color/white"
+                colorImage="@{viewModel.favoriteIconColor}"
+                android:onClick="@{()->viewModel.favoriteIconClicked()}"/>
         <ImageView
+            android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="@+id/img_back"
-            app:srcCompat="@drawable/ic_favorite"
-            app:tint="@color/white"/>
+            app:srcCompat="@drawable/ic_more_horiz"
+            app:tint="@color/white"
+            android:onClick="@{()->viewModel.moreMenuClicked()}"/>
 
-        <ImageView
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="6dp"
+            android:layout_margin="16dp"
             android:layout_width="150dp"
             android:layout_height="150dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_header"
-            app:layout_constraintBottom_toBottomOf="@id/img_header"
-            android:background="@color/black"/>
+            app:layout_constraintBottom_toBottomOf="@id/img_header">
+
+            <com.smarteist.autoimageslider.SliderView
+                android:id="@+id/imageSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:sliderAnimationDuration="600"
+                app:sliderAutoCycleDirection="back_and_forth"
+                app:sliderAutoCycleEnabled="true"
+                app:sliderIndicatorAnimationDuration="600"
+                app:sliderIndicatorMargin="15dp"
+                app:sliderIndicatorOrientation="horizontal"
+                app:sliderIndicatorPadding="3dp"
+                app:sliderIndicatorRadius="2dp"
+                app:sliderIndicatorSelectedColor="#5A5A5A"
+                app:sliderIndicatorUnselectedColor="#FFF"
+                app:sliderScrollTimeInSec="1"
+                app:sliderStartAutoCycle="true"
+                />
+
+        </androidx.cardview.widget.CardView>
 
         <include
+            android:id="@+id/card_holder"
             layout="@layout/card_details"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="120dp"
-            app:layout_constraintHeight_percent="0.12"
             app:layout_constraintTop_toBottomOf="@+id/img_header"
             app:layout_constraintBottom_toBottomOf="@id/img_header"
-            bind:title="@{@string/app_name}"
-
+            bind:title="@{viewModel.title}"
+            bind:price="@{viewModel.price}"
+            bind:vendor="@{viewModel.vendor}"
+            app:layout_constraintWidth_percent="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             />
+            <TextView
+                android:id="@+id/details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/card_holder"
+                app:layout_constraintTop_toBottomOf="@+id/card_holder"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/description"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/details"
+            app:layout_constraintTop_toBottomOf="@+id/details"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            mutableText="@{viewModel.descriptionText}"/>
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/txt_description"
+            app:layout_constraintTop_toBottomOf="@+id/txt_description"
+            android:layout_marginTop="32dp"
+            android:text="@string/size"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/size_recycler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/size"
+                app:layout_constraintStart_toStartOf="@+id/size"
+                android:orientation="horizontal"
+                tools:listitem="@layout/size_row_item"
+                adapter="@{viewModel.sizeAdapter}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_to_cart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/size_recycler"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_rectangle"
+                android:onClick="@{()->viewModel.addToCart()}"/>
 
 
-
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/more_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent="0.3"
+                app:layout_constraintTop_toBottomOf="@+id/more"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:elevation="2dp"
+                mutableVisibility="@{viewModel.fragmentVisibility}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
 </layout>

@@ -1,20 +1,255 @@
 <resources>
-    <string name="app_name">Ecommerce</string>
+    <string name="app_name">Wishop</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="p_name">Product Name</string>
     <!--     ahmed-->
+
+    <string name="please_login_register">please login/register</string>
+    <string name="view_all">View All</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="paid">Paid</string>
+    <string name="refunded">Refunded</string>
+    <string name="pending">Pending</string>
+    <string name="my_orders">My Orders</string>
+    <string name="all">ALL</string>
+    <string name="shop_cart">shopping cart</string>
+    <string name="order_details">Order details</string>
 
     <!--    ahmed-->
 
     <!--    wesam-->
+    <string name="description">Description</string>
+    <string name="t_shirt">T-Shirts</string>
+    <string name="shoes">Shoes</string>
+    <string name="accessory">Accessories</string>
+    <string name="special_offer">Special\nOffer</string>
+    <string name="shop">Shop</string>
+    <string name="category">Category</string>
+    <string name="home">Home</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="no_search_result">Your search did not match any products.</string>
+    <string name="cart">Cart</string>
+    <string name="my_address">My Address</string>
+    <string name="no_address">address is empty</string>
+    <string name="cash">Cash On Delivery </string>
+    <string name="checkout">CheckOut </string>
+    <string name="coupon">Coupon</string>
+    <string name="coupon_code">Coupon Code</string>
+    <string name="apply">Apply</string>
+    <string name="subTotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="total">Total</string>
+    <string name="add_address">Add Your Address</string>
+    <string name="add">Add</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="city">City</string>
+    <string name="address1">Address Line 1</string>
+    <string name="address">Shipping Address</string>
+    <string name="zip">Zip Code</string>
+    <string name="about">About</string>
+    <string name="developer">About</string>
+    <string name="no_internet">No Network Connection</string>
+    <string name="about_developers">Today a lot of people want to buy products form brand but they don’t find brand shop near and they don’t have time to travel to buy the products. So, from here a lot of people try to use online shopping to save their time and from here our project helps theme to found and buy brand products.
+
+The Ecommerce App allows people to show shop brand, show all products belong to this brand, add product to favorite and buy some products with easy way. </string>
+    <string name="buy_with_googlepay_button_content_description">Buy with Google Pay</string>
+    <string name="store_name" translatable="false">Auto T-Shirt Shop</string>
+    <string name="googlepay_status_unavailable" translatable="false">Unfortunately, Google Pay is not available on this phone.</string>
+    <string name="googlepay_status_checking" translatable="false">Checking if Google Pay is available...</string>
+    <string name="payments_show_name" translatable="false">Successfully received payment data for %s!</string>
+
+    //paytab
+    <string name="cart_id">Cart Id</string>
+    <string name="product_name">Product name</string>
+    <string name="show_merchant_logo">Show Merchant Logo</string>
+    <string name="complete_billing_info">Show Billing Info</string>
+    <string name="force_shipping_validation">Force Shipping Validation</string>
+    <string name="select_tokenise_type">Select Tokenise Type</string>
+    <string name="tokenisation_type">tokenization type</string>
+    <string name="client_secret">Client secret</string>
+
+    <string-array name="currencies">
+        <item>BHD</item>
+        <item>USD</item>
+        <item>SAR</item>
+        <item>KWD</item>
+        <item>OMR</item>
+        <item>EGP</item>
+        <item>AED</item>
+        <item>INR</item>
+
+    </string-array>
+
+    <string-array name="trans_types">
+        <item>SALE</item>
+        <item>AUTH</item>
+
+    </string-array>
+
+    <string-array name="regions">
+        <item>UAE</item>
+        <item>Egypt</item>
+        <item>Saudi</item>
+        <item>Oman</item>
+        <item>Jordan</item>
+        <item>Global</item>
+        <item>Demo</item>
+
+    </string-array>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Arabic</item>
+        <item>Do not pass language</item>
+    </string-array>
+
+    <string-array name="tokenisation_type">
+        <item>None</item>
+        <item>Merchant Mandatory</item>
+        <item>User Mandatory</item>
+        <item>User Optional</item>
+    </string-array>
+    <string name="merchant_email">Merchant Email</string>
+    <string name="merchant_secret">Merchant Secret</string>
+    <string name="merchant_options">Merchant Options</string>
+    <string name="transaction_options">Transaction Options</string>
+    <string name="amount">Amount</string>
+    <string name="customer_email">Customer Email</string>
+    <string name="select_currency">Select Currency</string>
+    <string name="select_trans_type">Select Transaction Type</string>
+    <string name="select_region">Select Region</string>
+    <string name="tokenisation_option">Tokenization Options</string>
+    <string name="currency">Currency</string>
+    <string name="trans_type">Transaction Type</string>
+    <string name="regions">Region</string>
+    <string name="use_tokenisation">Use Tokenization</string>
+    <string name="complete__shipping_info">Show Shipping info</string>
+    <string name="use_pre_auth">Use Pre Auth</string>
+    <string name="is_existing_customer">Is Existing Customer?</string>
+    <string name="token">Token</string>
+    <string name="token_email">Token Email</string>
+    <string name="token_password">Token Password</string>
+    <string name="pay">PAY</string>
+    <string name="apm_pay">PAY With Apms</string>
+
+    <!-- SnackBar messages -->
+    <string name="provide_email">Please provide your email</string>
+    <string name="provide_secret">Please provide your secret key</string>
+    <string name="provide_valid_email">Please provide valid merchant email address</string>
+    <string name="provide_valid_amount">Please provide valid amount</string>
+    <string name="provide_customer_email">Please provide customer email address</string>
+    <string name="provide_valid_customer_email">Please provide valid customer email address</string>
+    <string name="provide_currency">Please provide currency</string>
+    <string name="provide_region">Please provide Region</string>
+    <string name="provide_token">Please provide your token</string>
+    <string name="provide_token_password">Please provide your token password</string>
+    <string name="provide_token_email">Please provide token email address</string>
+    <string name="provide_valid_token_email">Please provide valid token email address</string>
+
+    <string name="enter_email">Enter email</string>
+    <string name="enter_valid_email">Enter valid email</string>
+    <string name="enter_valid_profile_id">Enter valid profile id</string>
+    <string name="enter_secret">Enter secret key</string>
+    <string name="enter_valid_amount">Enter valid amount</string>
+    <string name="enter_token">Enter token</string>
+    <string name="enter_token_password">Enter token password</string>
+    <string name="button_bar_background_color">Button/Bar Background Color</string>
+    <string name="theme">Select activity theme</string>
+    <string name="theme_options">Theme options</string>
+    <string name="customer_billing_info">Customer  billing info </string>
+    <string name="customer_billing_address">billing  address</string>
+    <string name="customer_billing_city">billing city</string>
+    <string name="customer_billing_state">billing  state</string>
+    <string name="customer_billing_country">billing  country</string>
+
+    <string name="customer_shipping_info">Customer shipping info </string>
+    <string name="customer_shipping_address">Shipping address</string>
+    <string name="customer_shipping_city">Shipping city</string>
+    <string name="customer_shipping_state">Shipping state</string>
+    <string name="customer_shipping_country">Shipping  country</string>
+    <string name="customer_country_code">Merchant country Code</string>
+    <string name="customer_billing_postal_code">billing  Zip</string>
+    <string name="customer_shipping_postal_code">Shipping  Zip</string>
+    <string name="enter_address">Enter valid address</string>
+    <string name="enter_country">Enter valid country</string>
+    <string name="enter_city">Enter valid city</string>
+    <string name="enter_state">Enter valid state</string>
+    <string name="enter_postal_code">Enter valid postal code</string>
+    <string name="select_language">Select Language</string>
+    <string name="language">Language</string>
+    <string name="sam_pay">Samsung pay</string>
+    <string name="customer_shipping_street">Shipping Street</string>
+    <string name="customer_billing_street">billing  Street</string>
+    <string name="merchant_profile_id">Merchant profile id</string>
+    <string name="cart_decription">Cart Description</string>
+    <string name="customer_shipping_name">shipping name</string>
+    <string name="customer_shipping_email">shipping email</string>
+    <string name="customer_shipping_phone">Shipping phone</string>
+    <string name="customer_billing_phone">billing phone</string>
+    <string name="customer_billing_email">billing email</string>
+    <string name="customer_billing_name">billing email</string>
+    <string name="transaction_title">Transaction title</string>
+    <string name="size">Size</string>
+    <string name="add_to_cart">Add to Cart</string>
 
     <!--    wesam-->
 
     <!--    norhan-->
 
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="already_have_account">Already have an Account?</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="register_now">New user? Register Now</string>
+    <string name="other_methods">Use other Methods</string>
+
+    <string name="fb_login_protocol_scheme">fb2968165746788869</string>
+    <string name="facebook_application_id">2968165746788869</string>
+
+    <string name="shop_bag">Shopping Bag</string>
+    <string name="dialog_wishList">Are you sure adding the product to wishlist ? </string>
+    <string name="yes">YES</string>
+    <string name="no">No</string>
+    <string name="dialog_delete">Are you sure to delete this item? </string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+
+
+
     <!--  norhan-->
 
     <!--   nermeen-->
-
+    <string name="register_first_name_hint">First Name</string>
+    <string name="register_last_name_hint">Last Name</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_phone_hint">Phone Number</string>
+    <string name="register_Confirm_password_hint">Confirm Password</string>
+    <string name="register_city_hint">City</string>
+    <string name="register_country_hint">Country</string>
+    <string name="register_Street_hint">Street</string>
+    <string name="setting_of_the_app">Setting of the app</string>
+    <string name="shopping_cart">shopping cart</string>
+    <string name="go_to_cart">Go to Cart</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="logout">Logout</string>
+    <string name="setting">Setting</string>
+    <string name="addressBook">Address Book</string>
+    <string name="country">Country</string>
+    <string name="egypt">Egypt</string>
+    <string name="egp">EGP</string>
+    <string name="aboutUs">About Us</string>
+    <string name="rating">Rating/feedback</string>
+    <string name="wishop">WiShop</string>
+    <string name="wi">Wi</string>
+    <string name="op">op</string>
+    <string name="sh">sh</string>
+    <string name="sale">Sale</string>
+    <string name="women">Women</string>
+    <string name="men">Men</string>
+    <string name="kids">Kids</string>
     <!--    nermeen-->
 </resources>

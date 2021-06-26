@@ -5,6 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Variants(
+
+    @Json(name = "id")
+    val id: Long?,
+
     @Json(name = "price")
     val price:String?,
 
