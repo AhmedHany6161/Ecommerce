@@ -1,5 +1,6 @@
 package com.iti.team.ecommerce.model.reposatory
 
+import com.iti.team.ecommerce.RequestAllOrdersQuery
 import com.iti.team.ecommerce.model.data_classes.*
 import com.iti.team.ecommerce.model.remote.Result
 import retrofit2.Response
@@ -63,4 +64,7 @@ interface ModelRepo {
 
     fun setAddressID(addressId:Long)
     fun getAddressID():Long
+
+    suspend fun getAllOrderFormGQL(email: String): Result<RequestAllOrdersQuery.Orders>
+
 }

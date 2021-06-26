@@ -6,14 +6,16 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class OrderDetails(
     @Json(name = "fulfillable_quantity")
-    val quantity: Long? = 0,
+    val quantity: Long = 0,
     @Json(name = "name")
-    val name: String? = "",
+    val name: String = "",
     @Json(name = "price")
-    val price: String? = "",
+    val price: String = "",
     @Json(name = "vendor")
-    val vendor: String? = "",
+    val vendor: String = "",
     @Json(name = "product_id")
-    val id: Long = 0
+    val id: Long = 0,
+    @Json(name = "Image")
+     val image: String = ""
 )
 

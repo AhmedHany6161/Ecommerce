@@ -3,7 +3,9 @@ package com.iti.team.ecommerce.model.reposatory
 
 import android.content.Context
 import android.util.Log
+import com.iti.team.ecommerce.RequestAllOrdersQuery
 import com.iti.team.ecommerce.model.data_classes.*
+import com.iti.team.ecommerce.model.graphql.shopify_services.ShopifyDataSource
 import com.iti.team.ecommerce.model.local.preferances.MySharedPreference
 import com.iti.team.ecommerce.model.local.preferances.Preference
 import com.iti.team.ecommerce.model.local.preferances.PreferenceDataSource
@@ -15,7 +17,6 @@ import com.iti.team.ecommerce.utils.PREF_FILE_NAME
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
-import java.lang.Exception
 
 
 class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): ModelRepo , OfflineRepo {
@@ -23,20 +24,20 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
     private val preference =
         MySharedPreference(context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE))
 
-    private val sharedPreference:Preference = PreferenceDataSource(preference)
+    private val sharedPreference: Preference = PreferenceDataSource(preference)
+    private val graphQL = ShopifyDataSource.getInstance()
+    override suspend fun getMainCategories(): Result<MainCategories?> {
 
-    override suspend fun getMainCategories():Result<MainCategories?>{
-
-        var result:Result<MainCategories?> = Result.Loading
+        var result: Result<MainCategories?> = Result.Loading
 
         try {
             val response = apiDataSource.getMainCategories()
-            if(response.isSuccessful){
-                 result = Result.Success(response.body())
-                Log.i("ModelRepository","Result $result")
-            }else {
+            if (response.isSuccessful) {
+                result = Result.Success(response.body())
+                Log.i("ModelRepository", "Result $result")
+            } else {
                 //result = Result.Error(response.errorBody().)
-                Log.i("ModelRepository","Error${response.errorBody()}")
+                Log.i("ModelRepository", "Error${response.errorBody()}")
             }
 
         }catch (e: IOException){
@@ -522,6 +523,31 @@ class ModelRepository(private val offlineDB: OfflineDB?,val context: Context): M
     }
 
     override fun getAddressID(): Long {
-        return  sharedPreference.getAddressID()
+        return sharedPreference.getAddressID()
+    }
+
+    override suspend fun getAllOrderFormGQL(email: String): Result<RequestAllOrdersQuery.Orders> {
+        var result: Result<RequestAllOrdersQuery.Orders> = Result.Loading
+
+        try {
+            val response = graphQL.getOrders(email)
+            if (!response.hasErrors()) {
+                if (response.data != null) {
+                    response.data?.let {
+                        result = Result.Success(it.orders)
+                    }
+                } else {
+                    result = Result.Error(Exception("null data"))
+                }
+
+            } else {
+                response.errors?.let {
+                    result = Result.Error(Exception(it[0].message))
+                }
+            }
+        } catch (e: IOException) {
+            result = Result.Error(e)
+        }
+        return result
     }
 }
