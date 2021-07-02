@@ -35,7 +35,7 @@ object NetworkService {
             val newRequest = chain.request().newBuilder()
                 .addHeader("authorization","S9JNTDT2HB-JBRGLTGWTH-9ZKWJWWWBK")
                 .addHeader("Content-Type", "application/json")
-                .addHeader("X-Shopify-Access-Token","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")
+                .addHeader("X-Shopify-Access-Token","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")
                 .build()
             chain.proceed(newRequest)
         }

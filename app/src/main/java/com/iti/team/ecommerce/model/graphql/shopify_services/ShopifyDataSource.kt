@@ -22,7 +22,7 @@ class ShopifyDataSource:ShopifyServices {
         @JvmStatic
         private fun build(): ShopifyDataSource {
             apolloClient = ApolloClient.builder()
-                .serverUrl("https://ce751b18c7156bf720ea405ad19614f4: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@itiana.myshopify.com/admin/api/2021-04/graphql.json")
+                .serverUrl("https://043be955a8db3bd91f8a910a6b5c7df8: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@mohamedabdallah.myshopify.com/admin/api/2021-04/graphql.json")
                 .okHttpClient(buildAuthClient())
                 .build()
             INSTANCE = ShopifyDataSource()
@@ -36,7 +36,7 @@ class ShopifyDataSource:ShopifyServices {
                 val newRequest = chain.request().newBuilder()
                     .addHeader("authorization","S9JNTDT2HB-JBRGLTGWTH-9ZKWJWWWBK")
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("X-Shopify-Access-Token","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")
+                    .addHeader("X-Shopify-Access-Token","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")
                     .build()
                 chain.proceed(newRequest)
             }
